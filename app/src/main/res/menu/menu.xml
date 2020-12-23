@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/home"
+        android:title="@string/home"
+        android:icon="@drawable/ic_nav_home"
+        />
+
+    <item android:id="@+id/chat"
+        android:title="@string/chat"
+        android:icon="@drawable/ic_chat"
+        />
+
+
+    <item android:id="@+id/patient"
+        android:title="@string/patient"
+        android:icon="@drawable/ic_patient"
+        />
+
+    <item android:id="@+id/more"
+        android:title="@string/more"
+        android:icon="@drawable/ic_more"
+        />
+</menu>

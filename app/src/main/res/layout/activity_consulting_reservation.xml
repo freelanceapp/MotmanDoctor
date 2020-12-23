@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="lang"
+            type="String" />
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+                        <ImageView
+                            android:id="@+id/imageBack"
+                            android:layout_width="match_parent"
+                            android:layout_height="160dp"
+                            android:src="@drawable/reserve_image"
+                            android:scaleType="centerCrop"
+                            />
+
+                    </FrameLayout>
+
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@color/colorPrimary"
+                    android:alpha=".4"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:layout_gravity="bottom|end"
+                    android:textSize="20sp"
+                    android:text="@string/reserve_consultation"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginStart="15sp"
+                    android:layout_marginEnd="15sp"
+
+                    />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/ic_left_arrow"
+                    app:tint="@color/color1"
+                    android:padding="7dp"
+                    android:background="@drawable/circle_white"
+                    android:rotation='@{lang.equals("ar")?180:0}'
+                    />
+            </FrameLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    >
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_write_note"
+                        app:tint="@color/color1"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gray8"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:textSize="15sp"
+                        android:text="@string/write_your_consultation"
+                        android:clickable="false"
+                        android:longClickable="false"
+                        />
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/edtConsultation"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="10dp"
+                    android:inputType="textMultiLine"
+                    android:background="@drawable/small_rounded_gray_strock"
+                    android:padding="10dp"
+                    android:gravity="start|top"
+
+                    />
+
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="40dp"
+                    android:background="@drawable/btn_change_lang"
+                    android:textColor="@color/white"
+                    android:minWidth="150dp"
+                    android:textSize="16sp"
+                    android:text="@string/send"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</layout>
