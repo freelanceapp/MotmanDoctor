@@ -17,38 +17,54 @@ public class UserModel implements Serializable {
 
     public static class User implements Serializable {
         private int id;
+        private String code;
+        private String user_type;
         private String name;
-        private String email;
-        private String city;
+        private String email = null;
         private String phone_code;
         private String phone;
-        private String image;
-        private String logo;
+        private String gender;
+        private String address = null;
+        private double latitude;
+        private double longitude;
+        private String specialization_id = null;
+        private String job_degree_id = null;
+        private String city_id = null;
+        private String license_img = null;
+        private String logo = null;
+        private String banner = null;
+        private String birth_day;
+        private String blood_type;
+        private String details = null;
+        private double rates;
+        private double app_cost;
+        private double detection_price;
+        private String appointment_time = null;
+        private String is_emergency;
+        private String email_verified_at = null;
+        private String is_blocked;
+        private String is_login;
+        private String logout_time = null;
+        private String is_confirmed;
+        private String confirmation_code = null;
+        private String forget_password_code = null;
+        private String software_type;
+        private String deleted_at = null;
+        private String created_at;
+        private String updated_at;
+        private double distance;
         private String token;
-        private String latitude;
-        private String longitude;
-        private String address;
-        private String user_type;
-        private String details;
-        private List<Stage> stage_fk;
-        private List<Stage_CLASS> class_fk;
-        private List<SkillModel> skills_fk;
-        private String fireBaseToken;
-
-        public User() {
-        }
-
-        public User(int id, String name, String phone_code, String phone, String logo, String token) {
-            this.id = id;
-            this.name = name;
-            this.phone_code = phone_code;
-            this.phone = phone;
-            this.logo = logo;
-            this.token = token;
-        }
 
         public int getId() {
             return id;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getUser_type() {
+            return user_type;
         }
 
         public String getName() {
@@ -59,10 +75,6 @@ public class UserModel implements Serializable {
             return email;
         }
 
-        public String getCity() {
-            return city;
-        }
-
         public String getPhone_code() {
             return phone_code;
         }
@@ -71,133 +83,128 @@ public class UserModel implements Serializable {
             return phone;
         }
 
-        public String getImage() {
-            return image;
-        }
-
-        public String getLogo() {
-            return logo;
-        }
-
-        public String getToken() {
-            return token;
-        }
-
-        public String getLatitude() {
-            return latitude;
-        }
-
-        public String getLongitude() {
-            return longitude;
+        public String getGender() {
+            return gender;
         }
 
         public String getAddress() {
             return address;
         }
 
-        public String getType() {
-            return user_type;
+        public double getLatitude() {
+            return latitude;
         }
 
-        public String getFireBaseToken() {
-            return fireBaseToken;
+        public double getLongitude() {
+            return longitude;
         }
 
-        public void setFireBaseToken(String fireBaseToken) {
-            this.fireBaseToken = fireBaseToken;
+        public String getSpecialization_id() {
+            return specialization_id;
         }
 
-        public List<SkillModel> getSkills_fk() {
-            return skills_fk;
+        public String getJob_degree_id() {
+            return job_degree_id;
+        }
+
+        public String getCity_id() {
+            return city_id;
+        }
+
+        public String getLicense_img() {
+            return license_img;
+        }
+
+        public String getLogo() {
+            return logo;
+        }
+
+        public String getBanner() {
+            return banner;
+        }
+
+        public String getBirth_day() {
+            return birth_day;
+        }
+
+        public String getBlood_type() {
+            return blood_type;
         }
 
         public String getDetails() {
             return details;
         }
 
-        public List<Stage> getStage_fk() {
-            return stage_fk;
+        public double getRates() {
+            return rates;
         }
 
-
-        public List<Stage_CLASS> getClass_fk() {
-            return class_fk;
+        public double getApp_cost() {
+            return app_cost;
         }
 
-        public static class Stage implements Serializable {
-            private int id;
-            private int stage_id;
-            private StageClassName stage_class_name;
-
-            public int getId() {
-                return id;
-            }
-
-            public int getStage_id() {
-                return stage_id;
-            }
-
-            public StageClassName getStage_class_name() {
-                return stage_class_name;
-            }
-
-            public class StageClassName implements Serializable {
-                private int id;
-                private String title;
-
-                public int getId() {
-                    return id;
-                }
-
-                public String getTitle() {
-                    return title;
-                }
-            }
+        public double getDetection_price() {
+            return detection_price;
         }
 
-        public static class Stage_CLASS implements Serializable {
-            private int id;
-            private int class_id;
-            private StageClassName stage_class_name;
-
-            public int getId() {
-                return id;
-            }
-
-            public int getClass_id() {
-                return class_id;
-            }
-
-            public StageClassName getStage_class_name() {
-                return stage_class_name;
-            }
-
-            public class StageClassName implements Serializable {
-                private int id;
-                private String title;
-
-                public int getId() {
-                    return id;
-                }
-
-                public String getTitle() {
-                    return title;
-                }
-            }
+        public String getAppointment_time() {
+            return appointment_time;
         }
 
+        public String getIs_emergency() {
+            return is_emergency;
+        }
 
-        public static class SkillModel implements Serializable{
-            private int id;
-            private String skill_type;
+        public String getEmail_verified_at() {
+            return email_verified_at;
+        }
 
-            public int getId() {
-                return id;
-            }
+        public String getIs_blocked() {
+            return is_blocked;
+        }
 
-            public String getSkill_type() {
-                return skill_type;
-            }
+        public String getIs_login() {
+            return is_login;
+        }
+
+        public String getLogout_time() {
+            return logout_time;
+        }
+
+        public String getIs_confirmed() {
+            return is_confirmed;
+        }
+
+        public String getConfirmation_code() {
+            return confirmation_code;
+        }
+
+        public String getForget_password_code() {
+            return forget_password_code;
+        }
+
+        public String getSoftware_type() {
+            return software_type;
+        }
+
+        public String getDeleted_at() {
+            return deleted_at;
+        }
+
+        public String getCreated_at() {
+            return created_at;
+        }
+
+        public String getUpdated_at() {
+            return updated_at;
+        }
+
+        public double getDistance() {
+            return distance;
+        }
+
+        public String getToken() {
+            return token;
         }
     }
 }

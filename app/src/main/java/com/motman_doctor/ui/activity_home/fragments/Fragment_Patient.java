@@ -23,24 +23,24 @@ import java.util.ArrayList;
 
 public class Fragment_Patient extends Fragment {
     private FragmentPatientBinding binding;
-    private double lat=0.0,lng=0.0;
+    private double lat = 0.0, lng = 0.0;
     private HomeActivity activity;
     private PatientAdapter adapter;
 
 
-
-    public static Fragment_Patient newInstance(double lat, double lng){
+    public static Fragment_Patient newInstance(double lat, double lng) {
         Bundle bundle = new Bundle();
-        bundle.putDouble("lat",lat);
-        bundle.putDouble("lng",lng);
+        bundle.putDouble("lat", lat);
+        bundle.putDouble("lng", lng);
         Fragment_Patient fragment_patient = new Fragment_Patient();
         fragment_patient.setArguments(bundle);
         return fragment_patient;
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_patient,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_patient, container, false);
         initView();
         return binding.getRoot();
     }
@@ -53,9 +53,9 @@ public class Fragment_Patient extends Fragment {
             lng = bundle.getDouble("lng");
         }
 
-        binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(activity,R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+        binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(activity, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         binding.recView.setLayoutManager(new LinearLayoutManager(activity));
-        binding.recView.setAdapter(new PatientAdapter(new ArrayList<>(),activity));
+        binding.recView.setAdapter(new PatientAdapter(new ArrayList<>(), activity));
         binding.progBar.setVisibility(View.GONE);
     }
 }

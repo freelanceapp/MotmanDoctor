@@ -7,6 +7,11 @@ public interface ActivitySignUpView {
     void onFragmentSignUp2Displayed();
     void onFragmentSignUp3Displayed();
     void onBack();
-    void onSuccess(UserModel userModel);
     void onFailed(String msg);
+    void onLoad();
+    void onFinishload();
+    void onSignupValid(UserModel userModel);
+    void onServer();
+    void onnotconnect(String msg);
+
 }

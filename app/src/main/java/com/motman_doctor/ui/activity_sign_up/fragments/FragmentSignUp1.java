@@ -67,6 +67,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.paperdb.Paper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -95,7 +96,7 @@ public class FragmentSignUp1 extends Fragment implements OnMapReadyCallback, Goo
     private AlertDialog dialog;
     private List<String> genderList;
     private SpinnerAdapter genderAdapter;
-
+    private String lang;
     public static FragmentSignUp1 newInstance(SignUpModel signUpModel){
         Bundle bundle = new Bundle();
         bundle.putSerializable(TAG,signUpModel);
@@ -127,6 +128,8 @@ public class FragmentSignUp1 extends Fragment implements OnMapReadyCallback, Goo
         }
         binding.setModel(signUpModel);
         activity = (SignUpActivity) getActivity();
+        Paper.init(activity);
+        lang = Paper.book().read("lang","ar");
         genderList = new ArrayList<>();
         genderAdapter = new SpinnerAdapter(genderList,activity);
         binding.spinnerGender.setAdapter(genderAdapter);
@@ -135,8 +138,16 @@ public class FragmentSignUp1 extends Fragment implements OnMapReadyCallback, Goo
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i==0){
                     signUpModel.setGender("");
+                }else {if(lang.equals("ar")){
+                    if(i==1){
+                        signUpModel.setGender("male");
+                    }
+                    else {
+                        signUpModel.setGender("female");
+                    }
                 }else {
-                    signUpModel.setGender(genderList.get(i));
+
+                    signUpModel.setGender(genderList.get(i));}
                 }
                 binding.setModel(signUpModel);
             }
@@ -146,7 +157,6 @@ public class FragmentSignUp1 extends Fragment implements OnMapReadyCallback, Goo
 
             }
         });
-
         binding.edtAddress.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 String query = binding.edtAddress.getText().toString();

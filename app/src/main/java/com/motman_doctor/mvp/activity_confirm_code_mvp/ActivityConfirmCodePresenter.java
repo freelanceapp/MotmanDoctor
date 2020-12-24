@@ -8,17 +8,24 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.motman_doctor.R;
+import com.motman_doctor.models.UserModel;
+import com.motman_doctor.remote.Api;
 import com.motman_doctor.share.Common;
+import com.motman_doctor.tags.Tags;
 import com.motman_doctor.ui.activity_confirm_code.ConfirmCodeActivity;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import io.paperdb.Paper;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ActivityConfirmCodePresenter {
     private Context context;
@@ -96,11 +103,10 @@ public class ActivityConfirmCodePresenter {
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
             mAuth.signInWithCredential(credential)
                     .addOnSuccessListener(authResult -> {
-
                         dialog.dismiss();
-                        view.onSuccess();
+                        login();
                     }).addOnFailureListener(e -> {
-                        dialog.dismiss();
+                dialog.dismiss();
                 if (e.getMessage() != null) {
                     try {
                         view.onCodeFailed(e.getMessage());
@@ -117,7 +123,58 @@ public class ActivityConfirmCodePresenter {
         }
 
     }
+    private void login() {
+        view.onLoad();
+        Api.getService(Tags.base_url)
+                .login(phone_code, phone)
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        view.onFinishload();
+                        if (response.isSuccessful() && response.body() != null) {
+                            //  Log.e("eeeeee", response.body().getUser().getName());
+                            view.onUserFound(response.body());
+                        } else {
+                            try {
+                                Log.e("mmmmmmmmmm", response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
 
+
+                            if (response.code() == 500) {
+                                view.onServer();
+                            } else if (response.code() == 401) {
+                                view.onUserNoFound();
+                            } else {
+                                view.onFailed();
+                                //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            view.onFinishload();
+                            if (t.getMessage() != null) {
+                                Log.e("msg_category_error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    view.onnotconnect(t.getMessage().toLowerCase());
+                                    //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    view.onFailed();
+                                    // Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
+
+    }
 
 
     private void startCounter()

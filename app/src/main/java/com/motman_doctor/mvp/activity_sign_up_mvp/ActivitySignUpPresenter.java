@@ -1,16 +1,28 @@
 package com.motman_doctor.mvp.activity_sign_up_mvp;
 
 import android.content.Context;
-import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 
 import androidx.fragment.app.FragmentManager;
 
 import com.motman_doctor.R;
 import com.motman_doctor.models.SignUpModel;
-import com.motman_doctor.ui.activity_home.HomeActivity;
+import com.motman_doctor.models.UserModel;
+import com.motman_doctor.remote.Api;
+import com.motman_doctor.share.Common;
+import com.motman_doctor.tags.Tags;
 import com.motman_doctor.ui.activity_sign_up.fragments.FragmentSignUp1;
 import com.motman_doctor.ui.activity_sign_up.fragments.FragmentSignUp2;
 import com.motman_doctor.ui.activity_sign_up.fragments.FragmentSignUp3;
+
+import java.io.IOException;
+
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ActivitySignUpPresenter {
     private Context context;
@@ -22,11 +34,7 @@ public class ActivitySignUpPresenter {
     private SignUpModel signUpModel;
 
 
-
-
-
-    public ActivitySignUpPresenter(Context context, ActivitySignUpView view,FragmentManager fragmentManager,SignUpModel signUpModel)
-    {
+    public ActivitySignUpPresenter(Context context, ActivitySignUpView view, FragmentManager fragmentManager, SignUpModel signUpModel) {
         this.context = context;
         this.view = view;
         this.fragmentManager = fragmentManager;
@@ -35,110 +43,246 @@ public class ActivitySignUpPresenter {
 
     }
 
-    public void manageData(boolean isBack)
-    {
-        if (fragmentSignUp1!=null&&fragmentSignUp1.isAdded()&&fragmentSignUp1.isVisible()){
+    public void manageData(boolean isBack) {
+        if (fragmentSignUp1 != null && fragmentSignUp1.isAdded() && fragmentSignUp1.isVisible()) {
             this.signUpModel = fragmentSignUp1.signUpModel;
-            if (isBack){
+            if (isBack) {
                 view.onBack();
-            }else {
-                if (signUpModel.isStep1Valid(context)){
+            } else {
+                if (signUpModel.isStep1Valid(context)) {
                     displayFragment2();
                 }
             }
-        }else if (fragmentSignUp2!=null&&fragmentSignUp2.isAdded()&&fragmentSignUp2.isVisible()){
+        } else if (fragmentSignUp2 != null && fragmentSignUp2.isAdded() && fragmentSignUp2.isVisible()) {
             this.signUpModel = fragmentSignUp2.signUpModel;
 
-            if (isBack){
+            if (isBack) {
                 displayFragment1();
-            }else {
+            } else {
 
-                if (this.signUpModel.isStep2Valid(context)){
+                if (this.signUpModel.isStep2Valid(context)) {
                     displayFragment3();
                 }
             }
-        }else if (fragmentSignUp3!=null&&fragmentSignUp3.isAdded()&&fragmentSignUp3.isVisible()){
+        } else if (fragmentSignUp3 != null && fragmentSignUp3.isAdded() && fragmentSignUp3.isVisible()) {
             this.signUpModel = fragmentSignUp3.signUpModel;
 
-            if (isBack){
+            if (isBack) {
                 displayFragment2();
-            }else {
-                if (this.signUpModel.isStep3Valid(context)){
-                    signUp();
+            } else {
+                if (this.signUpModel.isStep3Valid(context)) {
+                    signUp(signUpModel);
                 }
             }
         }
     }
 
-    private void displayFragment1()
-    {
-        if (fragmentSignUp1==null){
+    private void displayFragment1() {
+        if (fragmentSignUp1 == null) {
             fragmentSignUp1 = FragmentSignUp1.newInstance(signUpModel);
         }
 
-        if (fragmentSignUp2!=null&&fragmentSignUp2.isAdded()){
+        if (fragmentSignUp2 != null && fragmentSignUp2.isAdded()) {
             fragmentManager.beginTransaction().hide(fragmentSignUp2).commit();
         }
 
-        if (fragmentSignUp3!=null&&fragmentSignUp3.isAdded()){
+        if (fragmentSignUp3 != null && fragmentSignUp3.isAdded()) {
             fragmentManager.beginTransaction().hide(fragmentSignUp3).commit();
         }
 
-        if (fragmentSignUp1.isAdded()){
+        if (fragmentSignUp1.isAdded()) {
             fragmentManager.beginTransaction().show(fragmentSignUp1).commit();
-        }else {
-            fragmentManager.beginTransaction().add(R.id.fragment_container,fragmentSignUp1,"fragmentSignUp1").commit();
+        } else {
+            fragmentManager.beginTransaction().add(R.id.fragment_container, fragmentSignUp1, "fragmentSignUp1").commit();
         }
         view.onFragmentSignUp1Displayed();
     }
 
-    private void displayFragment2()
-    {
-        if (fragmentSignUp2==null){
+    private void displayFragment2() {
+        if (fragmentSignUp2 == null) {
             fragmentSignUp2 = FragmentSignUp2.newInstance(signUpModel);
         }
 
-        if (fragmentSignUp1!=null&&fragmentSignUp1.isAdded()){
+        if (fragmentSignUp1 != null && fragmentSignUp1.isAdded()) {
             fragmentManager.beginTransaction().hide(fragmentSignUp1).commit();
         }
 
-        if (fragmentSignUp3!=null&&fragmentSignUp3.isAdded()){
+        if (fragmentSignUp3 != null && fragmentSignUp3.isAdded()) {
             fragmentManager.beginTransaction().hide(fragmentSignUp3).commit();
         }
 
-        if (fragmentSignUp2.isAdded()){
+        if (fragmentSignUp2.isAdded()) {
             fragmentManager.beginTransaction().show(fragmentSignUp2).commit();
-        }else {
-            fragmentManager.beginTransaction().add(R.id.fragment_container,fragmentSignUp2,"fragmentSignUp2").commit();
+        } else {
+            fragmentManager.beginTransaction().add(R.id.fragment_container, fragmentSignUp2, "fragmentSignUp2").commit();
         }
         view.onFragmentSignUp2Displayed();
     }
 
-    private void displayFragment3()
-    {
-        if (fragmentSignUp3==null){
+    private void displayFragment3() {
+        if (fragmentSignUp3 == null) {
             fragmentSignUp3 = FragmentSignUp3.newInstance(signUpModel);
         }
 
-        if (fragmentSignUp1!=null&&fragmentSignUp1.isAdded()){
+        if (fragmentSignUp1 != null && fragmentSignUp1.isAdded()) {
             fragmentManager.beginTransaction().hide(fragmentSignUp1).commit();
         }
 
-        if (fragmentSignUp2!=null&&fragmentSignUp2.isAdded()){
+        if (fragmentSignUp2 != null && fragmentSignUp2.isAdded()) {
             fragmentManager.beginTransaction().hide(fragmentSignUp2).commit();
         }
 
-        if (fragmentSignUp3.isAdded()){
+        if (fragmentSignUp3.isAdded()) {
             fragmentManager.beginTransaction().show(fragmentSignUp3).commit();
-        }else {
-            fragmentManager.beginTransaction().add(R.id.fragment_container,fragmentSignUp3,"fragmentSignUp3").commit();
+        } else {
+            fragmentManager.beginTransaction().add(R.id.fragment_container, fragmentSignUp3, "fragmentSignUp3").commit();
         }
         view.onFragmentSignUp3Displayed();
     }
 
 
-    private void signUp() {
-        Intent intent=new Intent(context, HomeActivity.class);
-        context.startActivity(intent);
+    private void signUp(SignUpModel signUpModel) {
+        if (!signUpModel.getImageUrl() .isEmpty()) {
+            sign_up_with_image(signUpModel);
+        } else {
+            sign_up_with_out_image(signUpModel);
+        }
+
     }
+
+    private void sign_up_with_image(SignUpModel signUpModel) {
+        RequestBody name_part = Common.getRequestBodyText(signUpModel.getName());
+        RequestBody phone_code_part = Common.getRequestBodyText(signUpModel.getPhone_code().replace("+", "00"));
+        RequestBody phone_part = Common.getRequestBodyText(signUpModel.getPhone());
+        RequestBody lat_part = Common.getRequestBodyText(signUpModel.getLat() + "");
+        RequestBody lng_part = Common.getRequestBodyText(signUpModel.getLng() + "");
+        RequestBody gender_part = Common.getRequestBodyText(signUpModel.getGender());
+        RequestBody address_part = Common.getRequestBodyText(signUpModel.getAddress());
+        RequestBody spicial_part = Common.getRequestBodyText(signUpModel.getSpecialization_id() + "");
+        RequestBody city_part = Common.getRequestBodyText(signUpModel.getCity_id() + "");
+        RequestBody email_part = Common.getRequestBodyText(signUpModel.getEmail());
+
+        RequestBody type_part = Common.getRequestBodyText("doctor");
+        RequestBody soft_part = Common.getRequestBodyText("android");
+
+
+        MultipartBody.Part image_form_part = Common.getMultiPart(context, Uri.parse(signUpModel.getImageUrl()), "logo");
+        MultipartBody.Part lice_part = Common.getMultiPart(context, Uri.parse(signUpModel.getLicenseImage()), "license_img");
+
+        view.onLoad();
+        Api.getService(Tags.base_url)
+                .signup(phone_code_part, phone_part, name_part, lat_part, lng_part, address_part, gender_part, type_part, soft_part, spicial_part, city_part, email_part, image_form_part, lice_part)
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        view.onFinishload();
+                        if (response.isSuccessful() && response.body() != null) {
+                            //  Log.e("eeeeee", response.body().getUser().getName());
+                            view.onSignupValid(response.body());
+                        } else {
+                            try {
+                                Log.e("mmmmmmmmmmssss", response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            if (response.code() == 500) {
+                                view.onServer();
+                            } else {
+                                view.onFailed(context.getResources().getString(R.string.failed));
+                                //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            view.onFinishload();
+                            if (t.getMessage() != null) {
+                                Log.e("msg_category_error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    view.onnotconnect(t.getMessage().toLowerCase());
+                                    //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    view.onFailed(context.getResources().getString(R.string.failed));
+                                    // Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
+    }
+
+    private void sign_up_with_out_image(SignUpModel signUpModel) {
+        RequestBody name_part = Common.getRequestBodyText(signUpModel.getName());
+        RequestBody phone_code_part = Common.getRequestBodyText(signUpModel.getPhone_code().replace("+", "00"));
+        RequestBody phone_part = Common.getRequestBodyText(signUpModel.getPhone());
+        RequestBody lat_part = Common.getRequestBodyText(signUpModel.getLat() + "");
+        RequestBody lng_part = Common.getRequestBodyText(signUpModel.getLng() + "");
+        RequestBody gender_part = Common.getRequestBodyText(signUpModel.getGender());
+        RequestBody address_part = Common.getRequestBodyText(signUpModel.getAddress());
+        RequestBody spicial_part = Common.getRequestBodyText(signUpModel.getSpecialization_id() + "");
+        RequestBody city_part = Common.getRequestBodyText(signUpModel.getCity_id() + "");
+        RequestBody email_part = Common.getRequestBodyText(signUpModel.getEmail());
+
+        RequestBody type_part = Common.getRequestBodyText("doctor");
+        RequestBody soft_part = Common.getRequestBodyText("android");
+
+
+        MultipartBody.Part lice_part = Common.getMultiPart(context, Uri.parse(signUpModel.getLicenseImage()), "license_img");
+
+        view.onLoad();
+        Api.getService(Tags.base_url)
+                .signup(phone_code_part, phone_part, name_part, lat_part, lng_part, address_part, gender_part, type_part, soft_part, spicial_part, city_part, email_part, lice_part)
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                        view.onFinishload();
+                        if (response.isSuccessful() && response.body() != null) {
+                            //  Log.e("eeeeee", response.body().getUser().getName());
+                            view.onSignupValid(response.body());
+                        } else {
+                            try {
+                                Log.e("mmmmmmmmmmssss", response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            if (response.code() == 500) {
+                                view.onServer();
+                            } else {
+                                view.onFailed(context.getResources().getString(R.string.failed));
+                                //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserModel> call, Throwable t) {
+                        try {
+                            view.onFinishload();
+                            if (t.getMessage() != null) {
+                                Log.e("msg_category_error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    view.onnotconnect(t.getMessage().toLowerCase());
+                                    //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    view.onFailed(context.getResources().getString(R.string.failed));
+                                    // Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
+    }
+
 }

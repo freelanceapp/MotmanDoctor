@@ -14,18 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.motman_doctor.R;
 import com.motman_doctor.databinding.AppointmentRowBinding;
 import com.motman_doctor.databinding.LoadMoreRowBinding;
+import com.motman_doctor.models.ApointmentModel;
 
 import java.util.List;
 
 public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int DATA = 1;
     private final int LOAD = 2;
-    private List<Object> list;
+    private List<ApointmentModel.Data> list;
     private Context context;
     private LayoutInflater inflater;
     private AppCompatActivity activity;
 
-    public AppointmentAdapter(List<Object> list, Context context) {
+    public AppointmentAdapter(List<ApointmentModel.Data> list, Context context) {
         this.list = list;
         this.context = context;
         inflater = LayoutInflater.from(context);
@@ -54,11 +55,11 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         if (holder instanceof MyHolder){
             MyHolder myHolder = (MyHolder) holder;
+myHolder.binding.setModel(list.get(position));
 
-
-            myHolder.binding.btnDetails.setOnClickListener(v -> {
-
-            });
+//            myHolder.binding.btnDetails.setOnClickListener(v -> {
+//
+//            });
         }else if (holder instanceof LoadMoreHolder){
             LoadMoreHolder loadMoreHolder = (LoadMoreHolder) holder;
             loadMoreHolder.binding.prgBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(context,R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
@@ -69,7 +70,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return 8;
+        return list.size();
     }
 
     public static class MyHolder extends RecyclerView.ViewHolder {

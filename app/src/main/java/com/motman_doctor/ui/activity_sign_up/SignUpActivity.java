@@ -1,17 +1,18 @@
 package com.motman_doctor.ui.activity_sign_up;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import com.motman_doctor.R;
 import com.motman_doctor.databinding.ActivitySignUpBinding;
@@ -20,6 +21,9 @@ import com.motman_doctor.models.SignUpModel;
 import com.motman_doctor.models.UserModel;
 import com.motman_doctor.mvp.activity_sign_up_mvp.ActivitySignUpPresenter;
 import com.motman_doctor.mvp.activity_sign_up_mvp.ActivitySignUpView;
+import com.motman_doctor.preferences.Preferences;
+import com.motman_doctor.share.Common;
+import com.motman_doctor.ui.activity_home.HomeActivity;
 import com.motman_doctor.ui.activity_login.LoginActivity;
 
 import java.util.List;
@@ -33,8 +37,8 @@ public class SignUpActivity extends AppCompatActivity implements ActivitySignUpV
     private String phone_code="";
     private String phone="";
     private SignUpModel signUpModel;
-
-
+    private ProgressDialog dialog2;
+    private Preferences preferences;
 
 
     @Override
@@ -62,6 +66,7 @@ public class SignUpActivity extends AppCompatActivity implements ActivitySignUpV
 
     private void initView()
     {
+        preferences=Preferences.getInstance();
         fragmentManager = getSupportFragmentManager();
         signUpModel = new SignUpModel(phone_code,phone);
         presenter = new ActivitySignUpPresenter(this,this,fragmentManager,signUpModel);
@@ -125,10 +130,7 @@ public class SignUpActivity extends AppCompatActivity implements ActivitySignUpV
 
 
 
-    @Override
-    public void onSuccess(UserModel userModel) {
 
-    }
 
     @Override
     public void onFailed(String msg) {
@@ -161,5 +163,38 @@ public class SignUpActivity extends AppCompatActivity implements ActivitySignUpV
     @Override
     public void onBackPressed() {
         presenter.manageData(true);
+    }
+    @Override
+    public void onLoad() {
+        dialog2 = Common.createProgressDialog(this, getString(R.string.wait));
+        dialog2.setCancelable(false);
+        dialog2.show();
+    }
+
+    @Override
+    public void onFinishload() {
+        dialog2.dismiss();
+    }
+
+    @Override
+    public void onnotconnect(String msg) {
+        Toast.makeText(SignUpActivity.this, msg, Toast.LENGTH_SHORT).show();
+
+    }
+    @Override
+    public void onSignupValid(UserModel userModel) {
+        preferences.create_update_userdata(SignUpActivity.this, userModel);
+
+
+        Intent intent = new Intent(this, HomeActivity.class);
+
+        startActivity(intent);
+        finish();
+
+    }
+    @Override
+    public void onServer() {
+        Toast.makeText(SignUpActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+
     }
 }

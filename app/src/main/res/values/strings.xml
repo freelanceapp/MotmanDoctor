@@ -141,5 +141,9 @@
     <string name="last_date">The date of the last disclosure</string>
     <string name="reply">reply</string>
     <string name="question">السؤال</string>
+    <string name="my_appoinment">My Appoinment</string>
+    <string name="server_error">Server Error</string>
+    <string name="subject">Subject</string>
+    <string name="message">Meaasge</string>
 
 </resources>

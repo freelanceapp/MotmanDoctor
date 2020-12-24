@@ -11,7 +11,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.motman_doctor.R;
-import com.motman_doctor.databinding.FragmentSignUp2Binding;
 import com.motman_doctor.databinding.FragmentSignUp3Binding;
 import com.motman_doctor.models.SignUpModel;
 
