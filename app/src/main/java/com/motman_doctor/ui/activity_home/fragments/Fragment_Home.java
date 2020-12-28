@@ -35,6 +35,8 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
     private HomeFragmentPresenter presenter;
     private List<ApointmentModel.Data> apointmentModelList;
     private Preferences preferences;
+
+
     private UserModel userModel;
 
     public static Fragment_Home newInstance() {
