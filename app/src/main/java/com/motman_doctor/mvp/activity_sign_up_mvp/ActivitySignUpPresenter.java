@@ -190,8 +190,11 @@ public class ActivitySignUpPresenter {
                             if (response.code() == 500) {
                                 view.onServer();
                             } else {
-                                view.onFailed(context.getResources().getString(R.string.failed));
-                                //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                if (response.code() == 409) {
+                                    view.onFailed(context.getString(R.string.phone_found));
+                                }  else {
+                                    view.onFailed(response.message() + "");
+                                }                                //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -257,8 +260,12 @@ public class ActivitySignUpPresenter {
                             if (response.code() == 500) {
                                 view.onServer();
                             } else {
-                                view.onFailed(context.getResources().getString(R.string.failed));
-                                //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+
+                                if (response.code() == 409) {
+                                    view.onFailed(context.getString(R.string.phone_found));
+                                }  else {
+                                    view.onFailed(response.message() + "");
+                                }                                //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
