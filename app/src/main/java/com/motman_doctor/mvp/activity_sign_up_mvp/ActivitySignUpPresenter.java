@@ -177,7 +177,6 @@ public class ActivitySignUpPresenter {
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                         view.onFinishload();
                         if (response.isSuccessful() && response.body() != null) {
-                            //  Log.e("eeeeee", response.body().getUser().getName());
                             view.onSignupValid(response.body());
                         } else {
                             try {
@@ -194,7 +193,7 @@ public class ActivitySignUpPresenter {
                                     view.onFailed(context.getString(R.string.phone_found));
                                 }  else {
                                     view.onFailed(response.message() + "");
-                                }                                //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
                     }

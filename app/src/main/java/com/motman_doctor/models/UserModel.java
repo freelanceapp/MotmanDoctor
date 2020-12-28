@@ -54,6 +54,7 @@ public class UserModel implements Serializable {
         private String updated_at;
         private double distance;
         private String token;
+        private LastReservationFk last_reservation_fk;
 
         public int getId() {
             return id;
@@ -205,6 +206,88 @@ public class UserModel implements Serializable {
 
         public String getToken() {
             return token;
+        }
+
+        public LastReservationFk getLast_reservation_fk() {
+            return last_reservation_fk;
+        }
+    }
+
+    public static class LastReservationFk implements Serializable{
+        private int id;
+        private int user_id;
+        private String patient_name;
+        private String patient_phone;
+        private int doctor_id;
+        private String date;
+        private String time;
+        private String time_type;
+        private double cost;
+        private String reservation_type;
+        private String status;
+        private String cancel_reason;
+        private String day_name;
+        private String created_at;
+        private String updated_at;
+
+        public int getId() {
+            return id;
+        }
+
+        public int getUser_id() {
+            return user_id;
+        }
+
+        public String getPatient_name() {
+            return patient_name;
+        }
+
+        public String getPatient_phone() {
+            return patient_phone;
+        }
+
+        public int getDoctor_id() {
+            return doctor_id;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public String getTime() {
+            return time;
+        }
+
+        public String getTime_type() {
+            return time_type;
+        }
+
+        public double getCost() {
+            return cost;
+        }
+
+        public String getReservation_type() {
+            return reservation_type;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public String getCancel_reason() {
+            return cancel_reason;
+        }
+
+        public String getDay_name() {
+            return day_name;
+        }
+
+        public String getCreated_at() {
+            return created_at;
+        }
+
+        public String getUpdated_at() {
+            return updated_at;
         }
     }
 }

@@ -7,11 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.widget.Toast;
 
 import com.motman_doctor.R;
 import com.motman_doctor.databinding.ActivityLoginBinding;
 import com.motman_doctor.language.Language;
 import com.motman_doctor.models.LoginModel;
+import com.motman_doctor.models.UserModel;
 import com.motman_doctor.mvp.activity_login_presenter.ActivityLoginPresenter;
 import com.motman_doctor.mvp.activity_login_presenter.ActivityLoginView;
 import com.motman_doctor.ui.activity_home.HomeActivity;
@@ -56,14 +58,17 @@ public class LoginActivity extends AppCompatActivity implements ActivityLoginVie
         });
     }
 
-    @Override
-    public void onLoginValid() {
-        Intent intent = new Intent(this, SignUpActivity.class);
-        intent.putExtra("phone_code", model.getPhone_code());
-        intent.putExtra("phone", model.getPhone());
 
+
+    @Override
+    public void onSuccess(UserModel userModel) {
+        Intent intent = new Intent(this,HomeActivity.class);
         startActivity(intent);
         finish();
+    }
 
+    @Override
+    public void onFailed(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

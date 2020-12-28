@@ -22,6 +22,7 @@ import com.motman_doctor.mvp.activity_home_mvp.HomeActivityView;
 import com.motman_doctor.ui.activity_clinic_reservation.ClinicReservationActivity;
 import com.motman_doctor.ui.activity_login.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.motman_doctor.ui.activity_notifications.NotificationActivity;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -72,6 +73,11 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityView 
             startActivity(intent);
         });
 
+
+        binding.flNotification.setOnClickListener(view -> {
+            Intent intent = new Intent(this, NotificationActivity.class);
+            startActivity(intent);
+        });
 
     }
 

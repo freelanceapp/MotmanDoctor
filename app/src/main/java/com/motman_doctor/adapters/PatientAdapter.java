@@ -15,23 +15,23 @@ import com.motman_doctor.R;
 import com.motman_doctor.databinding.AppointmentRowBinding;
 import com.motman_doctor.databinding.LoadMoreRowBinding;
 import com.motman_doctor.databinding.PatientRowBinding;
+import com.motman_doctor.models.UserModel;
+import com.motman_doctor.ui.activity_home.fragments.Fragment_Patient;
 
 import java.util.List;
 
 public class PatientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int DATA = 1;
     private final int LOAD = 2;
-    private List<Object> list;
+    private List<UserModel.User> list;
     private Context context;
     private LayoutInflater inflater;
-    private AppCompatActivity activity;
-
-    public PatientAdapter(List<Object> list, Context context) {
+    private Fragment_Patient fragment_patient;
+    public PatientAdapter(List<UserModel.User> list, Context context,Fragment_Patient fragment_patient) {
         this.list = list;
         this.context = context;
         inflater = LayoutInflater.from(context);
-        activity = (AppCompatActivity) context;
-
+        this.fragment_patient = fragment_patient;
 
     }
 
@@ -53,24 +53,24 @@ public class PatientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
 
-        /*if (holder instanceof MyHolder){
+        if (holder instanceof MyHolder){
             MyHolder myHolder = (MyHolder) holder;
-
-
-            myHolder.binding.btnDetails.setOnClickListener(v -> {
-
+            myHolder.binding.setModel(list.get(position));
+            myHolder.itemView.setOnClickListener(view -> {
+                UserModel.User user = list.get(myHolder.getAdapterPosition());
+                fragment_patient.setItemData(user);
             });
         }else if (holder instanceof LoadMoreHolder){
             LoadMoreHolder loadMoreHolder = (LoadMoreHolder) holder;
             loadMoreHolder.binding.prgBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(context,R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
             loadMoreHolder.binding.prgBar.setIndeterminate(true);
-        }*/
+        }
 
     }
 
     @Override
     public int getItemCount() {
-        return 8;
+        return list.size();
     }
 
     public static class MyHolder extends RecyclerView.ViewHolder {

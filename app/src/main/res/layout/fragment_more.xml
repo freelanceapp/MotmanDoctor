@@ -6,6 +6,9 @@
         <variable
             name="lang"
             type="String" />
+        <variable
+            name="model"
+            type="com.motman_doctor.models.UserModel" />
     </data>
     <ScrollView
         android:layout_width="match_parent"
@@ -45,6 +48,7 @@
                     app:civ_border_width="3dp"
                     app:civ_border_color="@color/white"
                     android:src="@drawable/ic_avatar"
+                    user_image='@{model!=null?model.data.logo:""}'
                     />
                 <TextView
                     android:id="@+id/tvName"
@@ -59,6 +63,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/image"
                     app:layout_constraintVertical_bias="1"
+                    android:text='@{model!=null?model.data.name:""}'
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -86,6 +91,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
+                    android:checked='@{model!=null?(model.data.is_emergency.equals("yes")?true:false):false,default=false}'
 
                     />
             </LinearLayout>
@@ -280,15 +286,7 @@
                 <Space
                     android:layout_width="20dp"
                     android:layout_height="0dp"/>
-                <ImageView
-                    android:id="@+id/google"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/google_plus"
-                    />
-                <Space
-                    android:layout_width="20dp"
-                    android:layout_height="0dp"/>
+
                 <ImageView
                     android:id="@+id/instgram"
                     android:layout_width="40dp"

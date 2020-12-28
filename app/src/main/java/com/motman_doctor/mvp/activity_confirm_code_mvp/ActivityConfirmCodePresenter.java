@@ -124,7 +124,7 @@ public class ActivityConfirmCodePresenter {
 
     }
     private void login() {
-        view.onLoad();
+       /* view.onLoad();
         Api.getService(Tags.base_url)
                 .login(phone_code, phone)
                 .enqueue(new Callback<UserModel>() {
@@ -132,7 +132,6 @@ public class ActivityConfirmCodePresenter {
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
                         view.onFinishload();
                         if (response.isSuccessful() && response.body() != null) {
-                            //  Log.e("eeeeee", response.body().getUser().getName());
                             view.onUserFound(response.body());
                         } else {
                             try {
@@ -172,7 +171,7 @@ public class ActivityConfirmCodePresenter {
                             Log.e("Error", e.getMessage() + "__");
                         }
                     }
-                });
+                });*/
 
     }
 

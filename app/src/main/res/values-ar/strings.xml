@@ -78,7 +78,7 @@
     <string name="appointments">مواعيد</string>
     <string name="consulting">إستشارات</string>
     <string name="medicine">علاجي</string>
-    <string name="no_data_to_show">لا توجد اقسام لعرضها</string>
+    <string name="no_data_to_show">لا توجد عناصر لعرضها</string>
     <string name="change_language">تغيير اللغة</string>
     <string name="contact_us">إتصل بنا</string>
     <string name="social_media">التواصل الاجتماعي</string>
@@ -141,9 +141,18 @@
     <string name="last_date">تاريخ أخر كشف</string>
     <string name="reply">رد</string>
     <string name="question">السؤال</string>
-    <string name="my_appoinment">My Appoinment</string>
-    <string name="server_error">Server Error</string>
-    <string name="subject">Subject</string>
-    <string name="message">Meaasge</string>
+    <string name="my_appoinment">مواعيدي</string>
+    <string name="server_error">يوجد مشكلة وجار العمل عليها</string>
+    <string name="subject">الموضوع</string>
+    <string name="message">الرسالة</string>
+    <string name="phone_found">الهاتف غير موجود</string>
+    <string name="phone_pass_inc">رقم الهاتف او كلمة المرور غير صحيحة</string>
+    <string name="previous_drugs">الادوية السابقة</string>
+    <string name="dose">الجرعة</string>
+    <string name="video_call">مكالمة فيديو</string>
+    <string name="no_notifications_to_show">لا توجد إشعارات لعرضها</string>
+    <string name="suc">تم بنجاح!</string>
+    <string name="not_avail_now">هذا الرابط غير متاح الان</string>
+    <string name="link_inc">هذا الرابط غير صحيح</string>
 
 </resources>

@@ -40,8 +40,8 @@ public class GeneralMethod {
 
 
 
-    @BindingAdapter("image")
-    public static void image(View view, String endPoint) {
+    @BindingAdapter("user_image")
+    public static void userImage(View view, String endPoint) {
         if (view instanceof CircleImageView) {
             CircleImageView imageView = (CircleImageView) view;
             if (endPoint != null) {
@@ -76,6 +76,33 @@ public class GeneralMethod {
     }
 
 
+    @BindingAdapter("image")
+    public static void image(View view, String endPoint) {
+        if (view instanceof CircleImageView) {
+            CircleImageView imageView = (CircleImageView) view;
+            if (endPoint != null) {
+
+                Picasso.get().load(Uri.parse(Tags.IMAGE_URL + endPoint)).into(imageView);
+            }
+        } else if (view instanceof RoundedImageView) {
+            RoundedImageView imageView = (RoundedImageView) view;
+
+            if (endPoint != null) {
+
+                Picasso.get().load(Uri.parse(Tags.IMAGE_URL + endPoint)).fit().into(imageView);
+            }
+        } else if (view instanceof ImageView) {
+            ImageView imageView = (ImageView) view;
+
+            if (endPoint != null) {
+
+                Picasso.get().load(Uri.parse(Tags.IMAGE_URL + endPoint)).fit().into(imageView);
+            }
+        }
+
+    }
+
+
     @BindingAdapter("distance")
     public static void distance(TextView view,double distance){
         view.setText(String.format(Locale.ENGLISH,"%.2f %s",distance,view.getContext().getString(R.string.km)));
@@ -84,6 +111,13 @@ public class GeneralMethod {
     @BindingAdapter("rate")
     public static void rate(SimpleRatingBar ratingBar, double rate) {
         ratingBar.setRating((float) rate);
+
+    }
+
+    @BindingAdapter("general_date")
+    public static void general_date(TextView textView , String date) {
+        String d = date.split("T")[0];
+        textView.setText(d);
 
     }
 

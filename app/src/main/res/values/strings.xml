@@ -140,10 +140,19 @@
     <string name="patient">Patient</string>
     <string name="last_date">The date of the last disclosure</string>
     <string name="reply">reply</string>
-    <string name="question">السؤال</string>
-    <string name="my_appoinment">My Appoinment</string>
+    <string name="question">Question</string>
+    <string name="my_appoinment">My Appointment</string>
     <string name="server_error">Server Error</string>
     <string name="subject">Subject</string>
-    <string name="message">Meaasge</string>
+    <string name="message">Message</string>
+    <string name="phone_found">phone not found</string>
+    <string name="phone_pass_inc">Phone or password is incorrect</string>
+    <string name="previous_drugs">Previous drugs</string>
+    <string name="dose">Dose</string>
+    <string name="video_call">Video call</string>
+    <string name="no_notifications_to_show">No notifications to show</string>
+    <string name="suc">Success!</string>
+    <string name="not_avail_now">Not available now</string>
+    <string name="link_inc">This link is incorrect</string>
 
 </resources>
