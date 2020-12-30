@@ -189,7 +189,7 @@ public class ActivitySignUpPresenter {
                             if (response.code() == 500) {
                                 view.onServer();
                             } else {
-                                if (response.code() == 409) {
+                                if (response.code() == 406) {
                                     view.onFailed(context.getString(R.string.phone_found));
                                 }  else {
                                     view.onFailed(response.message() + "");
@@ -260,7 +260,7 @@ public class ActivitySignUpPresenter {
                                 view.onServer();
                             } else {
 
-                                if (response.code() == 409) {
+                                if (response.code() == 406) {
                                     view.onFailed(context.getString(R.string.phone_found));
                                 }  else {
                                     view.onFailed(response.message() + "");

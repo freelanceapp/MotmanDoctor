@@ -154,5 +154,6 @@
     <string name="suc">Success!</string>
     <string name="not_avail_now">Not available now</string>
     <string name="link_inc">This link is incorrect</string>
+    <string name="type_message">Type Message</string>
 
 </resources>

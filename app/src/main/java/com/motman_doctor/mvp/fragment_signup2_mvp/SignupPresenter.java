@@ -10,6 +10,8 @@ import com.motman_doctor.remote.Api;
 import com.motman_doctor.tags.Tags;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -18,10 +20,12 @@ import retrofit2.Response;
 public class SignupPresenter {
     private SignupFragmentView view;
     private Context context;
+    private List<String> genderList;
 
     public SignupPresenter(SignupFragmentView view, Context context) {
         this.view = view;
         this.context = context;
+        genderList=new ArrayList<>();
     }
 
     public void getSpecilization()
@@ -101,4 +105,13 @@ public class SignupPresenter {
                     }
                 });
     }
+    public void getGender() {
+        genderList.clear();
+        genderList.add(context.getString(R.string.ch_gender));
+        genderList.add(context.getString(R.string.male));
+        genderList.add(context.getString(R.string.female));
+        view.onGenderSuccess(genderList);
+
+    }
+
 }

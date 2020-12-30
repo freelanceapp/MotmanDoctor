@@ -4,12 +4,15 @@ import com.motman_doctor.models.AllCityModel;
 import com.motman_doctor.models.AllSpiclixationModel;
 import com.motman_doctor.models.ApointmentModel;
 import com.motman_doctor.models.DrugDataModel;
+import com.motman_doctor.models.MessageDataModel;
+import com.motman_doctor.models.MessageModel;
 import com.motman_doctor.models.NotificationDataModel;
 import com.motman_doctor.models.PatentDataModel;
 import com.motman_doctor.models.PlaceGeocodeData;
 import com.motman_doctor.models.PlaceMapDetailsData;
 import com.motman_doctor.models.SettingModel;
 import com.motman_doctor.models.UserModel;
+import com.motman_doctor.models.UserRoomModelData;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -41,12 +44,13 @@ public interface Service {
 
 
     @GET("api/get-my-reservation")
-    Call<ApointmentModel> getMyApointment(@Header("Authorization") String Authorization,
-                                          @Query("pagination_status") String pagination_status,
-                                          @Query("per_link_") int per_link_,
-                                          @Query("page") int page,
-                                          @Query("doctor_id") int doctor_id,
-                                          @Query("reservation_type") String reservation_type
+    Call<ApointmentModel> getMyApointment(
+            @Header("Authorization") String Authorization,
+            @Query("pagination_status") String pagination_status,
+            @Query("per_link_") int per_link_,
+            @Query("page") int page,
+            @Query("doctor_id") int doctor_id,
+            @Query("reservation_type") String reservation_type
 
     );
 
@@ -56,25 +60,24 @@ public interface Service {
                           @Field("phone") String phone,
                           @Field("password") String password
 
-    );
 
+    );
     @GET("api/get-specializations")
     Call<AllSpiclixationModel> getspicailest();
 
     @GET("api/get-cities")
     Call<AllCityModel> getcities();
-
     @Multipart
     @POST("api/doctor-register")
     Call<UserModel> signup(@Part("phone_code") RequestBody phone_code,
                            @Part("phone") RequestBody phone,
                            @Part("name") RequestBody name,
-                           @Part("latitude") RequestBody lat_part,
-                           @Part("longitude") RequestBody lng_part,
-                           @Part("address") RequestBody address_part,
+                           @Part("latitude")RequestBody lat_part,
+                           @Part("longitude")RequestBody lng_part,
+                           @Part("address")RequestBody address_part,
 
-                           @Part("gender") RequestBody gender,
-                           @Part("user_type") RequestBody user_type,
+                           @Part("gender")RequestBody gender,
+                           @Part("user_type")RequestBody user_type,
                            @Part("software_type") RequestBody software_type,
                            @Part("specialization_id") RequestBody spicial_part,
                            @Part("city_id") RequestBody city_part,
@@ -84,18 +87,21 @@ public interface Service {
                            @Part MultipartBody.Part image
 
 
-    );
 
+
+
+    );
     @Multipart
     @POST("api/doctor-register")
     Call<UserModel> signup(@Part("phone_code") RequestBody phone_code,
                            @Part("phone") RequestBody phone,
                            @Part("name") RequestBody name,
-                           @Part("latitude") RequestBody lat_part,
-                           @Part("longitude") RequestBody lng_part,
-                           @Part("address") RequestBody address_part,
-                           @Part("gender") RequestBody gender,
-                           @Part("user_type") RequestBody user_type,
+                           @Part("latitude")RequestBody lat_part,
+                           @Part("longitude")RequestBody lng_part,
+                           @Part("address")RequestBody address_part,
+
+                           @Part("gender")RequestBody gender,
+                           @Part("user_type")RequestBody user_type,
                            @Part("software_type") RequestBody software_type,
                            @Part("specialization_id") RequestBody spicial_part,
                            @Part("city_id") RequestBody city_part,
@@ -103,7 +109,6 @@ public interface Service {
                            @Part MultipartBody.Part liceimage
 
     );
-
     @FormUrlEncoded
     @POST("api/contact-us")
     Call<ResponseBody> contactUs(@Field("name") String name,
@@ -113,15 +118,18 @@ public interface Service {
 
 
     );
-
     @POST("api/logout")
     Call<ResponseBody> logout(@Header("Authorization") String user_token
     );
-
-    @GET("api/settings")
+    @GET("api/sttings")
     Call<SettingModel> getSetting();
+    @GET("api/get-medical-consultings")
+    Call<UserRoomModelData> getRooms(
+            @Query("user_id") int user_id,
+            @Query("user_type") String user_type,
+            @Query("pagination_status") String pagination_status
 
-
+    );
     @GET("api/search-patient-by-name")
     Call<PatentDataModel> getMyPatient(@Header("Authorization") String Authorization,
                                        @Query("pagination_status") String pagination_status,
@@ -145,6 +153,40 @@ public interface Service {
                                                 @Query("user_id") int user_id
 
     );
+    @GET("api/get-one-consulting")
+    Call<MessageModel> getRoomMessages(
+            @Query("medical_consulting_id") int medical_consulting_id,
+            @Query("pagination_status") String pagination_status,
+            @Query("per_link_") int per_link_,
+            @Query("page") int page
 
+
+    );
+
+
+    @FormUrlEncoded
+    @POST("api/add-msg")
+    Call<MessageDataModel> sendmessagetext(
+            @Field("from_user_id") String from_id,
+
+            @Field("to_user_id") String to_id,
+            @Field("type") String type,
+            @Field("medical_consulting_id") String medical_consulting_id,
+            @Field("message") String message
+
+
+    );
+
+    @Multipart
+    @POST("api/add-msg")
+    Call<MessageDataModel> sendmessagewithimage
+            (
+                    @Part("from_user_id") RequestBody from_user_id,
+                    @Part("to_user_id") RequestBody to_user_id,
+                    @Part("type") RequestBody type,
+                    @Part("medical_consulting_id") RequestBody medical_consulting_id,
+                    @Part MultipartBody.Part imagepart
+
+            );
 
 }

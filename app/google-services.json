@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1091828986168:android:9b0c16e7cf4ca4ed0011cd",
         "android_client_info": {
-          "package_name": "com.motmaen_client"
+          "package_name": "com.motman_doctor"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "1091828986168-50oiehshelrlnslebbo39ki55s7oocib.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.motmaen_client",
+            "package_name": "com.motman_doctor",
             "certificate_hash": "e6a73e70c3fc31d4b07d77141e133d0dd6e6939e"
           }
         },
@@ -26,7 +26,7 @@
           "client_id": "1091828986168-aaqnmgvgnvr3cf2a5ab7vq2kkbtiaoir.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.motmaen_client",
+            "package_name": "com.motman_doctor",
             "certificate_hash": "0b354f3a0c02eaba29510595124a7d68aea8edf3"
           }
         },

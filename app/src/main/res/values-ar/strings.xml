@@ -154,5 +154,6 @@
     <string name="suc">تم بنجاح!</string>
     <string name="not_avail_now">هذا الرابط غير متاح الان</string>
     <string name="link_inc">هذا الرابط غير صحيح</string>
+    <string name="type_message">Type Message</string>
 
 </resources>

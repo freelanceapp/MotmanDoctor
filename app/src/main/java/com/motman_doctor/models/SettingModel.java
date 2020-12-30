@@ -30,8 +30,8 @@ public class SettingModel implements Serializable {
         private String email1;
         private String email2;
         private String link;
-        private int latitude;
-        private int longitude;
+        private double latitude;
+        private double longitude;
         private String address;
         private String sms_user_name;
         private String sms_user_pass;
@@ -140,11 +140,11 @@ public class SettingModel implements Serializable {
             return link;
         }
 
-        public int getLatitude() {
+        public double getLatitude() {
             return latitude;
         }
 
-        public int getLongitude() {
+        public double getLongitude() {
             return longitude;
         }
 

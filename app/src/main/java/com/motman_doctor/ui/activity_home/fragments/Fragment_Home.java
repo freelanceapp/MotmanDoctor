@@ -69,6 +69,7 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
         apointmentModelList.clear();
         apointmentModelList.addAll(apointmentModel.getData());
         adapter.notifyDataSetChanged();
+
     }
 
     @Override

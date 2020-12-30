@@ -26,6 +26,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.motman_doctor.R;
+import com.motman_doctor.adapters.SpinnerAdapter;
 import com.motman_doctor.adapters.SpinnerCityAdapter;
 import com.motman_doctor.adapters.SpinnerSpicialAdapter;
 import com.motman_doctor.databinding.DialogSelectImageBinding;
@@ -46,6 +47,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.paperdb.Paper;
+
 public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
     private SignUpActivity activity;
     private static final String TAG = "DATA";
@@ -61,8 +64,11 @@ public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
     private ProgressDialog dialog2;
     private List<SpecializationModel> specializationModelList;
     private List<CityModel> cityModelList;
+    private List<String> genderList;
     private SpinnerSpicialAdapter spinnerSpicialAdapter;
     private SpinnerCityAdapter spinnerCityAdapter;
+    private SpinnerAdapter genderAdapter;
+    private String lang;
 
     public static FragmentSignUp2 newInstance(SignUpModel signUpModel) {
         Bundle bundle = new Bundle();
@@ -94,8 +100,13 @@ public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
         if (bundle != null) {
             signUpModel = (SignUpModel) bundle.getSerializable(TAG);
         }
+        Paper.init(activity);
+        lang = Paper.book().read("lang","ar");
         presenter = new SignupPresenter(this, activity);
         specializationModelList=new ArrayList<>();
+        genderList = new ArrayList<>();
+        genderAdapter = new SpinnerAdapter(genderList,activity);
+        binding.spinnerGender.setAdapter(genderAdapter);
         cityModelList=new ArrayList<>();
         spinnerCityAdapter=new SpinnerCityAdapter(cityModelList,activity);
         spinnerSpicialAdapter=new SpinnerSpicialAdapter(specializationModelList,activity);
@@ -117,7 +128,30 @@ public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
 
             }
         });
+        binding.spinnerGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i==0){
+                    signUpModel.setGender("");
+                }else {if(lang.equals("ar")){
+                    if(i==1){
+                        signUpModel.setGender("male");
+                    }
+                    else {
+                        signUpModel.setGender("female");
+                    }
+                }else {
 
+                    signUpModel.setGender(genderList.get(i));}
+                }
+                binding.setModel(signUpModel);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         binding.spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -137,6 +171,8 @@ public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
         });
         presenter.getSpecilization();
         presenter.getcities();
+        presenter.getGender();
+
 
     }
 
@@ -312,5 +348,12 @@ spinnerSpicialAdapter.notifyDataSetChanged();
         cityModelList.add(new CityModel(activity.getResources().getString(R.string.ch_city)));
         cityModelList.addAll(body.getData());
         spinnerCityAdapter.notifyDataSetChanged();
+    }
+    @Override
+    public void onGenderSuccess(List<String> genderList)
+    {
+        this.genderList.clear();
+        this.genderList.addAll(genderList);
+        genderAdapter.notifyDataSetChanged();
     }
 }

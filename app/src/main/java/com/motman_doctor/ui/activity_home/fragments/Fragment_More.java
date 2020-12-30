@@ -27,6 +27,7 @@ import com.motman_doctor.ui.activity_contactus.ContactusActivity;
 import com.motman_doctor.ui.activity_home.HomeActivity;
 import com.motman_doctor.ui.activity_language.LanguageActivity;
 import com.motman_doctor.ui.activity_login.LoginActivity;
+import com.motman_doctor.ui.activity_room.ChatRoomActivity;
 
 import io.paperdb.Paper;
 
@@ -78,7 +79,14 @@ public class Fragment_More extends Fragment implements MoreFragmentView {
                 Common.CreateDialogAlert(activity, activity.getResources().getString(R.string.please_sign_in_or_sign_up));
             }
         });
-
+        binding.llchat.setOnClickListener(view -> {
+            if (userModel != null) {
+                Intent intent = new Intent(activity, ChatRoomActivity.class);
+                startActivity(intent);
+            } else {
+                Common.CreateDialogAlert(activity, activity.getResources().getString(R.string.please_sign_in_or_sign_up));
+            }
+        });
         binding.facebook.setOnClickListener(v -> {
             if (setting != null && setting.getSettings() != null && setting.getSettings().getFacebook() != null) {
                 if (setting.getSettings().getInstagram().matches(regex)) {

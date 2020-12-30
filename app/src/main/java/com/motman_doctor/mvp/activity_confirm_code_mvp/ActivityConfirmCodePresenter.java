@@ -124,6 +124,7 @@ public class ActivityConfirmCodePresenter {
 
     }
     private void login() {
+        view.onUserNoFound();
        /* view.onLoad();
         Api.getService(Tags.base_url)
                 .login(phone_code, phone)
