@@ -125,6 +125,21 @@ public class Fragment_More extends Fragment implements MoreFragmentView {
             }
         });
         presenter.getSetting();
+        if (userModel != null) {
+            binding.edtAmount.setText(userModel.getData().getDetection_price() + "");
+        }
+        binding.imageEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String price = binding.edtAmount.getText().toString();
+                if (price != null && !price.isEmpty()) {
+                    presenter.editprofile(price, userModel);
+
+                } else {
+                    binding.edtAmount.setError(getResources().getString(R.string.field_required));
+                }
+            }
+        });
     }
 
     @Override
@@ -182,5 +197,24 @@ public class Fragment_More extends Fragment implements MoreFragmentView {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(path));
         startActivity(intent);
 
+    }
+
+    @Override
+    public void onupdateValid(UserModel body) {
+        preferences.create_update_userdata(activity, body);
+        userModel = body;
+        Toast.makeText(activity,activity.getResources().getString(R.string.suc),Toast.LENGTH_LONG).show();
+        if(body.getData().getDetection_price()==0){
+            binding.imageEdit.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_correct));
+        }
+        else {
+            binding.imageEdit.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_edit2));
+
+        }
+    }
+
+    @Override
+    public void onServer() {
+        Toast.makeText(activity, activity.getResources().getString(R.string.server_error), Toast.LENGTH_LONG).show();
     }
 }

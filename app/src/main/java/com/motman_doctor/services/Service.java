@@ -14,6 +14,8 @@ import com.motman_doctor.models.SettingModel;
 import com.motman_doctor.models.UserModel;
 import com.motman_doctor.models.UserRoomModelData;
 
+import java.util.List;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -188,5 +190,15 @@ public interface Service {
                     @Part MultipartBody.Part imagepart
 
             );
+    @FormUrlEncoded
+    @POST("api/update-doctor-register")
+    Call<UserModel> editprofile(
+            @Header("Authorization") String user_token,
+            @Field("detection_price") String detection_price,
+            @Field("id") String id
+
+
+    );
+
 
 }
