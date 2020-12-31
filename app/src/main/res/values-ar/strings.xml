@@ -167,6 +167,7 @@
     <string name="Thr">الخميس</string>
     <string name="fri">الجمعه</string>
     <string name="add_day">اضافة يوم</string>
-    <string name="from">From</string>
+    <string name="from">من</string>
+    <string name="to">الى</string>
 
 </resources>
