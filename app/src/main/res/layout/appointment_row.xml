@@ -55,6 +55,16 @@ android:layout_marginBottom="8dp"
                 android:textSize="15sp"
 
                 />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src='@{model.reservation_type.equals("normal")?@drawable/ic_phone:@drawable/ic_video_camera}'
+                app:tint="@color/gray9"
+                android:padding="3dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginStart="7dp"
+                android:layout_gravity="center_vertical"
+                />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -28,7 +28,7 @@ public class HomeFragmentPresenter {
 
        // Log.e("mmmmmmm",userModel.getData().getId()+"");
         view.showProgressBar();
-        Api.getService(Tags.base_url).getMyApointment("Bearer "+userModel.getData().getToken(),"off",1,1,userModel.getData().getId(),"normal")
+        Api.getService(Tags.base_url).getMyApointment("Bearer "+userModel.getData().getToken(),"off",1,1,userModel.getData().getId(),"all")
                 .enqueue(new Callback<ApointmentModel>() {
                     @Override
                     public void onResponse(Call<ApointmentModel> call, Response<ApointmentModel> response) {

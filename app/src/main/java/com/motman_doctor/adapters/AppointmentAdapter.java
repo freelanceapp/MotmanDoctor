@@ -2,6 +2,7 @@ package com.motman_doctor.adapters;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -56,7 +57,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof MyHolder){
             MyHolder myHolder = (MyHolder) holder;
 myHolder.binding.setModel(list.get(position));
-
+            Log.e("flkfkfk",list.get(position).getReservation_type());
 //            myHolder.binding.btnDetails.setOnClickListener(v -> {
 //
 //            });
