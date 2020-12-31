@@ -156,5 +156,17 @@
     <string name="link_inc">This link is incorrect</string>
     <string name="type_message">Type Message</string>
     <string name="detection_price">Detection Price</string>
+    <string name="day">Day</string>
+    <string name="add_time">Add Time</string>
+    <string name="added_days">Added Days</string>
+    <string name="SAT">Satrday</string>
+    <string name="Sun">Sunday</string>
+    <string name="mon">Monday</string>
+    <string name="Tue">Tuesday</string>
+    <string name="wed">Wedensday</string>
+    <string name="Thr">Thursday</string>
+    <string name="fri">Friday</string>
+    <string name="add_day">Add Day</string>
+    <string name="from">From</string>
 
 </resources>

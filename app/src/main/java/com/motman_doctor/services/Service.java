@@ -3,6 +3,7 @@ package com.motman_doctor.services;
 import com.motman_doctor.models.AllCityModel;
 import com.motman_doctor.models.AllSpiclixationModel;
 import com.motman_doctor.models.ApointmentModel;
+import com.motman_doctor.models.DayModel;
 import com.motman_doctor.models.DrugDataModel;
 import com.motman_doctor.models.MessageDataModel;
 import com.motman_doctor.models.MessageModel;
@@ -123,7 +124,7 @@ public interface Service {
     @POST("api/logout")
     Call<ResponseBody> logout(@Header("Authorization") String user_token
     );
-    @GET("api/sttings")
+    @GET("api/settings")
     Call<SettingModel> getSetting();
     @GET("api/get-medical-consultings")
     Call<UserRoomModelData> getRooms(
@@ -199,6 +200,20 @@ public interface Service {
 
 
     );
+    @GET("api/Get-Days-with-Times")
+    Call<DayModel> getDays(
+            @Header("Authorization") String user_token,
+            @Query("doctor_id") int doctor_id,
+            @Query("pagination_status") String pagination_status
+
+    );
+    @FormUrlEncoded
+    @POST("api/add-doctor-days")
+    Call<ResponseBody> addday(
+            @Header("Authorization") String user_token,
+            @Field("doctor_id") String doctor_id,
+            @Field("day_name[]") List<String> day_name
 
 
+    );
 }

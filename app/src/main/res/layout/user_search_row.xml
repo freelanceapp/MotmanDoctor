@@ -18,7 +18,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image"
-            image="@{userroommodel.user_fk.logo}"
+            user_image="@{userroommodel.user_fk.logo}"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginStart="5dp"

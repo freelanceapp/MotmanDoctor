@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    >
+    <LinearLayout
+         android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:background="@drawable/custom_bg">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="@string/add_time"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal">
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center_horizontal"
+             android:gravity="center"
+             android:paddingBottom="5dp"
+             android:paddingTop="5dp"
+             android:text="@string/from"
+             android:textColor="@color/white"
+             android:textSize="15sp"
+             android:textStyle="bold" />
+
+         <TextView
+             android:id="@+id/tvaddfrom"
+             android:layout_width="match_parent"
+             android:layout_height="45dp"
+             android:text="@string/add_time"
+             android:textColor="@color/white"
+             android:gravity="center"
+             android:textSize="15sp"
+             />
+
+
+     </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="@string/from"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+           <TextView
+               android:id="@+id/tvaddto"
+               android:layout_width="match_parent"
+               android:layout_height="45dp"
+               android:text="@string/add_time"
+               android:textColor="@color/white"
+               android:gravity="center"
+               android:textSize="15sp"
+               />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

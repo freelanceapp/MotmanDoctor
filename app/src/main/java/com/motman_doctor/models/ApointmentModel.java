@@ -108,7 +108,7 @@ public class ApointmentModel implements Serializable{
             public Object details;
             public int rates;
             public int app_cost;
-            public int detection_price;
+            public double detection_price;
             public Object appointment_time;
             public String is_emergency;
             public Object email_verified_at;
@@ -212,7 +212,7 @@ public class ApointmentModel implements Serializable{
                 return app_cost;
             }
 
-            public int getDetection_price() {
+            public double getDetection_price() {
                 return detection_price;
             }
 
