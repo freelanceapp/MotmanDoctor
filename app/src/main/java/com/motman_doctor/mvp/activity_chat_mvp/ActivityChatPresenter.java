@@ -116,7 +116,7 @@ public class ActivityChatPresenter {
                         public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
                          //   view.onfinishloadmore();
 
-                            if (response.isSuccessful() && response.body() != null&&response.body().getData().size()>0) {
+                            if (response.isSuccessful() && response.body() != null&&response.body().getData()!=null) {
                                 view.ondataloadmore(response.body());
 
 
@@ -132,7 +132,7 @@ public class ActivityChatPresenter {
                                     try {
 
                                         Log.e("error", response.code() + "_" + response.errorBody().string());
-                                    } catch (IOException e) {
+                                    } catch (Exception e) {
                                        // e.printStackTrace();
                                     }
                                 }

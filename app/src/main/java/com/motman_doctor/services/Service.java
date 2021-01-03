@@ -1,5 +1,6 @@
 package com.motman_doctor.services;
 
+import com.motman_doctor.models.AddTimeModel;
 import com.motman_doctor.models.AllCityModel;
 import com.motman_doctor.models.AllSpiclixationModel;
 import com.motman_doctor.models.ApointmentModel;
@@ -7,6 +8,7 @@ import com.motman_doctor.models.DayModel;
 import com.motman_doctor.models.DrugDataModel;
 import com.motman_doctor.models.MessageDataModel;
 import com.motman_doctor.models.MessageModel;
+import com.motman_doctor.models.MyTimeModel;
 import com.motman_doctor.models.NotificationDataModel;
 import com.motman_doctor.models.PatentDataModel;
 import com.motman_doctor.models.PlaceGeocodeData;
@@ -21,6 +23,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -65,22 +68,24 @@ public interface Service {
 
 
     );
+
     @GET("api/get-specializations")
     Call<AllSpiclixationModel> getspicailest();
 
     @GET("api/get-cities")
     Call<AllCityModel> getcities();
+
     @Multipart
     @POST("api/doctor-register")
     Call<UserModel> signup(@Part("phone_code") RequestBody phone_code,
                            @Part("phone") RequestBody phone,
                            @Part("name") RequestBody name,
-                           @Part("latitude")RequestBody lat_part,
-                           @Part("longitude")RequestBody lng_part,
-                           @Part("address")RequestBody address_part,
+                           @Part("latitude") RequestBody lat_part,
+                           @Part("longitude") RequestBody lng_part,
+                           @Part("address") RequestBody address_part,
 
-                           @Part("gender")RequestBody gender,
-                           @Part("user_type")RequestBody user_type,
+                           @Part("gender") RequestBody gender,
+                           @Part("user_type") RequestBody user_type,
                            @Part("software_type") RequestBody software_type,
                            @Part("specialization_id") RequestBody spicial_part,
                            @Part("city_id") RequestBody city_part,
@@ -90,21 +95,19 @@ public interface Service {
                            @Part MultipartBody.Part image
 
 
-
-
-
     );
+
     @Multipart
     @POST("api/doctor-register")
     Call<UserModel> signup(@Part("phone_code") RequestBody phone_code,
                            @Part("phone") RequestBody phone,
                            @Part("name") RequestBody name,
-                           @Part("latitude")RequestBody lat_part,
-                           @Part("longitude")RequestBody lng_part,
-                           @Part("address")RequestBody address_part,
+                           @Part("latitude") RequestBody lat_part,
+                           @Part("longitude") RequestBody lng_part,
+                           @Part("address") RequestBody address_part,
 
-                           @Part("gender")RequestBody gender,
-                           @Part("user_type")RequestBody user_type,
+                           @Part("gender") RequestBody gender,
+                           @Part("user_type") RequestBody user_type,
                            @Part("software_type") RequestBody software_type,
                            @Part("specialization_id") RequestBody spicial_part,
                            @Part("city_id") RequestBody city_part,
@@ -112,6 +115,7 @@ public interface Service {
                            @Part MultipartBody.Part liceimage
 
     );
+
     @FormUrlEncoded
     @POST("api/contact-us")
     Call<ResponseBody> contactUs(@Field("name") String name,
@@ -121,11 +125,14 @@ public interface Service {
 
 
     );
+
     @POST("api/logout")
     Call<ResponseBody> logout(@Header("Authorization") String user_token
     );
+
     @GET("api/settings")
     Call<SettingModel> getSetting();
+
     @GET("api/get-medical-consultings")
     Call<UserRoomModelData> getRooms(
             @Query("user_id") int user_id,
@@ -133,6 +140,7 @@ public interface Service {
             @Query("pagination_status") String pagination_status
 
     );
+
     @GET("api/search-patient-by-name")
     Call<PatentDataModel> getMyPatient(@Header("Authorization") String Authorization,
                                        @Query("pagination_status") String pagination_status,
@@ -156,6 +164,7 @@ public interface Service {
                                                 @Query("user_id") int user_id
 
     );
+
     @GET("api/get-one-consulting")
     Call<MessageModel> getRoomMessages(
             @Query("medical_consulting_id") int medical_consulting_id,
@@ -191,6 +200,7 @@ public interface Service {
                     @Part MultipartBody.Part imagepart
 
             );
+
     @FormUrlEncoded
     @POST("api/update-doctor-register")
     Call<UserModel> editprofile(
@@ -200,6 +210,7 @@ public interface Service {
 
 
     );
+
     @GET("api/Get-Days-with-Times")
     Call<DayModel> getDays(
             @Header("Authorization") String user_token,
@@ -207,12 +218,29 @@ public interface Service {
             @Query("pagination_status") String pagination_status
 
     );
+
     @FormUrlEncoded
     @POST("api/add-doctor-days")
     Call<ResponseBody> addday(
             @Header("Authorization") String user_token,
             @Field("doctor_id") String doctor_id,
             @Field("day_name[]") List<String> day_name
+
+
+    );
+
+    @GET("api/Get-Times-By-Day")
+    Call<MyTimeModel> gettimes(
+            @Header("Authorization") String user_token,
+            @Query("doctor_time_id") int doctor_time_id,
+            @Query("pagination_status") String pagination_status
+
+    );
+
+    @POST("api/add-doctor-times")
+    Call<ResponseBody> addtime(
+            @Header("Authorization") String user_token,
+            @Body AddTimeModel addTimeModel
 
 
     );

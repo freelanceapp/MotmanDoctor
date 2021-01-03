@@ -30,6 +30,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             />
+        <activity android:name=".ui.activity_mytime.MyTimeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            />
         <activity android:name=".ui.activity_notifications.NotificationActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait"

@@ -66,6 +66,7 @@
                 android:layout_weight=".7">
 
                 <FrameLayout
+                    android:id="@+id/flshow"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"

@@ -1,14 +1,15 @@
-package com.motman_doctor.mvp.activity_my_appoinment_mvp;
+package com.motman_doctor.mvp.activity_mytime_mvp;
 
 import com.motman_doctor.databinding.DialogAddTimeBinding;
 import com.motman_doctor.models.DayModel;
+import com.motman_doctor.models.MyTimeModel;
 
-public interface MyAppoimentActivityView {
+public interface MyTimeActivityView {
     void onFinished();
 
     void onFailed(String msg);
 
-    void ondata(DayModel body);
+    void ondata(MyTimeModel body);
 
     void onLoad();
 
@@ -20,6 +21,4 @@ public interface MyAppoimentActivityView {
 
 
     void onDateSelected(String date, DialogAddTimeBinding binding);
-
-    void suceseaddtime();
 }

@@ -86,6 +86,14 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     }
                 }
             });
+            myHolder.binding.flshow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MyAppoinmentActivity myAppoinmentActivity=(MyAppoinmentActivity)context;
+                    myAppoinmentActivity.
+                            show(context,list.get(position).getId(),position);
+                }
+            });
             // Log.e("flkfkfk",list.get(position).getReservation_type());
 //            myHolder.binding.btnDetails.setOnClickListener(v -> {
 //

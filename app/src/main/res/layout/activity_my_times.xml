@@ -7,7 +7,9 @@
         <variable
             name="lang"
             type="String" />
-
+<variable
+    name="day"
+    type="String" />
 
     </data>
 
@@ -127,7 +129,7 @@
                             android:paddingStart="10dp"
                             android:paddingEnd="10dp"
                             android:gravity="center_vertical"
-                            android:text="@string/day"
+                            android:text="@{day}"
                             android:textColor="@color/white"
                             android:textSize="15sp"
 
@@ -141,6 +143,7 @@
                             android:paddingStart="10dp"
                             android:paddingEnd="10dp"
                             android:text="@string/show"
+                            android:visibility="gone"
                             android:textColor="@color/white"
                             android:textSize="15sp"
 
