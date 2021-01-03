@@ -20,7 +20,7 @@ public class ApointmentModel implements Serializable{
         public int doctor_id;
         public String date;
         public String time;
-        public int cost;
+        public double cost;
         public String reservation_type;
         public String status;
         public Object cancel_reason;
@@ -60,7 +60,7 @@ public class ApointmentModel implements Serializable{
             return time;
         }
 
-        public int getCost() {
+        public double getCost() {
             return cost;
         }
 

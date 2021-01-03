@@ -56,7 +56,7 @@ public class ActivityMyAppoimentPresenter implements TimePickerDialog.OnTimeSetL
         // datePickerDialog.setOkText(getString(R.string.select));
         //datePickerDialog.setCancelText(getString(R.string.cancel));
         timePickerDialog.setVersion(com.wdullaer.materialdatetimepicker.time.TimePickerDialog.Version.VERSION_2);
-        timePickerDialog.setMinTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+      //  timePickerDialog.setMinTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
 
     }
 

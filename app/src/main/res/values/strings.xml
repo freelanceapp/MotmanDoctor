@@ -169,5 +169,6 @@
     <string name="add_day">Add Day</string>
     <string name="from">From</string>
     <string name="to">To</string>
+    <string name="appoinments_table">Appoinments Table</string>
 
 </resources>
