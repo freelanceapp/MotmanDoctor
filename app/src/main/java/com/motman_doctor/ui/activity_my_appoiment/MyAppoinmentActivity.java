@@ -3,6 +3,7 @@ package com.motman_doctor.ui.activity_my_appoiment;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +20,14 @@ import com.motman_doctor.adapters.SpinnerAdapter;
 import com.motman_doctor.databinding.ActivityMyAppoimentBinding;
 import com.motman_doctor.databinding.DialogAddTimeBinding;
 import com.motman_doctor.language.Language;
+import com.motman_doctor.models.AddTimeModel;
 import com.motman_doctor.models.DayModel;
 import com.motman_doctor.models.UserModel;
 import com.motman_doctor.mvp.activity_my_appoinment_mvp.ActivityMyAppoimentPresenter;
 import com.motman_doctor.mvp.activity_my_appoinment_mvp.MyAppoimentActivityView;
 import com.motman_doctor.preferences.Preferences;
 import com.motman_doctor.share.Common;
+import com.motman_doctor.ui.activity_mytime.MyTimeActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +46,12 @@ public class MyAppoinmentActivity extends AppCompatActivity implements MyAppoime
     private SpinnerAdapter adddayAdapter;
     private List<String> list;
     private List<String> list2;
-private int typedate=-1;
+    private List<String> list3;
+
+    private int typedate = -1;
     private ActivityMyAppoimentPresenter presenter;
     private ProgressDialog dialog;
+    private String from = "", to = "";
 
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -66,6 +72,8 @@ private int typedate=-1;
     private void initView() {
         list = new ArrayList<>();
         list2 = new ArrayList<>();
+        list3 = new ArrayList<>();
+
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(this);
         Paper.init(this);
@@ -141,7 +149,14 @@ private int typedate=-1;
         list2.add("WED");
         list2.add("THU");
         list2.add("FRI");
-
+        list3.add(getResources().getString(R.string.add_day));
+        list3.add(getResources().getString(R.string.SAT));
+        list3.add(getResources().getString(R.string.Sun));
+        list3.add(getResources().getString(R.string.mon));
+        list3.add(getResources().getString(R.string.Tue));
+        list3.add(getResources().getString(R.string.wed));
+        list3.add(getResources().getString(R.string.Thr));
+        list3.add(getResources().getString(R.string.fri));
     }
 
 
@@ -210,15 +225,45 @@ private int typedate=-1;
         binding.tvaddfrom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                typedate=0;
+                typedate = 0;
                 presenter.showDateDialog(getFragmentManager(), binding);
             }
         });
         binding.tvaddto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                typedate=1;
+                typedate = 1;
                 presenter.showDateDialog(getFragmentManager(), binding);
+            }
+        });
+        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!from.isEmpty() && !to.isEmpty()) {
+                    AddTimeModel addTimeModel = new AddTimeModel();
+                    addTimeModel.setDoctor_time_id(dayid);
+                    List<AddTimeModel.Times> list = new ArrayList<>();
+                    AddTimeModel.Times add = new AddTimeModel.Times();
+                    add.setFrom_hour(from);
+                    add.setTo_hour(to);
+                    add.setType("normal");
+                    list.add(add);
+                    addTimeModel.setTimes(list);
+                    presenter.addtime(addTimeModel, userModel);
+                    from = "";
+                    to = "";
+                    dialog.dismiss();
+                } else {
+                    if (from.isEmpty() || to.isEmpty()) {
+                        if (from.isEmpty()) {
+                            Toast.makeText(MyAppoinmentActivity.this, getResources().getString(R.string.add_from), Toast.LENGTH_LONG).show();
+                        }
+                        if (to.isEmpty()) {
+                            Toast.makeText(MyAppoinmentActivity.this, getResources().getString(R.string.add_to), Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }
             }
         });
         dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_congratulation_animation;
@@ -229,10 +274,24 @@ private int typedate=-1;
 
     @Override
     public void onDateSelected(String date, DialogAddTimeBinding binding) {
-        if(typedate==0){
-        binding.tvaddfrom.setText(date);}
-        else {
+        if (typedate == 0) {
+            binding.tvaddfrom.setText(date);
+            from = date;
+        } else {
             binding.tvaddto.setText(date);
+            to = date;
         }
+    }
+
+    @Override
+    public void suceseaddtime() {
+        Toast.makeText(this, getResources().getString(R.string.suc), Toast.LENGTH_LONG).show();
+    }
+
+    public void show(Context context, int id, int pos) {
+        Intent intent = new Intent(MyAppoinmentActivity.this, MyTimeActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("day", list3.get(pos + 1));
+        startActivity(intent);
     }
 }

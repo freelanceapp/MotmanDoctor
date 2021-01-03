@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat;
 
 import com.motman_doctor.R;
 import com.motman_doctor.databinding.DialogAddTimeBinding;
+import com.motman_doctor.models.AddTimeModel;
 import com.motman_doctor.models.DayModel;
 import com.motman_doctor.models.UserModel;
 import com.motman_doctor.models.DayModel;
@@ -182,6 +183,59 @@ public class ActivityMyAppoimentPresenter implements TimePickerDialog.OnTimeSetL
                     }
                 });
     }
+    public void addtime(AddTimeModel addTimeModel, UserModel userModel) {
+
+        view.onLoad();
+        Api.getService(Tags.base_url)
+                .addtime("Bearer " + userModel.getData().getToken(), addTimeModel)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        view.onFinishload();
+                        if (response.isSuccessful() && response.body() != null) {
+                            //  Log.e("eeeeee", response.body().getUser().getName());
+                            view.suceseaddtime();
+                        } else {
+                            try {
+                                Log.e("mmmmmmmmmmssss", response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            if (response.code() == 500) {
+                                view.onServer();
+                            } else {
+                                if (response.code() == 409) {
+                                    view.onFailed(context.getString(R.string.phone_found));
+                                } else {
+                                    view.onFailed(response.message() + "");
+                                }                                 //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        try {
+                            view.onFinishload();
+                            if (t.getMessage() != null) {
+                                Log.e("msg_category_error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    view.onFailed(context.getResources().getString(R.string.something));
+                                    //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    view.onFailed(t.getMessage());
+                                    // Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
+    }
 
 
 //    private void loadMore(int page)
@@ -260,7 +314,7 @@ public class ActivityMyAppoimentPresenter implements TimePickerDialog.OnTimeSetL
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, second);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm aa", Locale.ENGLISH);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
         String date = dateFormat.format(new Date(calendar.getTimeInMillis()));
         ActivityMyAppoimentPresenter.this.view.onDateSelected(date,binding);
 

@@ -169,6 +169,8 @@
     <string name="add_day">اضافة يوم</string>
     <string name="from">من</string>
     <string name="to">الى</string>
-    <string name="appoinments_table">Appoinments Table</string>
+    <string name="appoinments_table">جدول المواعيد</string>
+    <string name="add_from">اضف الوقت من </string>
+    <string name="add_to">اضف الوقت الى</string>
 
 </resources>

@@ -159,7 +159,7 @@
     <string name="day">Day</string>
     <string name="add_time">Add Time</string>
     <string name="added_days">Added Days</string>
-    <string name="SAT">Satrday</string>
+    <string name="SAT">Saturday</string>
     <string name="Sun">Sunday</string>
     <string name="mon">Monday</string>
     <string name="Tue">Tuesday</string>
@@ -170,5 +170,7 @@
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="appoinments_table">Appoinments Table</string>
+    <string name="add_from">Add From Time</string>
+    <string name="add_to">Add To Time</string>
 
 </resources>
