@@ -66,7 +66,7 @@ public class ChatRoomActivity extends AppCompatActivity implements ChatRoomActiv
         presenter = new ActivityChatRoomPresenter(this, this);
         binding.setLang(lang);
         userRoomModelList = new ArrayList<>();
-        room_adapter = new Room_Adapter(this, userRoomModelList);
+        room_adapter = new Room_Adapter(this, userRoomModelList,null);
         manager = new LinearLayoutManager(this);
         binding.recView.setLayoutManager(manager);
         binding.recView.setItemViewCacheSize(25);

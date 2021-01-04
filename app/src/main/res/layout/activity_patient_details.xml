@@ -9,6 +9,9 @@
             name="lang"
             type="String" />
         <variable
+            name="type"
+            type="String" />
+        <variable
             name="model"
             type="com.motman_doctor.models.UserModel.User" />
         <variable
@@ -234,7 +237,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_video_camera"
+                            android:src='@{type!=null?(type.equals("normal")?@drawable/ic_phone:@drawable/ic_video_camera):@drawable/ic_video_camera}'
                             app:tint="@color/white"
                             android:layout_gravity="center_vertical"
                             />
@@ -247,7 +250,7 @@
                             android:layout_gravity="center_vertical"
                             android:textColor="@color/white"
                             android:textSize="18sp"
-                            android:text="@string/video_call"
+                            android:text='@{type!=null?(type.equals("online")?@string/video_call:@string/call):@string/call}'
                             />
                     </LinearLayout>
 

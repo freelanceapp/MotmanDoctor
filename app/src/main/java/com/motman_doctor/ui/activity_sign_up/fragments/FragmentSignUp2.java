@@ -128,30 +128,31 @@ public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
 
             }
         });
-        binding.spinnerGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i==0){
-                    signUpModel.setGender("");
-                }else {if(lang.equals("ar")){
-                    if(i==1){
-                        signUpModel.setGender("male");
-                    }
-                    else {
-                        signUpModel.setGender("female");
-                    }
-                }else {
-
-                    signUpModel.setGender(genderList.get(i));}
-                }
-                binding.setModel(signUpModel);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+//        binding.spinnerGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                if (i==0){
+//                    signUpModel.setGender("");
+//                }else {if(lang.equals("ar")){
+//                    if(i==1){
+//                        signUpModel.setGender("male");
+//                    }
+//                    else {
+//                        signUpModel.setGender("female");
+//                    }
+//                }else {
+//
+//                    signUpModel.setGender(genderList.get(i));}
+//                }
+//                binding.setModel(signUpModel);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
+        binding.spinnerGender.setVisibility(View.GONE);
         binding.spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

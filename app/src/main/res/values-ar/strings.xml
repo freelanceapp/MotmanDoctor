@@ -145,7 +145,7 @@
     <string name="server_error">يوجد مشكلة وجار العمل عليها</string>
     <string name="subject">الموضوع</string>
     <string name="message">الرسالة</string>
-    <string name="phone_found">الهاتف غير موجود</string>
+    <string name="phone_found">الهاتف  موجود</string>
     <string name="phone_pass_inc">رقم الهاتف او كلمة المرور غير صحيحة</string>
     <string name="previous_drugs">الادوية السابقة</string>
     <string name="dose">الجرعة</string>
@@ -172,5 +172,6 @@
     <string name="appoinments_table">جدول المواعيد</string>
     <string name="add_from">اضف الوقت من </string>
     <string name="add_to">اضف الوقت الى</string>
+    <string name="call">اتصال</string>
 
 </resources>

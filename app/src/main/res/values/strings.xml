@@ -145,7 +145,7 @@
     <string name="server_error">Server Error</string>
     <string name="subject">Subject</string>
     <string name="message">Message</string>
-    <string name="phone_found">phone not found</string>
+    <string name="phone_found">phone found</string>
     <string name="phone_pass_inc">Phone or password is incorrect</string>
     <string name="previous_drugs">Previous drugs</string>
     <string name="dose">Dose</string>
@@ -172,5 +172,5 @@
     <string name="appoinments_table">Appoinments Table</string>
     <string name="add_from">Add From Time</string>
     <string name="add_to">Add To Time</string>
-
+    <string name="call">Call</string>
 </resources>

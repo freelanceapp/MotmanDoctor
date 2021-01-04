@@ -70,8 +70,9 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
         binding.recView.setLayoutManager(new LinearLayoutManager(activity));
         binding.recView.setAdapter(adapter);
         presenter = new HomeFragmentPresenter(this, activity);
+        if(userModel!=null){
         presenter.getApointment(userModel);
-    }
+    }}
 
     @Override
     public void onSuccess(ApointmentModel apointmentModel) {
@@ -97,9 +98,11 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
 
     }
 
-    public void setitem(ApointmentModel.Data.PatientFk patient_fk) {
+    public void setitem(ApointmentModel.Data.PatientFk patient_fk, int id, String reservation_type) {
         Intent intent = new Intent(activity, PatientDetailsActivity.class);
         intent.putExtra("DATA", patient_fk);
+        intent.putExtra("id",id);
+        intent.putExtra("type",reservation_type);
         startActivity(intent);
     }
 

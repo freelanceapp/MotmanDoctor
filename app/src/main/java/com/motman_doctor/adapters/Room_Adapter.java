@@ -8,12 +8,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.motman_doctor.R;
 import com.motman_doctor.databinding.LoadMoreRowBinding;
 import com.motman_doctor.databinding.UserSearchRowBinding;
 import com.motman_doctor.models.UserRoomModelData;
+import com.motman_doctor.ui.activity_home.HomeActivity;
+import com.motman_doctor.ui.activity_home.fragments.Fragment_Chat;
 import com.motman_doctor.ui.activity_room.ChatRoomActivity;
 
 import java.util.List;
@@ -24,13 +27,15 @@ public class Room_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private List<UserRoomModelData.UserRoomModel> userRoomModelList;
     private Context context;
-    private ChatRoomActivity chatRoomActivity;
+    private HomeActivity chatRoomActivity;
+    private Fragment fragment;
 
-    public Room_Adapter(Context context, List<UserRoomModelData.UserRoomModel> userRoomModelList) {
+    public Room_Adapter(Context context, List<UserRoomModelData.UserRoomModel> userRoomModelList, Fragment fragment) {
 
         this.userRoomModelList = userRoomModelList;
         this.context = context;
-        chatRoomActivity = (ChatRoomActivity) context;
+        chatRoomActivity = (HomeActivity) context;
+        this.fragment = fragment;
     }
 
     @NonNull
@@ -59,9 +64,10 @@ public class Room_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
             myHolder.itemView.setOnClickListener(v -> {
+                Fragment_Chat fragment_chat=(Fragment_Chat)fragment;
                 UserRoomModelData.UserRoomModel userRoomModel1 = userRoomModelList.get(myHolder.getAdapterPosition());
                 // fragment.setItemData(userRoomModel1,myHolder.getAdapterPosition());
-                chatRoomActivity.setItemData(userRoomModel1, holder.getLayoutPosition());
+                fragment_chat.setItemData(userRoomModel1, holder.getLayoutPosition());
             });
         } else {
             LoadMoreHolder loadMoreHolder = (LoadMoreHolder) holder;
