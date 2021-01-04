@@ -75,6 +75,7 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
         else {
             presenter.getDrugs(patientFk.getId());
         }
+
         binding.imageBack.setOnClickListener(view -> finish());
     }
 
