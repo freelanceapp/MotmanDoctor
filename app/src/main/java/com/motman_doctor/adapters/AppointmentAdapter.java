@@ -4,18 +4,21 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.motman_doctor.R;
 import com.motman_doctor.databinding.AppointmentRowBinding;
 import com.motman_doctor.databinding.LoadMoreRowBinding;
 import com.motman_doctor.models.ApointmentModel;
+import com.motman_doctor.ui.activity_home.fragments.Fragment_Home;
 
 import java.util.List;
 
@@ -26,13 +29,14 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private Context context;
     private LayoutInflater inflater;
     private AppCompatActivity activity;
+    private Fragment fragment;
 
-    public AppointmentAdapter(List<ApointmentModel.Data> list, Context context) {
+    public AppointmentAdapter(List<ApointmentModel.Data> list, Context context, Fragment fragment) {
         this.list = list;
         this.context = context;
         inflater = LayoutInflater.from(context);
         activity = (AppCompatActivity) context;
-
+        this.fragment = fragment;
 
     }
 
@@ -41,10 +45,10 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        if (viewType==DATA){
+        if (viewType == DATA) {
             AppointmentRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.appointment_row, parent, false);
             return new MyHolder(binding);
-        }else {
+        } else {
             LoadMoreRowBinding binding = DataBindingUtil.inflate(inflater, R.layout.load_more_row, parent, false);
             return new LoadMoreHolder(binding);
         }
@@ -54,16 +58,25 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
 
-        if (holder instanceof MyHolder){
+        if (holder instanceof MyHolder) {
             MyHolder myHolder = (MyHolder) holder;
-myHolder.binding.setModel(list.get(position));
-            Log.e("flkfkfk",list.get(position).getReservation_type());
+            myHolder.binding.setModel(list.get(position));
+            Log.e("flkfkfk", list.get(position).getPatient_fk().getAddress());
 //            myHolder.binding.btnDetails.setOnClickListener(v -> {
 //
 //            });
-        }else if (holder instanceof LoadMoreHolder){
+            myHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (fragment instanceof Fragment_Home){
+                        Fragment_Home fragment_home=(Fragment_Home)fragment;
+                        fragment_home.setitem(list.get(position).patient_fk);
+                    }
+                }
+            });
+        } else if (holder instanceof LoadMoreHolder) {
             LoadMoreHolder loadMoreHolder = (LoadMoreHolder) holder;
-            loadMoreHolder.binding.prgBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(context,R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+            loadMoreHolder.binding.prgBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
             loadMoreHolder.binding.prgBar.setIndeterminate(true);
         }
 
@@ -100,13 +113,13 @@ myHolder.binding.setModel(list.get(position));
 
     @Override
     public int getItemViewType(int position) {
-        if (list.size()>0){
-            if (list.get(position)==null){
+        if (list.size() > 0) {
+            if (list.get(position) == null) {
                 return LOAD;
-            }else {
+            } else {
                 return DATA;
             }
-        }else {
+        } else {
             return DATA;
 
         }

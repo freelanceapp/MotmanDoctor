@@ -25,7 +25,7 @@ public class ApointmentModel implements Serializable{
         public String status;
         public Object cancel_reason;
         public String day_name;
-        public PatientFk patient_fk;
+        public UserModel.User patient_fk;
 
 
         public int getId() {
@@ -80,7 +80,7 @@ public class ApointmentModel implements Serializable{
             return day_name;
         }
 
-        public PatientFk getPatient_fk() {
+        public UserModel.User getPatient_fk() {
             return patient_fk;
         }
 
