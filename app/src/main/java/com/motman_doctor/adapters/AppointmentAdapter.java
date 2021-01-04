@@ -61,11 +61,20 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof MyHolder) {
             MyHolder myHolder = (MyHolder) holder;
             myHolder.binding.setModel(list.get(position));
-            Log.e("flkfkfk", list.get(position).getPatient_fk().getAddress());
+           // Log.e("flkfkfk", list.get(position).getPatient_fk().getAppointment_time());
+            myHolder.binding.image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(fragment instanceof  Fragment_Home){
+                        Fragment_Home fragment_home=(Fragment_Home)fragment;
+                        fragment_home.open(list.get(position));
+                    }
+                }
+            });
 //            myHolder.binding.btnDetails.setOnClickListener(v -> {
 //
 //            });
-            myHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            myHolder.binding.tvdetials.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (fragment instanceof Fragment_Home){

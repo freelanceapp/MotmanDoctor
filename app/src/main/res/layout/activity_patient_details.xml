@@ -11,7 +11,9 @@
         <variable
             name="model"
             type="com.motman_doctor.models.UserModel.User" />
-
+        <variable
+            name="patinetmodel"
+            type="com.motman_doctor.models.ApointmentModel.Data.PatientFk" />
     </data>
 
     <FrameLayout
@@ -80,7 +82,7 @@
                             android:layout_height="80dp"
                             android:src="@drawable/image_avatar"
                             android:layout_gravity="bottom"
-                            user_image="@{model.logo}"
+                            user_image='@{model!=null?model.logo:patinetmodel.logo}'
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             />
@@ -92,7 +94,7 @@
                             android:textStyle="bold"
                             android:textSize="16sp"
                             android:singleLine="true"
-                            android:text="@{model.name}"
+                            android:text='@{model!=null?model.name:patinetmodel.name}'
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@id/image"
                             android:layout_marginStart="8dp"
@@ -150,7 +152,7 @@
                             android:textSize="13sp"
                             android:layout_gravity="center_vertical"
                             android:textColor="@color/black"
-                            android:text='@{model.last_reservation_fk!=null?(model.last_reservation_fk.date+" "+model.last_reservation_fk.time+""+model.last_reservation_fk.time_type):""}'
+                            android:text='@{model!=null?(model.last_reservation_fk!=null?(model.last_reservation_fk.date+" "+model.last_reservation_fk.time+""+model.last_reservation_fk.time_type):""):(patinetmodel.last_reservation_fk!=null?(patinetmodel.last_reservation_fk.date+" "+patinetmodel.last_reservation_fk.time+""+patinetmodel.last_reservation_fk.time_type):"")}'
                             />
                     </LinearLayout>
 

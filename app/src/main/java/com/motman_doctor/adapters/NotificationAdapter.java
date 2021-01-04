@@ -2,6 +2,7 @@ package com.motman_doctor.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import com.motman_doctor.databinding.DrugRowBinding;
 import com.motman_doctor.databinding.NotificationRowBinding;
 import com.motman_doctor.models.DrugModel;
 import com.motman_doctor.models.NotificationModel;
+import com.motman_doctor.ui.activity_notifications.NotificationActivity;
 
 import java.util.List;
 
@@ -46,7 +48,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         MyHolder myHolder = (MyHolder) holder;
         myHolder.binding.setModel(list.get(position));
-
+myHolder.itemView.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        if(context instanceof NotificationActivity){
+            NotificationActivity notificationActivity=(NotificationActivity) context;
+            notificationActivity.delete(position);
+        }
+    }
+});
     }
 
     @Override

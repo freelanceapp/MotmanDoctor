@@ -15,6 +15,7 @@ import com.motman_doctor.adapters.DrugsAdapter;
 import com.motman_doctor.databinding.ActivityMedicalAdviceBinding;
 import com.motman_doctor.databinding.ActivityPatientDetailsBinding;
 import com.motman_doctor.language.Language;
+import com.motman_doctor.models.ApointmentModel;
 import com.motman_doctor.models.DrugModel;
 import com.motman_doctor.models.UserModel;
 import com.motman_doctor.mvp.activity_patient_details_mvp.ActivityPatientDetailsPresenter;
@@ -29,6 +30,7 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
     private ActivityPatientDetailsBinding binding;
     private String lang;
     private UserModel.User patientModel;
+    private ApointmentModel.Data.PatientFk patientFk;
     private ActivityPatientDetailsPresenter presenter;
     private List<DrugModel> drugModelList;
     private DrugsAdapter adapter;
@@ -49,7 +51,12 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
 
     private void getDataFromIntent() {
         Intent intent = getIntent();
+        if(intent.getSerializableExtra("data")!=null){
         patientModel = (UserModel.User) intent.getSerializableExtra("data");
+    }
+        else {
+            patientFk=(ApointmentModel.Data.PatientFk)intent.getSerializableExtra("DATA");
+        }
     }
 
     private void initView() {
@@ -58,11 +65,16 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
         lang = Paper.book().read("lang","ar");
         binding.setLang(lang);
         binding.setModel(patientModel);
+        binding.setPatinetmodel(patientFk);
         binding.recView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new DrugsAdapter(drugModelList,this);
         binding.recView.setAdapter(adapter);
         presenter = new ActivityPatientDetailsPresenter(this,this);
-        presenter.getDrugs(patientModel.getId());
+        if(patientModel!=null){
+        presenter.getDrugs(patientModel.getId());}
+        else {
+            presenter.getDrugs(patientFk.getId());
+        }
         binding.imageBack.setOnClickListener(view -> finish());
     }
 

@@ -35,9 +35,9 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image"
-                user_image="@{messagemodel.from.logo}"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:src="@drawable/logo"
                 android:layout_gravity="top" />
 
             <LinearLayout
@@ -45,22 +45,27 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="5dp"
-                android:background="@drawable/msg_left_bg"
                 android:orientation="vertical"
-                android:paddingLeft="8dp"
+                android:padding="7dp"
 
                 >
 
-                <ImageView
-                    android:id="@+id/tv_message_content"
-                    image="@{messagemodel.image}"
+                    <ImageView
+                        android:id="@+id/tv_message_content"
+                        image="@{messagemodel.image}"
 
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
 
 
-                    android:maxWidth="200dp"
-                    android:maxHeight="200dp" />
+                        android:maxWidth="100dp"
+
+                        android:maxHeight="100dp"/>
+
+
+
+
+
 
                 <TextView
                     android:id="@+id/tv_time"
@@ -72,6 +77,7 @@
                     android:layout_marginBottom="5dp"
                     android:textColor="@color/black"
                     android:textSize="13sp"
+                    android:visibility="gone"
                     date="@{messagemodel.date}" />
             </LinearLayout>
         </LinearLayout>

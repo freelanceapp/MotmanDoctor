@@ -3,6 +3,7 @@ package com.motman_doctor.ui.activity_home.fragments;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.motman_doctor.mvp.fragment_home_mvp.HomeFragmentPresenter;
 import com.motman_doctor.mvp.fragment_home_mvp.HomeFragmentView;
 import com.motman_doctor.preferences.Preferences;
 import com.motman_doctor.ui.activity_home.HomeActivity;
+import com.motman_doctor.ui.activity_live.LiveActivity;
 import com.motman_doctor.ui.activity_patient_details.PatientDetailsActivity;
 
 import java.util.ArrayList;
@@ -57,7 +59,7 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
         activity = (HomeActivity) getActivity();
         preferences = Preferences.getInstance();
         userModel = preferences.getUserData(activity);
-        adapter = new AppointmentAdapter(apointmentModelList, activity,this);
+        adapter = new AppointmentAdapter(apointmentModelList, activity, this);
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(activity, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         binding.recView.setLayoutManager(new LinearLayoutManager(activity));
         binding.recView.setAdapter(adapter);
@@ -89,10 +91,23 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
 
     }
 
-    public void setitem(UserModel.User patient_fk) {
+    public void setitem(ApointmentModel.Data.PatientFk patient_fk) {
         Intent intent = new Intent(activity, PatientDetailsActivity.class);
-        intent.putExtra("data",patient_fk);
+        intent.putExtra("DATA", patient_fk);
         startActivity(intent);
+    }
+
+    public void open(ApointmentModel.Data data) {
+        Log.e("lkdkdk",data.reservation_type);
+        if (data.getReservation_type().equals("online")) {
+            Intent intent = new Intent(activity, LiveActivity.class);
+            intent.putExtra("room", data.getId());
+            startActivity(intent);
+        }
+        else {
+
+        }
+
     }
 //    public void showdetails(ApointmentModel.Data data) {
 //        Intent intent=new Intent(activity, ReservationActivity.class);

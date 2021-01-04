@@ -244,4 +244,7 @@ public interface Service {
 
 
     );
+    @FormUrlEncoded
+    @POST("api/delete_notification")
+    Call<ResponseBody> delteNotification(@Field("notification_id") int notification_id);
 }

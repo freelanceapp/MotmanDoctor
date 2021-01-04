@@ -43,6 +43,7 @@ android:layout_marginBottom="8dp"
                 android:background="@color/colorPrimaryDark" />
 
             <TextView
+                android:id="@+id/tvdetials"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -56,6 +57,7 @@ android:layout_marginBottom="8dp"
 
                 />
             <ImageView
+                android:id="@+id/image"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src='@{model.reservation_type.equals("normal")?@drawable/ic_phone:@drawable/ic_video_camera}'

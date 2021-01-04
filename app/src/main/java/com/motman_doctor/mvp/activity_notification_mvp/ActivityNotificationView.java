@@ -11,4 +11,9 @@ public interface ActivityNotificationView {
     void showProgressBar();
     void hideProgressBar();
 
+    void onLoad();
+
+    void onFinishload();
+
+    void onSuccessDelete();
 }
