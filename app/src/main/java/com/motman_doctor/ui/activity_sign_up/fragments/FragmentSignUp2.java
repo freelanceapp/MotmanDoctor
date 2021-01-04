@@ -107,10 +107,7 @@ public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
         genderList = new ArrayList<>();
         genderAdapter = new SpinnerAdapter(genderList,activity);
         binding.spinnerGender.setAdapter(genderAdapter);
-        cityModelList=new ArrayList<>();
-        spinnerCityAdapter=new SpinnerCityAdapter(cityModelList,activity);
-        spinnerSpicialAdapter=new SpinnerSpicialAdapter(specializationModelList,activity);
-        binding.spinnerCity.setAdapter(spinnerCityAdapter);
+
         binding.spinnerspicial.setAdapter(spinnerSpicialAdapter);
         binding.spinnerspicial.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -153,23 +150,23 @@ public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
 //            }
 //        });
         binding.spinnerGender.setVisibility(View.GONE);
-        binding.spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i==0){
-                    signUpModel.setCity_id(0);
-                }else {
-                    signUpModel.setCity_id(cityModelList.get(i).getId());
-                }
-                binding.setModel(signUpModel);
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+//        binding.spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                if (i==0){
+//                    signUpModel.setCity_id(0);
+//                }else {
+//                    signUpModel.setCity_id(cityModelList.get(i).getId());
+//                }
+//                binding.setModel(signUpModel);
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
         presenter.getSpecilization();
         presenter.getcities();
         presenter.getGender();

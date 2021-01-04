@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -32,11 +33,19 @@ import androidx.fragment.app.Fragment;
 
 import com.motman_doctor.R;
 import com.motman_doctor.adapters.SpinnerAdapter;
+import com.motman_doctor.adapters.SpinnerCityAdapter;
+import com.motman_doctor.adapters.SpinnerSpicialAdapter;
 import com.motman_doctor.databinding.DialogSelectImageBinding;
 import com.motman_doctor.databinding.FragmentSignUp1Binding;
+import com.motman_doctor.models.AllCityModel;
+import com.motman_doctor.models.AllSpiclixationModel;
+import com.motman_doctor.models.CityModel;
 import com.motman_doctor.models.PlaceGeocodeData;
 import com.motman_doctor.models.PlaceMapDetailsData;
 import com.motman_doctor.models.SignUpModel;
+import com.motman_doctor.models.SpecializationModel;
+import com.motman_doctor.mvp.fragment_signup2_mvp.SignupFragmentView;
+import com.motman_doctor.mvp.fragment_signup2_mvp.SignupPresenter;
 import com.motman_doctor.remote.Api;
 import com.motman_doctor.share.Common;
 import com.motman_doctor.ui.activity_sign_up.SignUpActivity;
@@ -72,7 +81,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FragmentSignUp1 extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class FragmentSignUp1 extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, SignupFragmentView {
     private SignUpActivity activity;
     private static final String TAG = "DATA";
     private FragmentSignUp1Binding binding;
@@ -80,6 +89,9 @@ public class FragmentSignUp1 extends Fragment implements OnMapReadyCallback, Goo
     private final String write_permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     private final String camera_permission = Manifest.permission.CAMERA;
     private final int READ_REQ = 1, CAMERA_REQ = 2;
+    private SignupPresenter presenter;
+    private List<CityModel> cityModelList;
+    private SpinnerCityAdapter spinnerCityAdapter;
     private Uri uri = null;
     private double lat = 0.0, lng = 0.0;
     private String address = "";
@@ -97,6 +109,8 @@ public class FragmentSignUp1 extends Fragment implements OnMapReadyCallback, Goo
     private List<String> genderList;
     private SpinnerAdapter genderAdapter;
     private String lang;
+    private Dialog dialog2;
+
     public static FragmentSignUp1 newInstance(SignUpModel signUpModel){
         Bundle bundle = new Bundle();
         bundle.putSerializable(TAG,signUpModel);
@@ -117,7 +131,7 @@ public class FragmentSignUp1 extends Fragment implements OnMapReadyCallback, Goo
         super.onViewCreated(view, savedInstanceState);
         updateUI();
         createImageDialogAlert();
-        getGenders();
+        //getGenders();
     }
 
     private void initView()
@@ -131,6 +145,9 @@ public class FragmentSignUp1 extends Fragment implements OnMapReadyCallback, Goo
         Paper.init(activity);
         lang = Paper.book().read("lang","ar");
         genderList = new ArrayList<>();
+        cityModelList=new ArrayList<>();
+        spinnerCityAdapter=new SpinnerCityAdapter(cityModelList,activity);
+        binding.spinnerCity.setAdapter(spinnerCityAdapter);
         genderAdapter = new SpinnerAdapter(genderList,activity);
         binding.spinnerGender.setAdapter(genderAdapter);
         binding.spinnerGender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -171,17 +188,35 @@ public class FragmentSignUp1 extends Fragment implements OnMapReadyCallback, Goo
         binding.flSelectImage.setOnClickListener(view -> {
             dialog.show();
         });
+        binding.spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i==0){
+                    signUpModel.setCity_id(0);
+                }else {
+                    signUpModel.setCity_id(cityModelList.get(i).getId());
+                }
+                binding.setModel(signUpModel);
 
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        presenter.getcities();
+presenter.getGender();
     }
 
-    private void getGenders()
-    {
-        genderList.clear();
-        genderList.add(getString(R.string.ch_gender));
-        genderList.add(getString(R.string.male));
-        genderList.add(getString(R.string.female));
-        genderAdapter.notifyDataSetChanged();
-    }
+//    private void getGenders()
+//    {
+//        genderList.clear();
+//        genderList.add(getString(R.string.ch_gender));
+//        genderList.add(getString(R.string.male));
+//        genderList.add(getString(R.string.female));
+//        genderAdapter.notifyDataSetChanged();
+//    }
 
     private void createImageDialogAlert()
     {
@@ -570,5 +605,41 @@ public class FragmentSignUp1 extends Fragment implements OnMapReadyCallback, Goo
             }
         }
     }
+    @Override
+    public void onSuccess(AllSpiclixationModel apointmentModel) {
+//        specializationModelList.add(new SpecializationModel(activity.getResources().getString(R.string.ch_specialization)));
+//        specializationModelList.addAll(apointmentModel.getData());
+//        spinnerSpicialAdapter.notifyDataSetChanged();
+    }
 
+    @Override
+    public void onFailed(String msg) {
+        Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onLoad() {
+        dialog2 = Common.createProgressDialog(activity, getString(R.string.wait));
+        dialog2.setCancelable(false);
+        dialog2.show();
+    }
+
+    @Override
+    public void onFinishload() {
+        dialog2.dismiss();
+    }
+
+    @Override
+    public void onSuccesscitie(AllCityModel body) {
+        cityModelList.add(new CityModel(activity.getResources().getString(R.string.ch_city)));
+        cityModelList.addAll(body.getData());
+        spinnerCityAdapter.notifyDataSetChanged();
+    }
+    @Override
+    public void onGenderSuccess(List<String> genderList)
+    {
+        this.genderList.clear();
+        this.genderList.addAll(genderList);
+        genderAdapter.notifyDataSetChanged();
+    }
 }

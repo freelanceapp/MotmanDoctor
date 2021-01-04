@@ -24,7 +24,7 @@ public class SignUpModel extends BaseObservable implements Serializable {
     private String phone;
     private int specialization_id;
     private int city_id;
-    private String price;
+    private String syndicateidnumber;
     private String licenseImage;
     private int degree_id;
     private String email;
@@ -32,7 +32,7 @@ public class SignUpModel extends BaseObservable implements Serializable {
 
     public ObservableField<String> error_name = new ObservableField<>();
     public ObservableField<String> error_address = new ObservableField<>();
-    public ObservableField<String> error_price = new ObservableField<>();
+    public ObservableField<String> error_syndicateidnumber = new ObservableField<>();
     public ObservableField<String> error_email = new ObservableField<>();
     public ObservableField<String> error_password = new ObservableField<>();
 
@@ -48,7 +48,7 @@ public class SignUpModel extends BaseObservable implements Serializable {
         this.lng = 0.0;
         this.specialization_id = 1;
         this.city_id = 1;
-        this.price ="";
+        this.syndicateidnumber ="";
         this.licenseImage ="";
         this.degree_id =1;
         this.email = "";
@@ -86,12 +86,12 @@ public class SignUpModel extends BaseObservable implements Serializable {
     {
         if (specialization_id!=0&&
                 city_id!=0&&
-                !price.isEmpty()&&
+                !syndicateidnumber.isEmpty()&&
                 !licenseImage.isEmpty()&&
                 degree_id!=0
         )
         {
-            error_price.set(null);
+            error_syndicateidnumber.set(null);
             return true;
         }else {
             if (specialization_id==0){
@@ -102,10 +102,10 @@ public class SignUpModel extends BaseObservable implements Serializable {
                 Toast.makeText(context, R.string.ch_city, Toast.LENGTH_SHORT).show();
             }
 
-            if (price.isEmpty()){
-                error_price.set(context.getString(R.string.field_req));
+            if (syndicateidnumber.isEmpty()){
+                error_syndicateidnumber.set(context.getString(R.string.field_req));
             }else {
-                error_price.set(null);
+                error_syndicateidnumber.set(null);
             }
 
             if (degree_id==0){
@@ -232,15 +232,16 @@ public class SignUpModel extends BaseObservable implements Serializable {
         this.city_id = city_id;
     }
 
-    @Bindable
-    public String getPrice() {
-        return price;
+    public String getSyndicateidnumber() {
+        return syndicateidnumber;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
-        notifyPropertyChanged(BR.price);
+    public void setSyndicateidnumber(String syndicateidnumber) {
+        this.syndicateidnumber = syndicateidnumber;
     }
+
+    @Bindable
+
 
     public String getLicenseImage() {
         return licenseImage;

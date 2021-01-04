@@ -173,5 +173,6 @@
     <string name="add_from">اضف الوقت من </string>
     <string name="add_to">اضف الوقت الى</string>
     <string name="call">اتصال</string>
+    <string name="syndicate_id_number">Syndicate ID number</string>
 
 </resources>

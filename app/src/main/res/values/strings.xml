@@ -173,4 +173,5 @@
     <string name="add_from">Add From Time</string>
     <string name="add_to">Add To Time</string>
     <string name="call">Call</string>
+    <string name="syndicate_id_number">Syndicate ID number</string>
 </resources>
