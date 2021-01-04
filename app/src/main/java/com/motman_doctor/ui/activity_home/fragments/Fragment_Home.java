@@ -33,8 +33,11 @@ import com.motman_doctor.ui.activity_home.HomeActivity;
 import com.motman_doctor.ui.activity_live.LiveActivity;
 import com.motman_doctor.ui.activity_patient_details.PatientDetailsActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Fragment_Home extends Fragment implements HomeFragmentView {
     private FragmentHomeBinding binding;
@@ -70,9 +73,10 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
         binding.recView.setLayoutManager(new LinearLayoutManager(activity));
         binding.recView.setAdapter(adapter);
         presenter = new HomeFragmentPresenter(this, activity);
-        if(userModel!=null){
-        presenter.getApointment(userModel);
-    }}
+        if (userModel != null) {
+            presenter.getApointment(userModel);
+        }
+    }
 
     @Override
     public void onSuccess(ApointmentModel apointmentModel) {
@@ -101,34 +105,49 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
     public void setitem(ApointmentModel.Data.PatientFk patient_fk, int id, String reservation_type) {
         Intent intent = new Intent(activity, PatientDetailsActivity.class);
         intent.putExtra("DATA", patient_fk);
-        intent.putExtra("id",id);
-        intent.putExtra("type",reservation_type);
+        intent.putExtra("id", id);
+        intent.putExtra("type", reservation_type);
         startActivity(intent);
     }
 
     public void open(ApointmentModel.Data data) {
-        Log.e("lkdkdk",data.reservation_type);
-        if (data.getReservation_type().equals("online")) {
-            Intent intent = new Intent(activity, LiveActivity.class);
-            intent.putExtra("room", data.getId());
-            startActivity(intent);
+        String date = data.getDate()+" " + data.getTime()+" "+data.getTime_type();
+        Log.e("kdkdk", date);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss aa", Locale.US);
+        long datetime = 0;
+        try {
+            datetime = sdf.parse(date).getTime();
+        } catch (ParseException e) {
+           Log.e("dldkkd",e.toString());
         }
-        else {
-            intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", data.getPatient_fk().getPhone_code() + data.getPatient_fk().getPhone(), null));
-            if (intent != null) {
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+        long currenttime = System.currentTimeMillis();
+        Log.e("kdkdk", date+" "+currenttime+" "+datetime);
+
+      //  if (currenttime >= datetime) {
+            if (data.getReservation_type().equals("online")) {
+                Intent intent = new Intent(activity, LiveActivity.class);
+                intent.putExtra("room", data.getId());
+                startActivity(intent);
+            } else {
+                intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", data.getPatient_fk().getPhone_code() + data.getPatient_fk().getPhone(), null));
+                if (intent != null) {
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+                        } else {
+                            startActivity(intent);
+                        }
                     } else {
                         startActivity(intent);
                     }
-                } else {
-                    startActivity(intent);
                 }
             }
-        }
+//        } else {
+//            Toast.makeText(activity, activity.getResources().getString(R.string.not_avail_now), Toast.LENGTH_LONG).show();
+//        }
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
