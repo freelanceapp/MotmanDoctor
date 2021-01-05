@@ -54,7 +54,7 @@ public class PhoneActivity extends AppCompatActivity{
 
     private void navigateVerificationCodeActivity(String phone) {
 
-        Intent intent = new Intent(this, ConfirmCodeActivity.class);
+        Intent intent = new Intent(this, SignUpActivity.class);
         intent.putExtra("phone_code",phone_code);
         intent.putExtra("phone",phone);
         startActivityForResult(intent,100);

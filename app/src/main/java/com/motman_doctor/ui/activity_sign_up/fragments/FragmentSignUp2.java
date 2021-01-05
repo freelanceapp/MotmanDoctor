@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +25,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.motman_doctor.R;
+import com.motman_doctor.adapters.ImagesAdapter;
 import com.motman_doctor.adapters.SpinnerAdapter;
 import com.motman_doctor.adapters.SpinnerCityAdapter;
 import com.motman_doctor.adapters.SpinnerSpicialAdapter;
@@ -41,6 +44,8 @@ import com.motman_doctor.mvp.fragment_signup2_mvp.SignupPresenter;
 import com.motman_doctor.share.Common;
 import com.motman_doctor.ui.activity_sign_up.SignUpActivity;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -48,6 +53,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.paperdb.Paper;
+
+import static android.app.Activity.RESULT_OK;
 
 public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
     private SignUpActivity activity;
@@ -59,7 +66,8 @@ public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
     private final String write_permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     private final String camera_permission = Manifest.permission.CAMERA;
     private final int READ_REQ = 1, CAMERA_REQ = 2;
-    private Uri uri = null;
+    private List<String> imagesList;
+    private ImagesAdapter imagesAdapter;
     private AlertDialog dialog;
     private ProgressDialog dialog2;
     private List<SpecializationModel> specializationModelList;
@@ -89,9 +97,9 @@ public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.flSelectImage.setOnClickListener(view2 -> dialog.show());
+        binding.flSelectImage.setOnClickListener(view2 -> createImageDialogAlert());
         binding.setModel(signUpModel);
-        createImageDialogAlert();
+        //createImageDialogAlert();
     }
 
     private void initView() {
@@ -101,20 +109,25 @@ public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
             signUpModel = (SignUpModel) bundle.getSerializable(TAG);
         }
         Paper.init(activity);
-        lang = Paper.book().read("lang","ar");
+        lang = Paper.book().read("lang", "ar");
         presenter = new SignupPresenter(this, activity);
-        specializationModelList=new ArrayList<>();
-        genderList = new ArrayList<>();
-        genderAdapter = new SpinnerAdapter(genderList,activity);
-        binding.spinnerGender.setAdapter(genderAdapter);
+        specializationModelList = new ArrayList<>();
+        imagesList = new ArrayList<>();
 
+        binding.recViewImages.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+        imagesAdapter = new ImagesAdapter(imagesList, activity, this);
+        binding.recViewImages.setAdapter(imagesAdapter);
+        genderList = new ArrayList<>();
+        genderAdapter = new SpinnerAdapter(genderList, activity);
+        binding.spinnerGender.setAdapter(genderAdapter);
+        spinnerSpicialAdapter = new SpinnerSpicialAdapter(specializationModelList, activity);
         binding.spinnerspicial.setAdapter(spinnerSpicialAdapter);
         binding.spinnerspicial.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i==0){
+                if (i == 0) {
                     signUpModel.setSpecialization_id(0);
-                }else {
+                } else {
                     signUpModel.setSpecialization_id(specializationModelList.get(i).getId());
                 }
                 binding.setModel(signUpModel);
@@ -168,14 +181,15 @@ public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
 //            }
 //        });
         presenter.getSpecilization();
-        presenter.getcities();
+        //   presenter.getcities();
         presenter.getGender();
 
 
     }
 
 
-    private void createImageDialogAlert() {
+    public void createImageDialogAlert() {
+        Log.e("Dldldld","dkdkdk");
         dialog = new AlertDialog.Builder(activity)
                 .create();
 
@@ -194,6 +208,7 @@ public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
         dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_congratulation_animation;
         dialog.setCanceledOnTouchOutside(false);
         dialog.setView(binding.getRoot());
+        dialog.show();
     }
 
     public void checkReadPermission() {
@@ -274,41 +289,63 @@ public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == READ_REQ && resultCode == RESULT_OK && data != null) {
 
-        if (requestCode == READ_REQ && resultCode == Activity.RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            cropImage(uri);
 
-            uri = data.getData();
-            File file = new File(Common.getImagePath(activity, uri));
-            Picasso.get().load(file).fit().into(binding.imageLicense);
-            binding.icon.setVisibility(View.GONE);
-            signUpModel.setLicenseImage(uri.toString());
-            binding.setModel(signUpModel);
 
-        } else if (requestCode == CAMERA_REQ && resultCode == Activity.RESULT_OK && data != null) {
+        } else if (requestCode == CAMERA_REQ && resultCode == RESULT_OK && data != null) {
 
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            uri = getUriFromBitmap(bitmap);
-            binding.icon.setVisibility(View.GONE);
-
+            Uri uri = getUriFromBitmap(bitmap);
             if (uri != null) {
-                signUpModel.setLicenseImage(uri.toString());
-                binding.setModel(signUpModel);
-                String path = Common.getImagePath(activity, uri);
-                if (path != null) {
-                    Picasso.get().load(new File(path)).fit().into(binding.imageLicense);
+                cropImage(uri);
 
-                } else {
-                    Picasso.get().load(uri).fit().into(binding.imageLicense);
-
-                }
             }
 
 
+        } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                Uri uri = result.getUri();
+
+                if (imagesList.size() > 0) {
+                    imagesList.add(imagesList.size() - 1, uri.toString());
+                    imagesAdapter.notifyItemInserted(imagesList.size() - 1);
+
+                } else {
+                    imagesList.add(uri.toString());
+                    imagesList.add(null);
+                    imagesAdapter.notifyItemRangeInserted(0, imagesList.size());
+                }
+                signUpModel.setImagelist(imagesList);
+                binding.setModel(signUpModel);
+
+                dialog.dismiss();
+
+                binding.recViewImages.postDelayed(() -> {
+                    binding.recViewImages.smoothScrollToPosition(imagesList.size() - 1);
+                }, 100);
+
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
         }
 
+
     }
+
+    private void cropImage(Uri uri) {
+
+        CropImage.activity(uri).setAspectRatio(1, 1).setGuidelines(CropImageView.Guidelines.ON).start(activity);
+
+    }
+
 
     private Uri getUriFromBitmap(Bitmap bitmap) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -319,9 +356,9 @@ public class FragmentSignUp2 extends Fragment implements SignupFragmentView {
 
     @Override
     public void onSuccess(AllSpiclixationModel apointmentModel) {
-specializationModelList.add(new SpecializationModel(activity.getResources().getString(R.string.ch_specialization)));
-specializationModelList.addAll(apointmentModel.getData());
-spinnerSpicialAdapter.notifyDataSetChanged();
+        specializationModelList.add(new SpecializationModel(activity.getResources().getString(R.string.ch_specialization)));
+        specializationModelList.addAll(apointmentModel.getData());
+        spinnerSpicialAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -347,11 +384,24 @@ spinnerSpicialAdapter.notifyDataSetChanged();
         cityModelList.addAll(body.getData());
         spinnerCityAdapter.notifyDataSetChanged();
     }
+
     @Override
-    public void onGenderSuccess(List<String> genderList)
-    {
+    public void onGenderSuccess(List<String> genderList) {
         this.genderList.clear();
         this.genderList.addAll(genderList);
         genderAdapter.notifyDataSetChanged();
+    }
+
+    public void delete(int adapterPosition) {
+        imagesList.remove(adapterPosition);
+        if (imagesList.size() == 1) {
+            imagesList.clear();
+            imagesAdapter.notifyDataSetChanged();
+        } else {
+            imagesAdapter.notifyItemRemoved(adapterPosition);
+        }
+        signUpModel.setImagelist(imagesList);
+        binding.setModel(signUpModel);
+
     }
 }

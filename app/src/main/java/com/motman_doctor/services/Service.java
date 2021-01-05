@@ -90,9 +90,12 @@ public interface Service {
                            @Part("specialization_id") RequestBody spicial_part,
                            @Part("city_id") RequestBody city_part,
                            @Part("email") RequestBody email_part,
+                           @Part("national_id") RequestBody national_id,
+                           @Part("password") RequestBody password,
+                           @Part("syndicate_id_number") RequestBody syndicate_id_number,
                            @Part MultipartBody.Part logo
             ,
-                           @Part MultipartBody.Part image
+                           @Part List<MultipartBody.Part> image
 
 
     );
@@ -112,7 +115,11 @@ public interface Service {
                            @Part("specialization_id") RequestBody spicial_part,
                            @Part("city_id") RequestBody city_part,
                            @Part("email") RequestBody email_part,
-                           @Part MultipartBody.Part liceimage
+                           @Part("national_id") RequestBody national_id,
+                           @Part("password") RequestBody password,
+
+                           @Part("syndicate_id_number") RequestBody syndicate_id_number,
+                           @Part List<MultipartBody.Part> liceimage
 
     );
 

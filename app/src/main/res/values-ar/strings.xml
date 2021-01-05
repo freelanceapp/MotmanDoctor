@@ -173,6 +173,8 @@
     <string name="add_from">اضف الوقت من </string>
     <string name="add_to">اضف الوقت الى</string>
     <string name="call">اتصال</string>
-    <string name="syndicate_id_number">Syndicate ID number</string>
+    <string name="syndicate_id_number">رقم الكارنيه</string>
+    <string name="add_more">اضف مزيد</string>
+    <string name="national_number">الرقم القومى</string>
 
 </resources>

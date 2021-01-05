@@ -71,6 +71,7 @@ dependencies {
     implementation 'io.supercharge:shimmerlayout:2.1.0'
     implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.2'
     implementation ('org.jitsi.react:jitsi-meet-sdk:2.11.0')
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 
     implementation 'com.applandeo:material-calendar-view:1.9.0-alpha03'
 

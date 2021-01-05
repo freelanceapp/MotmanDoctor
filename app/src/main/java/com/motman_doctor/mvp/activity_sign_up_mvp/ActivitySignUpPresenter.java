@@ -17,6 +17,8 @@ import com.motman_doctor.ui.activity_sign_up.fragments.FragmentSignUp2;
 import com.motman_doctor.ui.activity_sign_up.fragments.FragmentSignUp3;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -142,7 +144,7 @@ public class ActivitySignUpPresenter {
 
 
     private void signUp(SignUpModel signUpModel) {
-        if (!signUpModel.getImageUrl() .isEmpty()) {
+        if (signUpModel.getImagelist()==null||signUpModel.getImagelist().size()==0) {
             sign_up_with_image(signUpModel);
         } else {
             sign_up_with_out_image(signUpModel);
@@ -152,7 +154,7 @@ public class ActivitySignUpPresenter {
 
     private void sign_up_with_image(SignUpModel signUpModel) {
         RequestBody name_part = Common.getRequestBodyText(signUpModel.getName());
-        RequestBody phone_code_part = Common.getRequestBodyText(signUpModel.getPhone_code().replace("+", "00"));
+        RequestBody phone_code_part = Common.getRequestBodyText(signUpModel.getPhone_code());
         RequestBody phone_part = Common.getRequestBodyText(signUpModel.getPhone());
         RequestBody lat_part = Common.getRequestBodyText(signUpModel.getLat() + "");
         RequestBody lng_part = Common.getRequestBodyText(signUpModel.getLng() + "");
@@ -167,11 +169,14 @@ public class ActivitySignUpPresenter {
 
 
         MultipartBody.Part image_form_part = Common.getMultiPart(context, Uri.parse(signUpModel.getImageUrl()), "logo");
-        MultipartBody.Part lice_part = Common.getMultiPart(context, Uri.parse(signUpModel.getLicenseImage()), "license_img");
+        List<MultipartBody.Part> imageparts=getMultiPartImages(signUpModel.getImagelist());
+        RequestBody nationl_part = Common.getRequestBodyText(signUpModel.getNationalid());
+        RequestBody syndicateidnumber_part = Common.getRequestBodyText(signUpModel.getSyndicateidnumber());
+        RequestBody pass_part = Common.getRequestBodyText(signUpModel.getPassword());
 
         view.onLoad();
         Api.getService(Tags.base_url)
-                .signup(phone_code_part, phone_part, name_part, lat_part, lng_part, address_part, gender_part, type_part, soft_part, spicial_part, city_part, email_part, image_form_part, lice_part)
+                .signup(phone_code_part, phone_part, name_part, lat_part, lng_part, address_part, gender_part, type_part, soft_part, spicial_part, city_part, email_part,nationl_part,pass_part,syndicateidnumber_part, image_form_part, imageparts)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -222,7 +227,7 @@ public class ActivitySignUpPresenter {
 
     private void sign_up_with_out_image(SignUpModel signUpModel) {
         RequestBody name_part = Common.getRequestBodyText(signUpModel.getName());
-        RequestBody phone_code_part = Common.getRequestBodyText(signUpModel.getPhone_code().replace("+", "00"));
+        RequestBody phone_code_part = Common.getRequestBodyText(signUpModel.getPhone_code());
         RequestBody phone_part = Common.getRequestBodyText(signUpModel.getPhone());
         RequestBody lat_part = Common.getRequestBodyText(signUpModel.getLat() + "");
         RequestBody lng_part = Common.getRequestBodyText(signUpModel.getLng() + "");
@@ -231,16 +236,18 @@ public class ActivitySignUpPresenter {
         RequestBody spicial_part = Common.getRequestBodyText(signUpModel.getSpecialization_id() + "");
         RequestBody city_part = Common.getRequestBodyText(signUpModel.getCity_id() + "");
         RequestBody email_part = Common.getRequestBodyText(signUpModel.getEmail());
-
+        RequestBody nationl_part = Common.getRequestBodyText(signUpModel.getNationalid());
+        RequestBody syndicateidnumber_part = Common.getRequestBodyText(signUpModel.getSyndicateidnumber());
         RequestBody type_part = Common.getRequestBodyText("doctor");
         RequestBody soft_part = Common.getRequestBodyText("android");
 
+        RequestBody pass_part = Common.getRequestBodyText(signUpModel.getPassword());
 
-        MultipartBody.Part lice_part = Common.getMultiPart(context, Uri.parse(signUpModel.getLicenseImage()), "license_img");
+        List<MultipartBody.Part> imageparts=getMultiPartImages(signUpModel.getImagelist());
 
         view.onLoad();
         Api.getService(Tags.base_url)
-                .signup(phone_code_part, phone_part, name_part, lat_part, lng_part, address_part, gender_part, type_part, soft_part, spicial_part, city_part, email_part, lice_part)
+                .signup(phone_code_part, phone_part, name_part, lat_part, lng_part, address_part, gender_part, type_part, soft_part, spicial_part, city_part, email_part,nationl_part,pass_part,syndicateidnumber_part, imageparts)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -290,5 +297,15 @@ public class ActivitySignUpPresenter {
                     }
                 });
     }
+    private List<MultipartBody.Part> getMultiPartImages(List<String> imagesList) {
+        List<MultipartBody.Part> parts = new ArrayList<>();
+        for (String uri : imagesList) {
+            if (uri != null) {
+                MultipartBody.Part part = Common.getMultiPartImage(context, Uri.parse(uri), "doctor_license_images[]");
+                parts.add(part);
+            }
 
+        }
+        return parts;
+    }
 }

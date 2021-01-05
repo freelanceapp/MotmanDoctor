@@ -38,12 +38,12 @@ public class SignupPresenter {
                 .enqueue(new Callback<AllSpiclixationModel>() {
                     @Override
                     public void onResponse(Call<AllSpiclixationModel> call, Response<AllSpiclixationModel> response) {
-//                        view.onFinishload();
+                       view.onFinishload();
 
                         if (response.isSuccessful() && response.body() != null) {
                             view.onSuccess(response.body());
                         } else {
-    //                        view.onFinishload();
+                           view.onFinishload();
                             view.onFailed(context.getString(R.string.something));
                             try {
                                 Log.e("error_codess",response.code()+ response.errorBody().string());
@@ -58,7 +58,7 @@ public class SignupPresenter {
                     @Override
                     public void onFailure(Call<AllSpiclixationModel> call, Throwable t) {
                         try {
-  //                          view.onFinishload();
+                            view.onFinishload();
                             view.onFailed(context.getString(R.string.something));
                             Log.e("Errorsss", t.getMessage());
                         } catch (Exception e) {
@@ -70,7 +70,7 @@ public class SignupPresenter {
     public void getcities()
     {
         // Log.e("tjtjtj",userModel.getIs_confirmed());
-
+view.onLoad();
         Api.getService(Tags.base_url)
                 .getcities()
                 .enqueue(new Callback<AllCityModel>() {
@@ -107,9 +107,9 @@ public class SignupPresenter {
     }
     public void getGender() {
         genderList.clear();
-        genderList.add(context.getString(R.string.ch_gender));
-        genderList.add(context.getString(R.string.male));
-        genderList.add(context.getString(R.string.female));
+        genderList.add(context.getResources().getString(R.string.ch_gender));
+        genderList.add(context.getResources().getString(R.string.male));
+        genderList.add(context.getResources().getString(R.string.female));
         view.onGenderSuccess(genderList);
 
     }

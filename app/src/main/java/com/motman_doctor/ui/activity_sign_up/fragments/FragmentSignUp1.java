@@ -142,6 +142,8 @@ public class FragmentSignUp1 extends Fragment implements OnMapReadyCallback, Goo
         }
         binding.setModel(signUpModel);
         activity = (SignUpActivity) getActivity();
+        presenter=new SignupPresenter(this,activity);
+
         Paper.init(activity);
         lang = Paper.book().read("lang","ar");
         genderList = new ArrayList<>();
