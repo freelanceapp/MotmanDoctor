@@ -144,7 +144,7 @@ public class ActivitySignUpPresenter {
 
 
     private void signUp(SignUpModel signUpModel) {
-        if (signUpModel.getImagelist()==null||signUpModel.getImagelist().size()==0) {
+        if (signUpModel.getImagelist() == null || signUpModel.getImagelist().size() == 0) {
             sign_up_with_image(signUpModel);
         } else {
             sign_up_with_out_image(signUpModel);
@@ -169,14 +169,14 @@ public class ActivitySignUpPresenter {
 
 
         MultipartBody.Part image_form_part = Common.getMultiPart(context, Uri.parse(signUpModel.getImageUrl()), "logo");
-        List<MultipartBody.Part> imageparts=getMultiPartImages(signUpModel.getImagelist());
+        List<MultipartBody.Part> imageparts = getMultiPartImages(signUpModel.getImagelist());
         RequestBody nationl_part = Common.getRequestBodyText(signUpModel.getNationalid());
         RequestBody syndicateidnumber_part = Common.getRequestBodyText(signUpModel.getSyndicateidnumber());
         RequestBody pass_part = Common.getRequestBodyText(signUpModel.getPassword());
 
         view.onLoad();
         Api.getService(Tags.base_url)
-                .signup(phone_code_part, phone_part, name_part, lat_part, lng_part, address_part, gender_part, type_part, soft_part, spicial_part, city_part, email_part,nationl_part,pass_part,syndicateidnumber_part, image_form_part, imageparts)
+                .signup(phone_code_part, phone_part, name_part, lat_part, lng_part, address_part, gender_part, type_part, soft_part, spicial_part, city_part, email_part, nationl_part, pass_part, syndicateidnumber_part, image_form_part, imageparts)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -196,7 +196,7 @@ public class ActivitySignUpPresenter {
                             } else {
                                 if (response.code() == 406) {
                                     view.onFailed(context.getString(R.string.phone_found));
-                                }  else {
+                                } else {
                                     view.onFailed(response.message() + "");
                                 }
                             }
@@ -243,11 +243,11 @@ public class ActivitySignUpPresenter {
 
         RequestBody pass_part = Common.getRequestBodyText(signUpModel.getPassword());
 
-        List<MultipartBody.Part> imageparts=getMultiPartImages(signUpModel.getImagelist());
+        List<MultipartBody.Part> imageparts = getMultiPartImages(signUpModel.getImagelist());
 
         view.onLoad();
         Api.getService(Tags.base_url)
-                .signup(phone_code_part, phone_part, name_part, lat_part, lng_part, address_part, gender_part, type_part, soft_part, spicial_part, city_part, email_part,nationl_part,pass_part,syndicateidnumber_part, imageparts)
+                .signup(phone_code_part, phone_part, name_part, lat_part, lng_part, address_part, gender_part, type_part, soft_part, spicial_part, city_part, email_part, nationl_part, pass_part, syndicateidnumber_part, imageparts)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -269,7 +269,7 @@ public class ActivitySignUpPresenter {
 
                                 if (response.code() == 406) {
                                     view.onFailed(context.getString(R.string.phone_found));
-                                }  else {
+                                } else {
                                     view.onFailed(response.message() + "");
                                 }                                //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
                             }
@@ -297,6 +297,7 @@ public class ActivitySignUpPresenter {
                     }
                 });
     }
+
     private List<MultipartBody.Part> getMultiPartImages(List<String> imagesList) {
         List<MultipartBody.Part> parts = new ArrayList<>();
         for (String uri : imagesList) {
