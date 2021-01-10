@@ -254,4 +254,59 @@ public interface Service {
     @FormUrlEncoded
     @POST("api/delete_notification")
     Call<ResponseBody> delteNotification(@Field("notification_id") int notification_id);
+    @FormUrlEncoded
+    @POST("api/update-doctor-register")
+    Call<UserModel> editprofile(
+            @Header("Authorization") String user_token,
+            @Field("id") String id,
+            @Field("name") String name,
+            @Field("email") String email,
+            @Field("title_job_degree") String title_job_degree
+
+
+
+            );
+    @FormUrlEncoded
+    @POST("api/update-doctor-register")
+    Call<UserModel> editprofile(
+            @Header("Authorization") String user_token,
+            @Field("id") String id,
+            @Field("name") String name,
+            @Field("email") String email,
+            @Field("title_job_degree") String title_job_degree,
+            @Field("password") String password
+
+
+
+
+    );
+    @Multipart
+    @POST("api/update-doctor-register")
+    Call<UserModel> editprofile(
+            @Header("Authorization") String user_token,
+            @Part("id") RequestBody id,
+            @Part("name") RequestBody name,
+            @Part("email") RequestBody email,
+            @Part("title_job_degree") RequestBody title_job_degree,
+            @Part("password") RequestBody password,
+            @Part MultipartBody.Part logo
+
+
+
+
+    );
+    @Multipart
+    @POST("api/update-doctor-register")
+    Call<UserModel> editprofile(
+            @Header("Authorization") String user_token,
+            @Part("id") RequestBody id,
+            @Part("name") RequestBody name,
+            @Part("email") RequestBody email,
+            @Part("title_job_degree") RequestBody title_job_degree,
+            @Part MultipartBody.Part logo
+
+
+
+
+    );
 }

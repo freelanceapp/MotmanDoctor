@@ -176,5 +176,6 @@
     <string name="syndicate_id_number">رقم الكارنيه</string>
     <string name="add_more">اضف مزيد</string>
     <string name="national_number">الرقم القومى</string>
+    <string name="degree_title_job">عنوان الدرجه الوظيفية</string>
 
 </resources>

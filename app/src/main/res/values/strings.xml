@@ -176,4 +176,5 @@
     <string name="syndicate_id_number">Syndicate ID number</string>
     <string name="add_more">Add More</string>
     <string name="national_number">National Number</string>
+    <string name="degree_title_job">Degree Title Job</string>
 </resources>

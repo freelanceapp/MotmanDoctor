@@ -23,12 +23,15 @@ import com.motman_doctor.mvp.fragment_more_mvp.FragmentMorePresenter;
 import com.motman_doctor.mvp.fragment_more_mvp.MoreFragmentView;
 import com.motman_doctor.preferences.Preferences;
 import com.motman_doctor.share.Common;
+import com.motman_doctor.tags.Tags;
 import com.motman_doctor.ui.activity_contactus.ContactusActivity;
+import com.motman_doctor.ui.activity_edit_profile.EditprofileActivity;
 import com.motman_doctor.ui.activity_home.HomeActivity;
 import com.motman_doctor.ui.activity_language.LanguageActivity;
 import com.motman_doctor.ui.activity_login.LoginActivity;
 import com.motman_doctor.ui.activity_my_appoiment.MyAppoinmentActivity;
 import com.motman_doctor.ui.activity_room.ChatRoomActivity;
+import com.squareup.picasso.Picasso;
 
 import io.paperdb.Paper;
 
@@ -133,6 +136,14 @@ public class Fragment_More extends Fragment implements MoreFragmentView {
                 Toast.makeText(activity, R.string.not_avail_now, Toast.LENGTH_SHORT).show();
             }
         });
+        binding.lleditprofile.setOnClickListener(view -> {
+            if (userModel != null) {
+                Intent intent = new Intent(activity, EditprofileActivity.class);
+                startActivity(intent);
+            } else {
+                Common.CreateDialogAlert(activity, activity.getResources().getString(R.string.please_sign_in_or_sign_up));
+            }
+        });
         presenter.getSetting();
         if (userModel != null) {
             binding.edtAmount.setText(userModel.getData().getDetection_price() + "");
@@ -225,5 +236,21 @@ public class Fragment_More extends Fragment implements MoreFragmentView {
     @Override
     public void onServer() {
         Toast.makeText(activity, activity.getResources().getString(R.string.server_error), Toast.LENGTH_LONG).show();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (preferences != null) {
+            userModel = preferences.getUserData(activity);
+            udpate();
+        }
+    }
+
+    private void udpate() {
+        if (userModel != null && userModel.getData().getLogo() != null) {
+            Picasso.get().load(Tags.IMAGE_URL + userModel.getData().getLogo()).resize(720, 480).onlyScaleDown().into(binding.image);
+        }
+        binding.tvName.setText(userModel.getData().getName());
+
     }
 }
