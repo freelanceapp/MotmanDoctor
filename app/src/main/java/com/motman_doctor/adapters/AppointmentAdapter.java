@@ -79,7 +79,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 public void onClick(View v) {
                     if (fragment instanceof Fragment_Home){
                         Fragment_Home fragment_home=(Fragment_Home)fragment;
-                        fragment_home.setitem(list.get(position).patient_fk,list.get(position).getId(),list.get(position).getReservation_type());
+                        fragment_home.setitem(list.get(position).getPatient_fk(),list.get(position).getId(),list.get(position).getReservation_type());
                     }
                 }
             });
