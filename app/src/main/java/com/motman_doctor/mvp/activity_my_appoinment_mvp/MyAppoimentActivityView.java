@@ -22,4 +22,6 @@ public interface MyAppoimentActivityView {
     void onDateSelected(String date, DialogAddTimeBinding binding);
 
     void suceseaddtime();
+
+    void onSuccessDelete();
 }

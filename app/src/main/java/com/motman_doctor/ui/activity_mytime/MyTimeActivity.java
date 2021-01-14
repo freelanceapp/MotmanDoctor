@@ -1,13 +1,10 @@
 package com.motman_doctor.ui.activity_mytime;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,16 +12,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.motman_doctor.R;
-import com.motman_doctor.adapters.DayAdapter;
 import com.motman_doctor.adapters.MyTimeAdapter;
-import com.motman_doctor.adapters.SpinnerAdapter;
 import com.motman_doctor.databinding.ActivityMyTimesBinding;
 import com.motman_doctor.databinding.DialogAddTimeBinding;
 import com.motman_doctor.language.Language;
-import com.motman_doctor.models.DayModel;
 import com.motman_doctor.models.MyTimeModel;
 import com.motman_doctor.models.UserModel;
-import com.motman_doctor.mvp.activity_my_appoinment_mvp.ActivityMyAppoimentPresenter;
 import com.motman_doctor.mvp.activity_mytime_mvp.ActivityMyTimePresenter;
 import com.motman_doctor.mvp.activity_mytime_mvp.MyTimeActivityView;
 import com.motman_doctor.preferences.Preferences;
@@ -48,6 +41,7 @@ public class MyTimeActivity extends AppCompatActivity implements MyTimeActivityV
     private ProgressDialog dialog;
     int doctortimeid;
     String day = "";
+    private int pos;
 
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
@@ -197,7 +191,14 @@ public class MyTimeActivity extends AppCompatActivity implements MyTimeActivityV
 //        }
     }
 
-    public void remove(int id) {
+    @Override
+    public void delteucese() {
+        dataList.remove(pos);
+        myTimeAdapter.notifyItemRemoved(pos);
+    }
 
+    public void remove(int pos) {
+        this.pos=pos;
+        presenter.remove(dataList.get(pos).getId(),userModel);
     }
 }

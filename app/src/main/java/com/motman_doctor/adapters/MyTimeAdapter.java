@@ -2,7 +2,6 @@ package com.motman_doctor.adapters;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +13,8 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.motman_doctor.R;
-import com.motman_doctor.databinding.AppointmentRowBinding;
 import com.motman_doctor.databinding.LoadMoreRowBinding;
 import com.motman_doctor.databinding.MyTimeBinding;
-import com.motman_doctor.models.ApointmentModel;
 import com.motman_doctor.models.MyTimeModel;
 import com.motman_doctor.ui.activity_mytime.MyTimeActivity;
 
@@ -60,14 +57,14 @@ public class MyTimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         if (holder instanceof MyHolder){
             MyHolder myHolder = (MyHolder) holder;
-myHolder.binding.setModel(list.get(position));
-myHolder.binding.flremove.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        MyTimeActivity myTimeActivity=(MyTimeActivity)context;
-        myTimeActivity.remove(list.get(position).getId());
-    }
-});
+            myHolder.binding.setModel(list.get(position));
+            myHolder.binding.flremove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MyTimeActivity myTimeActivity=(MyTimeActivity)context;
+                    myTimeActivity.remove(position);
+                }
+            });
 //            myHolder.binding.btnDetails.setOnClickListener(v -> {
 //
 //            });

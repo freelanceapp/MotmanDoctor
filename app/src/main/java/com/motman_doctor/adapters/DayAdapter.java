@@ -2,7 +2,6 @@ package com.motman_doctor.adapters;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +13,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.motman_doctor.R;
-import com.motman_doctor.databinding.AppointmentRowBinding;
 import com.motman_doctor.databinding.LoadMoreRowBinding;
 import com.motman_doctor.databinding.MyAppointmentRowBinding;
-import com.motman_doctor.models.ApointmentModel;
 import com.motman_doctor.models.DayModel;
 import com.motman_doctor.ui.activity_my_appoiment.MyAppoinmentActivity;
+import com.motman_doctor.ui.activity_notifications.NotificationActivity;
 
 import java.util.List;
 
@@ -92,6 +90,15 @@ public class DayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     MyAppoinmentActivity myAppoinmentActivity=(MyAppoinmentActivity)context;
                     myAppoinmentActivity.
                             show(context,list.get(position).getId(),position);
+                }
+            });
+            myHolder.binding.fldelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(context instanceof MyAppoinmentActivity){
+                        MyAppoinmentActivity myAppoinmentActivity=(MyAppoinmentActivity)context;
+                        myAppoinmentActivity.delete(position);
+                    }
                 }
             });
             // Log.e("flkfkfk",list.get(position).getReservation_type());

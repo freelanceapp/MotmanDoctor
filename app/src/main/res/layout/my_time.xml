@@ -125,7 +125,6 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:visibility="gone"
                 android:background="@drawable/small_rounded_red">
 
                 <ImageView

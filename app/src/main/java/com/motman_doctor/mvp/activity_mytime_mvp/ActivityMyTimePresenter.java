@@ -8,7 +8,6 @@ import androidx.core.app.ActivityCompat;
 
 import com.motman_doctor.R;
 import com.motman_doctor.databinding.DialogAddTimeBinding;
-import com.motman_doctor.models.DayModel;
 import com.motman_doctor.models.MyTimeModel;
 import com.motman_doctor.models.UserModel;
 import com.motman_doctor.preferences.Preferences;
@@ -55,7 +54,7 @@ public class ActivityMyTimePresenter implements TimePickerDialog.OnTimeSetListen
         // datePickerDialog.setOkText(getString(R.string.select));
         //datePickerDialog.setCancelText(getString(R.string.cancel));
         timePickerDialog.setVersion(TimePickerDialog.Version.VERSION_2);
-      //  timePickerDialog.setMinTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+        //  timePickerDialog.setMinTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
 
     }
 
@@ -127,19 +126,18 @@ public class ActivityMyTimePresenter implements TimePickerDialog.OnTimeSetListen
         }
     }
 
-    public void remove(String s, UserModel userModel) {
-        List<String> list = new ArrayList<>();
-        list.add(s);
+    public void remove(int id, UserModel userModel) {
+
         view.onLoad();
         Api.getService(Tags.base_url)
-                .addday("Bearer " + userModel.getData().getToken(), userModel.getData().getId() + "", list)
+                .deltetime("Bearer " + userModel.getData().getToken(), id)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         view.onFinishload();
                         if (response.isSuccessful() && response.body() != null) {
                             //  Log.e("eeeeee", response.body().getUser().getName());
-                            view.sucese();
+                            view.delteucese();
                         } else {
                             try {
                                 Log.e("mmmmmmmmmmssss", response.errorBody().string());

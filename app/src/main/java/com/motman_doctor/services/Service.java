@@ -305,8 +305,17 @@ public interface Service {
             @Part("title_job_degree") RequestBody title_job_degree,
             @Part MultipartBody.Part logo
 
-
-
-
+    );
+    @FormUrlEncoded
+    @POST("api/delete-doctor-days")
+    Call<ResponseBody> deleteday(
+            @Header("Authorization") String user_token,
+            @Field("doctor_time_id") int doctor_time_id
+    );
+    @FormUrlEncoded
+    @POST("api/delete-doctor-times")
+    Call<ResponseBody> deltetime(
+            @Header("Authorization") String user_token,
+            @Field("doctor_time_detail_id") int doctor_time_detail_id
     );
 }

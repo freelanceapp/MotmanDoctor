@@ -5,14 +5,12 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.motman_doctor.R;
 import com.motman_doctor.databinding.DialogAddTimeBinding;
 import com.motman_doctor.models.AddTimeModel;
 import com.motman_doctor.models.DayModel;
 import com.motman_doctor.models.UserModel;
-import com.motman_doctor.models.DayModel;
 import com.motman_doctor.preferences.Preferences;
 import com.motman_doctor.remote.Api;
 import com.motman_doctor.tags.Tags;
@@ -49,15 +47,15 @@ public class ActivityMyAppoimentPresenter implements TimePickerDialog.OnTimeSetL
     private void createDateDialog() {
 
         Calendar calendar = Calendar.getInstance();
-        timePickerDialog = com.wdullaer.materialdatetimepicker.time.TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), false);
+        timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), false);
         timePickerDialog.dismissOnPause(true);
         timePickerDialog.setAccentColor(ActivityCompat.getColor(context, R.color.colorPrimary));
         timePickerDialog.setCancelColor(ActivityCompat.getColor(context, R.color.gray4));
         timePickerDialog.setOkColor(ActivityCompat.getColor(context, R.color.colorPrimary));
         // datePickerDialog.setOkText(getString(R.string.select));
         //datePickerDialog.setCancelText(getString(R.string.cancel));
-        timePickerDialog.setVersion(com.wdullaer.materialdatetimepicker.time.TimePickerDialog.Version.VERSION_2);
-      //  timePickerDialog.setMinTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+        timePickerDialog.setVersion(TimePickerDialog.Version.VERSION_2);
+        //  timePickerDialog.setMinTime(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
 
     }
 
@@ -130,9 +128,10 @@ public class ActivityMyAppoimentPresenter implements TimePickerDialog.OnTimeSetL
     }
 
     public void addday(String s, UserModel userModel) {
+        view.onLoad();
+
         List<String> list = new ArrayList<>();
         list.add(s);
-        view.onLoad();
         Api.getService(Tags.base_url)
                 .addday("Bearer " + userModel.getData().getToken(), userModel.getData().getId() + "", list)
                 .enqueue(new Callback<ResponseBody>() {
@@ -308,7 +307,7 @@ public class ActivityMyAppoimentPresenter implements TimePickerDialog.OnTimeSetL
 //    }
 
     @Override
-    public void onTimeSet(com.wdullaer.materialdatetimepicker.time.TimePickerDialog view, int hourOfDay, int minute, int second) {
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE, minute);
@@ -318,5 +317,56 @@ public class ActivityMyAppoimentPresenter implements TimePickerDialog.OnTimeSetL
         String date = dateFormat.format(new Date(calendar.getTimeInMillis()));
         ActivityMyAppoimentPresenter.this.view.onDateSelected(date,binding);
 
+    }
+
+    public void deletday(UserModel userModel, int id) {
+        view.onLoad();
+        Api.getService(Tags.base_url)
+                .deleteday("Bearer " + userModel.getData().getToken(),id)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        view.onFinishload();
+                        if (response.isSuccessful() && response.body() != null) {
+                            //  Log.e("eeeeee", response.body().getUser().getName());
+                            // view.onUserFound(response.body());
+                            view.onSuccessDelete();
+                        } else {
+                            try {
+                                Log.e("mmmmmmmmmm", response.errorBody().string());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            if (response.code() == 500) {
+                                // view.onServer();
+                            } else {
+                                view.onFailed(response.message());
+                                //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        try {
+                            view.onFinishload();
+                            if (t.getMessage() != null) {
+                                Log.e("msg_category_error", t.getMessage() + "__");
+
+                                if (t.getMessage().toLowerCase().contains("failed to connect") || t.getMessage().toLowerCase().contains("unable to resolve host")) {
+                                    //   view.onnotconnect(t.getMessage().toLowerCase());
+                                    //  Toast.makeText(VerificationCodeActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    view.onFailed(t.getMessage());
+                                    // Toast.makeText(VerificationCodeActivity.this, getString(R.string.failed), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("Error", e.getMessage() + "__");
+                        }
+                    }
+                });
     }
 }
