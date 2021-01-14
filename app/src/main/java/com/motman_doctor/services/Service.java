@@ -318,4 +318,13 @@ public interface Service {
             @Header("Authorization") String user_token,
             @Field("doctor_time_detail_id") int doctor_time_detail_id
     );
+    @FormUrlEncoded
+    @POST("api/update-doctor-register")
+    Call<UserModel> switchprofile(
+            @Header("Authorization") String user_token,
+            @Field("is_emergency") String is_emergency,
+            @Field("id") String id
+
+
+    );
 }
