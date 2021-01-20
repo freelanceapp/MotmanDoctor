@@ -17,6 +17,7 @@ import com.motman_doctor.tags.Tags;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,11 +48,12 @@ public class ActivityMyAppoimentPresenter implements TimePickerDialog.OnTimeSetL
     private void createDateDialog() {
 
         Calendar calendar = Calendar.getInstance();
-        timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), false);
+        timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), true);
         timePickerDialog.dismissOnPause(true);
         timePickerDialog.setAccentColor(ActivityCompat.getColor(context, R.color.colorPrimary));
         timePickerDialog.setCancelColor(ActivityCompat.getColor(context, R.color.gray4));
         timePickerDialog.setOkColor(ActivityCompat.getColor(context, R.color.colorPrimary));
+
         // datePickerDialog.setOkText(getString(R.string.select));
         //datePickerDialog.setCancelText(getString(R.string.cancel));
         timePickerDialog.setVersion(TimePickerDialog.Version.VERSION_2);
@@ -61,7 +63,7 @@ public class ActivityMyAppoimentPresenter implements TimePickerDialog.OnTimeSetL
 
     public void showDateDialog(FragmentManager fragmentManager, DialogAddTimeBinding dialogAddTimeBinding) {
         try {
-            this.binding=dialogAddTimeBinding;
+            this.binding = dialogAddTimeBinding;
             timePickerDialog.show(fragmentManager, "");
 
         } catch (Exception e) {
@@ -182,6 +184,7 @@ public class ActivityMyAppoimentPresenter implements TimePickerDialog.OnTimeSetL
                     }
                 });
     }
+
     public void addtime(AddTimeModel addTimeModel, UserModel userModel) {
 
         view.onLoad();
@@ -311,18 +314,30 @@ public class ActivityMyAppoimentPresenter implements TimePickerDialog.OnTimeSetL
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.SECOND, second);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
-        String date = dateFormat.format(new Date(calendar.getTimeInMillis()));
-        ActivityMyAppoimentPresenter.this.view.onDateSelected(date,binding);
+      //  calendar.set(Calendar.SECOND, second);
+
+
+      //  SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm", Locale.ENGLISH);
+        String date = (hourOfDay<10?"0"+hourOfDay:hourOfDay)+":"+(minute<10?"0"+minute:minute);
+     //   Date date1 = null;
+//        Log.e("ldkdk", date + ""+calendar.getTime().toString());
+//        try {
+//           date1=dateFormat.parse(date);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        date=dateFormat.format(date1);
+        Log.e("ldkdk", date + ""+date);
+
+        ActivityMyAppoimentPresenter.this.view.onDateSelected(date, binding);
 
     }
 
     public void deletday(UserModel userModel, int id) {
         view.onLoad();
         Api.getService(Tags.base_url)
-                .deleteday("Bearer " + userModel.getData().getToken(),id)
+                .deleteday("Bearer " + userModel.getData().getToken(), id)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

@@ -22,6 +22,7 @@ public class ApointmentModel implements Serializable{
         public String time;
         public double cost;
         public String reservation_type;
+        private String reservation_status;
         public String status;
         public Object cancel_reason;
         public String day_name;
@@ -66,6 +67,10 @@ public class ApointmentModel implements Serializable{
 
         public String getReservation_type() {
             return reservation_type;
+        }
+
+        public String getReservation_status() {
+            return reservation_status;
         }
 
         public String getStatus() {

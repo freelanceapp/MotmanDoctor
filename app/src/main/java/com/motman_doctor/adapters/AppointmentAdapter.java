@@ -61,7 +61,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (holder instanceof MyHolder) {
             MyHolder myHolder = (MyHolder) holder;
             myHolder.binding.setModel(list.get(position));
-           // Log.e("flkfkfk", list.get(position).getPatient_fk().getAppointment_time());
+            Log.e("flkfkfk", list.get(position).getReservation_status());
             myHolder.binding.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -71,6 +71,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     }
                 }
             });
+
 //            myHolder.binding.btnDetails.setOnClickListener(v -> {
 //
 //            });
@@ -79,7 +80,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 public void onClick(View v) {
                     if (fragment instanceof Fragment_Home){
                         Fragment_Home fragment_home=(Fragment_Home)fragment;
-                        fragment_home.setitem(list.get(position).getPatient_fk(),list.get(position).getId(),list.get(position).getReservation_type());
+                        fragment_home.setitem(list.get(position),list.get(position).getId(),list.get(position).getReservation_type(),list.get(position).getReservation_status());
                     }
                 }
             });

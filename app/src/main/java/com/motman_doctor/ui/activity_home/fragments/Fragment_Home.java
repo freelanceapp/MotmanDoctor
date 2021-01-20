@@ -1,6 +1,7 @@
 package com.motman_doctor.ui.activity_home.fragments;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
@@ -29,9 +30,11 @@ import com.motman_doctor.models.UserModel;
 import com.motman_doctor.mvp.fragment_home_mvp.HomeFragmentPresenter;
 import com.motman_doctor.mvp.fragment_home_mvp.HomeFragmentView;
 import com.motman_doctor.preferences.Preferences;
+import com.motman_doctor.share.Common;
 import com.motman_doctor.ui.activity_home.HomeActivity;
 import com.motman_doctor.ui.activity_live.LiveActivity;
 import com.motman_doctor.ui.activity_patient_details.PatientDetailsActivity;
+import com.motman_doctor.ui.activity_sign_up.SignUpActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,6 +53,7 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
     private static final int REQUEST_PHONE_CALL = 1;
     private Intent intent;
     private UserModel userModel;
+    private Dialog dialog2;
 
     public static Fragment_Home newInstance() {
         return new Fragment_Home();
@@ -83,6 +87,12 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
         apointmentModelList.clear();
         apointmentModelList.addAll(apointmentModel.getData());
         adapter.notifyDataSetChanged();
+        if(apointmentModelList.size()==0){
+            binding.tvNoData.setVisibility(View.VISIBLE);
+        }
+        else {
+            binding.tvNoData.setVisibility(View.GONE);
+        }
 
     }
 
@@ -102,46 +112,53 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
 
     }
 
-    public void setitem(ApointmentModel.Data.PatientFk patient_fk, int id, String reservation_type) {
+    @Override
+    public void onSuccess(ApointmentModel.Data data) {
+        Intent intent = new Intent(activity, LiveActivity.class);
+        intent.putExtra("room", data.getId());
+        intent.putExtra("type",data.getReservation_type());
+        startActivity(intent);
+    }
+
+    public void setitem(ApointmentModel.Data data, int id, String reservation_type,String status) {
         Intent intent = new Intent(activity, PatientDetailsActivity.class);
-        intent.putExtra("DATA", patient_fk);
+        intent.putExtra("DATA", data);
         intent.putExtra("id", id);
         intent.putExtra("type", reservation_type);
+        intent.putExtra("status",status);
         startActivity(intent);
     }
 
     public void open(ApointmentModel.Data data) {
-        String date = data.getDate()+" " + data.getTime()+" "+data.getTime_type();
-        Log.e("kdkdk", date);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss aa", Locale.US);
-        long datetime = 0;
-        try {
-            datetime = sdf.parse(date).getTime();
-        } catch (ParseException e) {
-           Log.e("dldkkd",e.toString());
-        }
-        long currenttime = System.currentTimeMillis();
-        Log.e("kdkdk", date+" "+currenttime+" "+datetime);
+//        String date = data.getDate()+" " + data.getTime()+" "+data.getTime_type();
+//        Log.e("kdkdk", date);
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss aa", Locale.US);
+//        long datetime = 0;
+//        try {
+//            datetime = sdf.parse(date).getTime();
+//        } catch (ParseException e) {
+//           Log.e("dldkkd",e.toString());
+//        }
+//        long currenttime = System.currentTimeMillis();
+//        Log.e("kdkdk", date+" "+currenttime+" "+datetime);
 
       //  if (currenttime >= datetime) {
-            if (data.getReservation_type().equals("online")) {
-                Intent intent = new Intent(activity, LiveActivity.class);
-                intent.putExtra("room", data.getId());
-                startActivity(intent);
-            } else {
-                intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", data.getPatient_fk().getPhone_code() + data.getPatient_fk().getPhone(), null));
-                if (intent != null) {
-                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
-                        } else {
-                            startActivity(intent);
-                        }
-                    } else {
-                        startActivity(intent);
-                    }
-                }
-            }
+//            if (data.getReservation_type().equals("online")) {
+             presenter.opencall(data,userModel);
+//            } else {
+//                intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", data.getPatient_fk().getPhone_code() + data.getPatient_fk().getPhone(), null));
+//                if (intent != null) {
+//                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+//                        } else {
+//                            startActivity(intent);
+//                        }
+//                    } else {
+//                        startActivity(intent);
+//                    }
+//                }
+//            }
 //        } else {
 //            Toast.makeText(activity, activity.getResources().getString(R.string.not_avail_now), Toast.LENGTH_LONG).show();
 //        }
@@ -174,6 +191,29 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
                 return;
             }
         }
+    }
+    @Override
+    public void onLoad() {
+        dialog2 = Common.createProgressDialog(activity, getString(R.string.wait));
+        dialog2.setCancelable(false);
+        dialog2.show();
+    }
+
+    @Override
+    public void onFinishload() {
+        dialog2.dismiss();
+    }
+
+    @Override
+    public void onnotconnect(String msg) {
+        Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onServer() {
+        Toast.makeText(activity, getString(R.string.something), Toast.LENGTH_SHORT).show();
+
     }
 //    public void showdetails(ApointmentModel.Data data) {
 //        Intent intent=new Intent(activity, ReservationActivity.class);

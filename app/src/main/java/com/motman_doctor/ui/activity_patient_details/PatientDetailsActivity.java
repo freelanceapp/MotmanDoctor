@@ -1,16 +1,14 @@
 package com.motman_doctor.ui.activity_patient_details;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +16,6 @@ import android.widget.Toast;
 
 import com.motman_doctor.R;
 import com.motman_doctor.adapters.DrugsAdapter;
-import com.motman_doctor.databinding.ActivityMedicalAdviceBinding;
 import com.motman_doctor.databinding.ActivityPatientDetailsBinding;
 import com.motman_doctor.language.Language;
 import com.motman_doctor.models.ApointmentModel;
@@ -26,6 +23,8 @@ import com.motman_doctor.models.DrugModel;
 import com.motman_doctor.models.UserModel;
 import com.motman_doctor.mvp.activity_patient_details_mvp.ActivityPatientDetailsPresenter;
 import com.motman_doctor.mvp.activity_patient_details_mvp.ActivityPatientDetailsView;
+import com.motman_doctor.preferences.Preferences;
+import com.motman_doctor.share.Common;
 import com.motman_doctor.ui.activity_live.LiveActivity;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
     private ActivityPatientDetailsBinding binding;
     private String lang;
     private UserModel.User patientModel;
-    private ApointmentModel.Data.PatientFk patientFk;
+    private ApointmentModel.Data data;
     private ActivityPatientDetailsPresenter presenter;
     private List<DrugModel> drugModelList;
     private DrugsAdapter adapter;
@@ -45,15 +44,21 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
     private String type;
     private static final int REQUEST_PHONE_CALL = 1;
     private Intent intent;
+    private String status;
+    private Dialog dialog2;
+    private UserModel userModel;
+    private Preferences preferences;
+
     @Override
     protected void attachBaseContext(Context newBase) {
         Paper.init(newBase);
-        super.attachBaseContext(Language.updateResources(newBase,Paper.book().read("lang","ar")));
+        super.attachBaseContext(Language.updateResources(newBase, Paper.book().read("lang", "ar")));
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_patient_details);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_patient_details);
         getDataFromIntent();
         initView();
 
@@ -61,71 +66,80 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
 
     private void getDataFromIntent() {
         Intent intent = getIntent();
-        if(intent.getSerializableExtra("data")!=null){
-        patientModel = (UserModel.User) intent.getSerializableExtra("data");
-    }
-        else {
-            patientFk=(ApointmentModel.Data.PatientFk)intent.getSerializableExtra("DATA");
-            id=intent.getIntExtra("id",0);
-            type=intent.getStringExtra("type");
+        if (intent.getSerializableExtra("data") != null) {
+            patientModel = (UserModel.User) intent.getSerializableExtra("data");
+        } else {
+            data = (ApointmentModel.Data) intent.getSerializableExtra("DATA");
+            id = intent.getIntExtra("id", 0);
+            type = intent.getStringExtra("type");
+            status = intent.getStringExtra("status");
         }
     }
 
     private void initView() {
         drugModelList = new ArrayList<>();
+        preferences=Preferences.getInstance();
+        userModel=preferences.getUserData(this);
         Paper.init(this);
-        lang = Paper.book().read("lang","ar");
+        lang = Paper.book().read("lang", "ar");
         binding.setLang(lang);
         binding.setModel(patientModel);
-        binding.setPatinetmodel(patientFk);
+        if (data != null) {
+            binding.setPatinetmodel(data.getPatient_fk());
+        }
         binding.setType(type);
         binding.recView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new DrugsAdapter(drugModelList,this);
+        adapter = new DrugsAdapter(drugModelList, this);
         binding.recView.setAdapter(adapter);
-        presenter = new ActivityPatientDetailsPresenter(this,this);
-        if(patientModel!=null){
-        presenter.getDrugs(patientModel.getId());}
-        else {
-            presenter.getDrugs(patientFk.getId());
+        presenter = new ActivityPatientDetailsPresenter(this, this);
+        if (patientModel != null) {
+            presenter.getDrugs(patientModel.getId());
+        } else {
+            presenter.getDrugs(data.getPatient_fk().getId());
         }
-binding.imageCall.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        if(type.equals("online")){
-            Intent intent = new Intent(PatientDetailsActivity.this, LiveActivity.class);
-            intent.putExtra("room", id);
-            startActivity(intent);
-        }
-        else {
-            intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", patientFk.getPhone_code() + patientFk.getPhone(), null));
-            if (intent != null) {
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(PatientDetailsActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(PatientDetailsActivity.this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
-                    } else {
-                        startActivity(intent);
-                    }
-                } else {
-                    startActivity(intent);
-                }
+        binding.imageCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                if (type.equals("online")) {
+                presenter.opencall(data, userModel);
+//                } else {
+//                    intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", patientFk.getPhone_code() + patientFk.getPhone(), null));
+//                    if (intent != null) {
+//                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                            if (ContextCompat.checkSelfPermission(PatientDetailsActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+//                                ActivityCompat.requestPermissions(PatientDetailsActivity.this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+//                            } else {
+//                                startActivity(intent);
+//                            }
+//                        } else {
+//                            startActivity(intent);
+//                        }
+//                    }
+//                }
             }
-        }
-    }
-});
+        });
         binding.imageBack.setOnClickListener(view -> finish());
-        if(patientFk==null){
+        if (data == null) {
             binding.imageCall.setVisibility(View.GONE);
+        } else {
+            if (status.equals("open")) {
+                binding.imageCall.setVisibility(View.VISIBLE);
+
+            } else {
+                binding.imageCall.setVisibility(View.GONE);
+
+            }
         }
     }
 
     @Override
     public void onSuccess(List<DrugModel> data) {
         binding.view.setVisibility(View.GONE);
-        if (data.size()>0){
+        if (data.size() > 0) {
             drugModelList.addAll(data);
             binding.tvNoData.setVisibility(View.GONE);
             adapter.notifyDataSetChanged();
-        }else {
+        } else {
             binding.tvNoData.setVisibility(View.VISIBLE);
 
         }
@@ -150,6 +164,15 @@ binding.imageCall.setOnClickListener(new View.OnClickListener() {
         binding.progBar.setVisibility(View.GONE);
 
     }
+
+    @Override
+    public void onSuccess(ApointmentModel.Data data) {
+        Intent intent = new Intent(PatientDetailsActivity.this, LiveActivity.class);
+        intent.putExtra("room", id);
+        intent.putExtra("type",type);
+        startActivity(intent);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -176,5 +199,29 @@ binding.imageCall.setOnClickListener(new View.OnClickListener() {
                 return;
             }
         }
+    }
+
+    @Override
+    public void onLoad() {
+        dialog2 = Common.createProgressDialog(PatientDetailsActivity.this, getString(R.string.wait));
+        dialog2.setCancelable(false);
+        dialog2.show();
+    }
+
+    @Override
+    public void onFinishload() {
+        dialog2.dismiss();
+    }
+
+    @Override
+    public void onnotconnect(String msg) {
+        Toast.makeText(PatientDetailsActivity.this, msg, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onServer() {
+        Toast.makeText(PatientDetailsActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+
     }
 }

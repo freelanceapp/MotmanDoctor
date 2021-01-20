@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 <data>
+    <import type="android.view.View"/>
     <variable
         name="model"
         type="com.motman_doctor.models.ApointmentModel.Data" />
@@ -66,6 +67,8 @@ android:layout_marginBottom="8dp"
                 android:layout_marginEnd="7dp"
                 android:layout_marginStart="7dp"
                 android:layout_gravity="center_vertical"
+
+                android:clickable='@{model.reservation_status.equals("open")?true:false}'
                 />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

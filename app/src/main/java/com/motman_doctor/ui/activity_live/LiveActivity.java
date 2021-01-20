@@ -23,6 +23,8 @@ public class LiveActivity extends AppCompatActivity {
     private String lang;
     private ActivityLiveBinding binding;
     private int roomid;
+    private String type;
+    private JitsiMeetConferenceOptions options;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -41,6 +43,7 @@ public class LiveActivity extends AppCompatActivity {
 
     private void getDataFromIntent() {
         roomid=getIntent().getIntExtra("room",0);
+        type=getIntent().getStringExtra("type");
     }
 
     private void initView() {
@@ -49,8 +52,10 @@ public class LiveActivity extends AppCompatActivity {
         binding.setLang(lang);
 
         try {
+
             JitsiMeetUserInfo userInfo = new JitsiMeetUserInfo();
-            JitsiMeetConferenceOptions options = new JitsiMeetConferenceOptions.Builder()
+            if(type.equals("online")){
+          options = new JitsiMeetConferenceOptions.Builder()
                     .setServerURL(new URL("https://meet.jit.si"))
                     .setRoom(roomid+"")
                     .setUserInfo(userInfo)
@@ -58,7 +63,20 @@ public class LiveActivity extends AppCompatActivity {
                     .setVideoMuted(false)
                     .setAudioOnly(false)
                     .setWelcomePageEnabled(false)
-                    .build();
+                    .build();}
+            else {
+                options = new JitsiMeetConferenceOptions.Builder()
+                        .setServerURL(new URL("https://meet.jit.si"))
+                        .setRoom(roomid+"")
+                        .setUserInfo(userInfo)
+                        .setAudioMuted(false)
+                        .setVideoMuted(true)
+                        .setAudioOnly(true)
+                        .setWelcomePageEnabled(false)
+                        .build();
+
+            }
+
             JitsiMeetActivity.launch(this, options);
         } catch (MalformedURLException e) {
             e.printStackTrace();
