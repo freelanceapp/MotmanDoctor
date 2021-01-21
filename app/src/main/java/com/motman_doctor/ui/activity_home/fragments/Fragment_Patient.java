@@ -43,7 +43,6 @@ public class Fragment_Patient extends Fragment implements FragmentPatientView {
     private List<UserModel.User> userList;
 
 
-
     public static Fragment_Patient newInstance(double lat, double lng) {
         Bundle bundle = new Bundle();
         bundle.putDouble("lat", lat);
@@ -72,15 +71,15 @@ public class Fragment_Patient extends Fragment implements FragmentPatientView {
 
         binding.progBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(activity, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         binding.recView.setLayoutManager(new LinearLayoutManager(activity));
-        adapter = new PatientAdapter(userList,activity,this);
+        adapter = new PatientAdapter(userList, activity, this);
         binding.recView.setAdapter(adapter);
-        presenter = new FragmentPatientPresenter(this,activity);
+        presenter = new FragmentPatientPresenter(this, activity);
         presenter.getPatient("");
 
         binding.edtSearch.setOnEditorActionListener((textView, i, keyEvent) -> {
-            if (i== EditorInfo.IME_ACTION_SEARCH){
+            if (i == EditorInfo.IME_ACTION_SEARCH) {
                 String query = binding.edtSearch.getText().toString().trim();
-                if (!query.isEmpty()){
+                if (!query.isEmpty()) {
                     presenter.getPatient(query);
                 }
             }
@@ -89,7 +88,7 @@ public class Fragment_Patient extends Fragment implements FragmentPatientView {
 
         binding.imageSearch.setOnClickListener(view -> {
             String query = binding.edtSearch.getText().toString().trim();
-            if (!query.isEmpty()){
+            if (!query.isEmpty()) {
                 presenter.getPatient(query);
             }
         });
@@ -108,9 +107,9 @@ public class Fragment_Patient extends Fragment implements FragmentPatientView {
             @Override
             public void afterTextChanged(Editable editable) {
                 String query = editable.toString();
-                if (!query.isEmpty()){
+                if (!query.isEmpty()) {
                     presenter.getPatient(query);
-                }else {
+                } else {
                     presenter.getPatient("all");
                 }
             }
@@ -120,11 +119,11 @@ public class Fragment_Patient extends Fragment implements FragmentPatientView {
 
     @Override
     public void onSuccess(List<UserModel.User> data) {
-        if (data.size()>0){
+        if (data.size() > 0) {
             binding.tvNoData.setVisibility(View.GONE);
             userList.addAll(data);
             adapter.notifyDataSetChanged();
-        }else {
+        } else {
             binding.tvNoData.setVisibility(View.VISIBLE);
 
         }
@@ -151,7 +150,7 @@ public class Fragment_Patient extends Fragment implements FragmentPatientView {
 
     public void setItemData(UserModel.User user) {
         Intent intent = new Intent(activity, PatientDetailsActivity.class);
-        intent.putExtra("data",user);
+        intent.putExtra("data", user);
         startActivity(intent);
     }
 }
