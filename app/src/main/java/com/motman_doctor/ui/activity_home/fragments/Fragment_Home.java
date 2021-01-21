@@ -1,7 +1,9 @@
 package com.motman_doctor.ui.activity_home.fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
@@ -24,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.motman_doctor.R;
 import com.motman_doctor.adapters.AppointmentAdapter;
+import com.motman_doctor.databinding.DialogChooseAddDrugBinding;
 import com.motman_doctor.databinding.FragmentHomeBinding;
 import com.motman_doctor.models.ApointmentModel;
 import com.motman_doctor.models.UserModel;
@@ -31,6 +34,7 @@ import com.motman_doctor.mvp.fragment_home_mvp.HomeFragmentPresenter;
 import com.motman_doctor.mvp.fragment_home_mvp.HomeFragmentView;
 import com.motman_doctor.preferences.Preferences;
 import com.motman_doctor.share.Common;
+import com.motman_doctor.ui.activity_emergency.AddDrugActivity;
 import com.motman_doctor.ui.activity_home.HomeActivity;
 import com.motman_doctor.ui.activity_live.LiveActivity;
 import com.motman_doctor.ui.activity_patient_details.PatientDetailsActivity;
@@ -41,6 +45,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static android.app.Activity.RESULT_OK;
 
 public class Fragment_Home extends Fragment implements HomeFragmentView {
     private FragmentHomeBinding binding;
@@ -54,6 +60,7 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
     private Intent intent;
     private UserModel userModel;
     private Dialog dialog2;
+    private ApointmentModel.Data data;
 
     public static Fragment_Home newInstance() {
         return new Fragment_Home();
@@ -144,6 +151,7 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
 
       //  if (currenttime >= datetime) {
 //            if (data.getReservation_type().equals("online")) {
+        this.data=data;
              presenter.opencall(data,userModel);
 //            } else {
 //                intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", data.getPatient_fk().getPhone_code() + data.getPatient_fk().getPhone(), null));
@@ -210,9 +218,55 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
 
     }
 
+
+
+    public void getdata() {
+        apointmentModelList.clear();
+        adapter.notifyDataSetChanged();
+        presenter.getApointment(userModel);
+    }
+
+    @Override
+    public void oncloseSuccess() {
+        CreateDialogAlert(activity);
+    }
+
     @Override
     public void onServer() {
         Toast.makeText(activity, getString(R.string.something), Toast.LENGTH_SHORT).show();
+
+    }
+    public  void CreateDialogAlert(Context context) {
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .create();
+
+        DialogChooseAddDrugBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_choose_add_drug, null, false);
+
+        binding.btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                Intent intent = new Intent(activity, AddDrugActivity.class);
+                intent.putExtra("DATA", data);
+
+                startActivity(intent);
+
+            }
+        });
+        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                apointmentModelList.clear();
+                adapter.notifyDataSetChanged();
+                presenter.getApointment(userModel);
+            }
+        });
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_congratulation_animation;
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setView(binding.getRoot());
+        dialog.show();
 
     }
 //    public void showdetails(ApointmentModel.Data data) {
@@ -220,4 +274,11 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
 //        intent.putExtra("data",data);
 //        startActivity(intent);
 //    }
+@Override
+public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if(resultCode==RESULT_OK&&requestCode==1){
+        presenter.closecall(this.data, userModel);
+    }
+}
 }

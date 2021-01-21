@@ -338,4 +338,30 @@ public interface Service {
 
 
     );
+    @FormUrlEncoded
+    @POST("api/close-call-by-doctor")
+    Call<ResponseBody> closecall(
+            @Header("Authorization") String Authorization,
+            @Field("doctor_id") String doctor_id,
+            @Field("patient_id") String patient_id,
+            @Field("reservation_id") String reservation_id
+
+
+
+    );
+    @FormUrlEncoded
+    @POST("api/add-drugs")
+    Call<ResponseBody> Adddrug(
+            @Header("Authorization") String Authorization,
+            @Field("doctor_id") String doctor_id,
+            @Field("user_id") String user_id,
+            @Field("reservation_id") String reservation_id,
+            @Field("drag_name[]") List<String> drag_name,
+            @Field("take_num[]") List<String> take_num,
+            @Field("details[]") List<String> details
+
+
+
+
+    );
 }

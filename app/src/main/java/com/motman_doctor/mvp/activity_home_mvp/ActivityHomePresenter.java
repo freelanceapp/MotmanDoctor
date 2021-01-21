@@ -17,7 +17,7 @@ public class ActivityHomePresenter {
     private FragmentManager fragmentManager;
     private HomeActivityView view;
     private Fragment_Patient fragment_patient;
-    private Fragment_Home fragment_home;
+    public Fragment_Home fragment_home;
     private Fragment_Chat fragment_chat;
     private Fragment_More fragment_more;
     private double lat=0.0,lng=0.0;

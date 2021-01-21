@@ -7,13 +7,15 @@ import com.motman_doctor.models.UserModel;
 import java.util.List;
 
 public interface ActivityPatientDetailsView {
-    void onSuccess(List<DrugModel> data);
+    void oncloseSuccess(List<DrugModel> data);
     void onFailed(String msg);
     void showProgressBar();
     void hideProgressBar();
-    void onSuccess(ApointmentModel.Data data);
+    void oncopenSuccess(ApointmentModel.Data data);
     void onLoad();
     void onFinishload();
     void onServer();
     void onnotconnect(String msg);
+
+    void oncloseSuccess();
 }

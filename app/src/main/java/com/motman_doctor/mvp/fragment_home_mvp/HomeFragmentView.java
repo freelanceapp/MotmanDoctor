@@ -14,4 +14,5 @@ public interface HomeFragmentView {
     void onFinishload();
     void onServer();
     void onnotconnect(String msg);
+    void oncloseSuccess();
 }

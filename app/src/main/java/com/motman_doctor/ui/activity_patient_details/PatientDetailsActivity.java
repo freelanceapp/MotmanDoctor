@@ -1,22 +1,27 @@
 package com.motman_doctor.ui.activity_patient_details;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
 import com.motman_doctor.R;
 import com.motman_doctor.adapters.DrugsAdapter;
 import com.motman_doctor.databinding.ActivityPatientDetailsBinding;
+import com.motman_doctor.databinding.DialogAlertBinding;
+import com.motman_doctor.databinding.DialogChooseAddDrugBinding;
 import com.motman_doctor.language.Language;
 import com.motman_doctor.models.ApointmentModel;
 import com.motman_doctor.models.DrugModel;
@@ -25,6 +30,7 @@ import com.motman_doctor.mvp.activity_patient_details_mvp.ActivityPatientDetails
 import com.motman_doctor.mvp.activity_patient_details_mvp.ActivityPatientDetailsView;
 import com.motman_doctor.preferences.Preferences;
 import com.motman_doctor.share.Common;
+import com.motman_doctor.ui.activity_emergency.AddDrugActivity;
 import com.motman_doctor.ui.activity_live.LiveActivity;
 
 import java.util.ArrayList;
@@ -78,8 +84,8 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
 
     private void initView() {
         drugModelList = new ArrayList<>();
-        preferences=Preferences.getInstance();
-        userModel=preferences.getUserData(this);
+        preferences = Preferences.getInstance();
+        userModel = preferences.getUserData(this);
         Paper.init(this);
         lang = Paper.book().read("lang", "ar");
         binding.setLang(lang);
@@ -133,7 +139,7 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
     }
 
     @Override
-    public void onSuccess(List<DrugModel> data) {
+    public void oncloseSuccess(List<DrugModel> data) {
         binding.view.setVisibility(View.GONE);
         if (data.size() > 0) {
             drugModelList.addAll(data);
@@ -166,11 +172,19 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
     }
 
     @Override
-    public void onSuccess(ApointmentModel.Data data) {
+    public void oncopenSuccess(ApointmentModel.Data data) {
         Intent intent = new Intent(PatientDetailsActivity.this, LiveActivity.class);
         intent.putExtra("room", id);
-        intent.putExtra("type",type);
-        startActivity(intent);
+        intent.putExtra("type", type);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            presenter.closecall(this.data, userModel);
+        }
     }
 
     @Override
@@ -220,8 +234,47 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
     }
 
     @Override
+    public void oncloseSuccess() {
+        CreateDialogAlert(this);
+    }
+
+    @Override
     public void onServer() {
         Toast.makeText(PatientDetailsActivity.this, getString(R.string.something), Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void CreateDialogAlert(Context context) {
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .create();
+
+        DialogChooseAddDrugBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dialog_choose_add_drug, null, false);
+
+        binding.btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                Intent intent = new Intent(PatientDetailsActivity.this, AddDrugActivity.class);
+                intent.putExtra("DATA", data);
+
+                startActivity(intent);
+                finish();
+            }
+        });
+        binding.btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                finish();
+                dialog.dismiss();
+
+            }
+        });
+        dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_congratulation_animation;
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setView(binding.getRoot());
+        dialog.show();
 
     }
 }

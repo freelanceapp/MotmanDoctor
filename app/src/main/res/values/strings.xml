@@ -177,4 +177,8 @@
     <string name="add_more">Add More</string>
     <string name="national_number">National Number</string>
     <string name="degree_title_job">Degree Title Job</string>
+    <string name="calling">Calling</string>
+    <string name="add_drug">Add Drug</string>
+    <string name="drug_name">Drug Name</string>
+    <string name="are_you_want_to_adddrug">Are You Want to Adddrug ?</string>
 </resources>

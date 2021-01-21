@@ -96,14 +96,14 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityView 
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        List<Fragment> fragments = fragmentManager.getFragments();
-        for (Fragment fragment : fragments) {
-            fragment.onActivityResult(requestCode, resultCode, data);
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        List<Fragment> fragments = fragmentManager.getFragments();
+//        for (Fragment fragment : fragments) {
+//            fragment.onActivityResult(requestCode, resultCode, data);
+//        }
+//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -132,6 +132,14 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityView 
         startActivity(intent);
         finish();
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(presenter.fragment_home!=null){
+            presenter.fragment_home.getdata();
+        }
     }
 
     @Override
