@@ -124,7 +124,7 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
         Intent intent = new Intent(activity, LiveActivity.class);
         intent.putExtra("room", data.getId());
         intent.putExtra("type",data.getReservation_type());
-        startActivity(intent);
+        startActivityForResult(intent,1);
     }
 
     public void setitem(ApointmentModel.Data data, int id, String reservation_type,String status) {

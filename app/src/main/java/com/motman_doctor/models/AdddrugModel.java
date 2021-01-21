@@ -69,7 +69,7 @@ public class AdddrugModel extends BaseObservable {
     public AdddrugModel() {
         name = "";
         dose = "";
-        detials="";
+        detials = "";
     }
 
     @Bindable
