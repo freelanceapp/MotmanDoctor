@@ -75,7 +75,7 @@ public class Fragment_Patient extends Fragment implements FragmentPatientView {
         adapter = new PatientAdapter(userList,activity,this);
         binding.recView.setAdapter(adapter);
         presenter = new FragmentPatientPresenter(this,activity);
-        presenter.getPatient("all");
+        presenter.getPatient("");
 
         binding.edtSearch.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i== EditorInfo.IME_ACTION_SEARCH){
