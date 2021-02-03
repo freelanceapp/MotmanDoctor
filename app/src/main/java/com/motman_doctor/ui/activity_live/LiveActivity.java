@@ -73,7 +73,7 @@ public class LiveActivity extends AppCompatActivity {
             if (type.equals("online")) {
                 options = new JitsiMeetConferenceOptions.Builder()
                         .setServerURL(new URL("https://meet.jit.si"))
-                        .setRoom(roomid + "")
+                        .setRoom("motman"+roomid + "")
                         .setUserInfo(userInfo)
                         .setAudioMuted(false)
                         .setVideoMuted(false)
