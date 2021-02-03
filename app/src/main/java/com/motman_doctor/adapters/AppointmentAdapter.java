@@ -74,6 +74,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 //            myHolder.binding.btnDetails.setOnClickListener(v -> {
 //
+
 //            });
             myHolder.binding.tvdetials.setOnClickListener(new View.OnClickListener() {
                 @Override

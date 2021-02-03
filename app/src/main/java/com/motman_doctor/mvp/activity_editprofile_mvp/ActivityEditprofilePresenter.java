@@ -81,12 +81,13 @@ public class ActivityEditprofilePresenter {
         RequestBody email_part = Common.getRequestBodyText(editProfileModel.getEmail());
         RequestBody job_part = Common.getRequestBodyText(editProfileModel.getJob_title());
         RequestBody user_part = Common.getRequestBodyText(userModel.getData().getId() + "");
+        RequestBody time_part = Common.getRequestBodyText(editProfileModel.getTime() + "");
 
 
         MultipartBody.Part image_form_part = Common.getMultiPart(context, Uri.parse(editProfileModel.getImageUrl()), "logo");
         view.onLoad();
         Api.getService(Tags.base_url)
-                .editprofile("Bearer " + userModel.getData().getToken(), user_part, name_part, email_part, job_part, image_form_part)
+                .editprofile("Bearer " + userModel.getData().getToken(), user_part, name_part, email_part,time_part, job_part, image_form_part)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -147,12 +148,13 @@ public class ActivityEditprofilePresenter {
         RequestBody job_part = Common.getRequestBodyText(editProfileModel.getJob_title());
         RequestBody user_part = Common.getRequestBodyText(userModel.getData().getId() + "");
         RequestBody pass_part = Common.getRequestBodyText(editProfileModel.getPassword());
+        RequestBody time_part = Common.getRequestBodyText(editProfileModel.getTime());
 
 
         MultipartBody.Part image_form_part = Common.getMultiPart(context, Uri.parse(editProfileModel.getImageUrl()), "logo");
         view.onLoad();
         Api.getService(Tags.base_url)
-                .editprofile("Bearer " + userModel.getData().getToken(), user_part, name_part, email_part, job_part, pass_part, image_form_part)
+                .editprofile("Bearer " + userModel.getData().getToken(), user_part, name_part, email_part,time_part, job_part, pass_part, image_form_part)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -206,7 +208,7 @@ public class ActivityEditprofilePresenter {
 
         view.onLoad();
         Api.getService(Tags.base_url)
-                .editprofile("Bearer " + userModel.getData().getToken(), userModel.getData().getId() + "", editProfileModel.getName(), editProfileModel.getEmail(), editProfileModel.getJob_title())
+                .editprofile("Bearer " + userModel.getData().getToken(), userModel.getData().getId() + "", editProfileModel.getName(), editProfileModel.getEmail(),editProfileModel.getTime(), editProfileModel.getJob_title())
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {
@@ -261,7 +263,7 @@ public class ActivityEditprofilePresenter {
 
         view.onLoad();
         Api.getService(Tags.base_url)
-                .editprofile("Bearer " + userModel.getData().getToken(), userModel.getData().getId() + "", editProfileModel.getName(), editProfileModel.getEmail(), editProfileModel.getJob_title(), editProfileModel.getPassword())
+                .editprofile("Bearer " + userModel.getData().getToken(), userModel.getData().getId() + "", editProfileModel.getName(), editProfileModel.getEmail(),editProfileModel.getTime(), editProfileModel.getJob_title(), editProfileModel.getPassword())
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(Call<UserModel> call, Response<UserModel> response) {

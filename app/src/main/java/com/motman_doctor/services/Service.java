@@ -261,6 +261,7 @@ public interface Service {
             @Field("id") String id,
             @Field("name") String name,
             @Field("email") String email,
+            @Field("detection_time") String detection_time,
             @Field("title_job_degree") String title_job_degree
 
 
@@ -273,6 +274,7 @@ public interface Service {
             @Field("id") String id,
             @Field("name") String name,
             @Field("email") String email,
+            @Field("detection_time") String detection_time,
             @Field("title_job_degree") String title_job_degree,
             @Field("password") String password
 
@@ -287,6 +289,7 @@ public interface Service {
             @Part("id") RequestBody id,
             @Part("name") RequestBody name,
             @Part("email") RequestBody email,
+            @Part("detection_time") RequestBody detection_time,
             @Part("title_job_degree") RequestBody title_job_degree,
             @Part("password") RequestBody password,
             @Part MultipartBody.Part logo
@@ -302,6 +305,7 @@ public interface Service {
             @Part("id") RequestBody id,
             @Part("name") RequestBody name,
             @Part("email") RequestBody email,
+            @Part("detection_time") RequestBody detection_time,
             @Part("title_job_degree") RequestBody title_job_degree,
             @Part MultipartBody.Part logo
 

@@ -121,10 +121,25 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
 
     @Override
     public void onSuccess(ApointmentModel.Data data) {
-        Intent intent = new Intent(activity, LiveActivity.class);
-        intent.putExtra("room", data.getId());
-        intent.putExtra("type",data.getReservation_type());
-        startActivityForResult(intent,1);
+        if(data.getReservation_type().equals("online")){
+            Intent intent = new Intent(activity, LiveActivity.class);
+            intent.putExtra("room", data.getId());
+            intent.putExtra("type", data.getReservation_type());
+            startActivityForResult(intent, 1);}
+        else {
+            intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", data.getPatient_fk().getPhone_code() + data.getPatient_fk().getPhone(), null));
+            if (intent != null) {
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+                    } else {
+                        startActivity(intent);
+                    }
+                } else {
+                    startActivity(intent);
+                }
+            }
+        }
     }
 
     public void setitem(ApointmentModel.Data data, int id, String reservation_type,String status) {
@@ -261,6 +276,13 @@ public class Fragment_Home extends Fragment implements HomeFragmentView {
                 apointmentModelList.clear();
                 adapter.notifyDataSetChanged();
                 presenter.getApointment(userModel);
+            }
+        });
+        binding.btnReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                presenter.opencall(data,userModel);
             }
         });
         dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_congratulation_animation;

@@ -18,6 +18,8 @@ public class EditProfileModel extends BaseObservable {
     private String name;
     private String job_title;
     private String email;
+    private String time;
+
     private String password;
     ;
     private String phone_code;
@@ -36,12 +38,12 @@ public class EditProfileModel extends BaseObservable {
         this.job_title = "";
         this.email = "";
         this.password = "";
-
+        this.time = "";
     }
 
     public boolean isDataValid(Context context) {
-        if (!name.isEmpty()&&
-                (!password.isEmpty() && password.length() >= 6)||password.isEmpty()
+        if (!name.isEmpty() &&
+                (!password.isEmpty() && password.length() >= 6) || password.isEmpty()
 
         ) {
 
@@ -55,7 +57,7 @@ public class EditProfileModel extends BaseObservable {
             } else {
                 error_name.set(null);
             }
-              if (!password.isEmpty()&&password.length() < 6) {
+            if (!password.isEmpty() && password.length() < 6) {
                 error_password.set(context.getString(R.string.password_short));
             } else {
                 error_password.set(null);
@@ -126,5 +128,11 @@ public class EditProfileModel extends BaseObservable {
         this.phone = phone;
     }
 
+    public String getTime() {
+        return time;
+    }
 
+    public void setTime(String time) {
+        this.time = time;
+    }
 }

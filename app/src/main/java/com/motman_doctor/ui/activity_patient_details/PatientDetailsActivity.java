@@ -2,6 +2,8 @@ package com.motman_doctor.ui.activity_patient_details;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -11,6 +13,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -103,6 +106,16 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
         } else {
             presenter.getDrugs(data.getPatient_fk().getId());
         }
+        binding.imageAdddrug.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PatientDetailsActivity.this, AddDrugActivity.class);
+                intent.putExtra("DATA", data);
+
+                startActivity(intent);
+                finish();
+            }
+        });
         binding.imageCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,13 +141,23 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
         if (data == null) {
             binding.imageCall.setVisibility(View.GONE);
         } else {
-            if (status.equals("open")) {
-                binding.imageCall.setVisibility(View.VISIBLE);
-
-            } else {
-                binding.imageCall.setVisibility(View.GONE);
+            if(data.getReservation_type().equals("normal")){
+                binding.imageAdddrug.setVisibility(View.VISIBLE);
+                binding.imageAdddrug.setVisibility(View.GONE);
 
             }
+            else {
+                binding.imageAdddrug.setVisibility(View.GONE);
+
+            }
+//            if (status.equals("open")) {
+//                binding.imageCall.setVisibility(View.VISIBLE);
+//
+//            }
+//            else {
+//                binding.imageCall.setVisibility(View.GONE);
+//
+//            }
         }
     }
 
@@ -173,10 +196,25 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
 
     @Override
     public void oncopenSuccess(ApointmentModel.Data data) {
-        Intent intent = new Intent(PatientDetailsActivity.this, LiveActivity.class);
-        intent.putExtra("room", id);
-        intent.putExtra("type", type);
-        startActivityForResult(intent, 1);
+        if(data.getReservation_type().equals("online")){
+            Intent intent = new Intent(PatientDetailsActivity.this, LiveActivity.class);
+            intent.putExtra("room", data.getId());
+            intent.putExtra("type", data.getReservation_type());
+            startActivityForResult(intent, 1);}
+        else {
+            intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", data.getPatient_fk().getPhone_code() + data.getPatient_fk().getPhone(), null));
+            if (intent != null) {
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+                    } else {
+                        startActivity(intent);
+                    }
+                } else {
+                    startActivity(intent);
+                }
+            }
+        }
     }
 
     @Override
@@ -269,6 +307,19 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
                 finish();
                 dialog.dismiss();
 
+            }
+        });
+        binding.btnReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                presenter.opencall(data, userModel);
+
+//                Intent intent = new Intent(PatientDetailsActivity.this, LiveActivity.class);
+//                intent.putExtra("room", data.getId());
+//                intent.putExtra("type", data.getReservation_type());
+//                startActivityForResult(intent, 1);
             }
         });
         dialog.getWindow().getAttributes().windowAnimations = R.style.dialog_congratulation_animation;

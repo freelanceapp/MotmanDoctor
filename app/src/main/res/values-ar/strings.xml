@@ -181,5 +181,7 @@
     <string name="add_drug">اضافة علاج</string>
     <string name="drug_name">اسم العلاج</string>
     <string name="are_you_want_to_adddrug">هل تريد اضافة علاج</string>
+    <string name="detection_time">وقت الكشف</string>
+    <string name="back_to_call">عودة للمكالمه</string>
 
 </resources>

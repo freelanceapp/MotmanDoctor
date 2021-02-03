@@ -70,6 +70,8 @@ public class LiveActivity extends AppCompatActivity {
         try {
 
             JitsiMeetUserInfo userInfo = new JitsiMeetUserInfo();
+            userInfo.setDisplayName("ah");
+            userInfo.setEmail("ah@yahoo.com");
             if (type.equals("online")) {
                 options = new JitsiMeetConferenceOptions.Builder()
                         .setServerURL(new URL("https://meet.jit.si"))

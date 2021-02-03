@@ -15,10 +15,11 @@
     </data>
 
     <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layoutDirection="ltr"
+        android:gravity="end"
         tools:ignore="UnusedAttribute">
 
         <LinearLayout
@@ -42,8 +43,8 @@
                     <ImageView
                         android:id="@+id/tv_message_content"
                         image="@{messagemodel.image}"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
                         android:maxWidth="100dp"
 
                         android:maxHeight="100dp"
@@ -75,7 +76,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="top"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/logo" />
+                 />
         </LinearLayout>
     </RelativeLayout>
 </layout>

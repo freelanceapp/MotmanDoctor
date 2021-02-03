@@ -54,6 +54,7 @@ public class UserModel implements Serializable {
         private String updated_at;
         private double distance;
         private String token;
+        private String detection_time;
         private LastReservationFk last_reservation_fk;
 
         public int getId() {
@@ -206,6 +207,10 @@ public class UserModel implements Serializable {
 
         public String getToken() {
             return token;
+        }
+
+        public String getDetection_time() {
+            return detection_time;
         }
 
         public LastReservationFk getLast_reservation_fk() {

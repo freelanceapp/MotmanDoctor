@@ -86,6 +86,7 @@ public class EditprofileActivity extends AppCompatActivity implements Editprofil
         lang = Paper.book().read("lang", "ar");
         model = new EditProfileModel();
         updatedata();
+        model.setTime(userModel.getData().getDetection_time());
         binding.setModel(model);
         binding.setLang(lang);
         presenter = new ActivityEditprofilePresenter(this, this);
