@@ -223,11 +223,18 @@
 
 
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
                 <FrameLayout
                     android:id="@+id/image_adddrug"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="56dp"
-                    android:background="@color/color1"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
                     >
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -248,8 +255,9 @@
                 </FrameLayout>
                 <FrameLayout
                     android:id="@+id/image_call"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="56dp"
+                    android:layout_weight="1"
                     android:background="@color/color1"
                     >
                     <LinearLayout
@@ -278,7 +286,7 @@
                     </LinearLayout>
 
                 </FrameLayout>
-
+                </LinearLayout>
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

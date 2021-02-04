@@ -4,6 +4,9 @@
 <data>
     <import type="android.view.View"/>
     <variable
+        name="lang"
+        type="String" />
+    <variable
         name="model"
         type="com.motman_doctor.models.ApointmentModel.Data" />
 </data>
@@ -32,7 +35,7 @@ android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:text="@{model.time}"
+                android:text='@{model.time.substring(0,model.time.lastIndexOf(":"))+(lang.equals("en")?model.time_type:(model.time_type.equals("AM")?"ص":"م"))}'
                 android:textColor="@color/color1"
                 android:textSize="15sp"
 

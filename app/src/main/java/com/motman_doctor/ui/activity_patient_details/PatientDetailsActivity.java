@@ -16,6 +16,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
@@ -36,8 +37,13 @@ import com.motman_doctor.share.Common;
 import com.motman_doctor.ui.activity_emergency.AddDrugActivity;
 import com.motman_doctor.ui.activity_live.LiveActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.paperdb.Paper;
 
@@ -141,14 +147,42 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
         if (data == null) {
             binding.imageCall.setVisibility(View.GONE);
         } else {
-            if(data.getReservation_type().equals("normal")){
-                binding.imageAdddrug.setVisibility(View.VISIBLE);
-                binding.imageAdddrug.setVisibility(View.GONE);
+            String myTime = data.getDate()+" "+data.getTime()+" "+ data.getTime_type();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss aa", Locale.US);
+            Date d = null;
+            Log.e("dlldl",myTime);
+            try {
+                d = df.parse(myTime);
+            } catch (ParseException e) {
+                Log.e("llflfl",e.toString());
+            }
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(d);
+            cal.add(Calendar.MINUTE, Integer.parseInt(userModel.getData().getDetection_time()));
+            long time = System.currentTimeMillis();
+
+            if(time>cal.getTimeInMillis()){
+                if (data.getReservation_type().equals("normal")) {
+                    binding.imageAdddrug.setVisibility(View.VISIBLE);
+
+                }else {
+                    binding.imageAdddrug.setVisibility(View.GONE);
+
+                }
+                    binding.imageCall.setVisibility(View.GONE);
 
             }
             else {
-                binding.imageAdddrug.setVisibility(View.GONE);
+                binding.imageCall.setVisibility(View.VISIBLE);
 
+                if (data.getReservation_type().equals("normal")) {
+                    binding.imageAdddrug.setVisibility(View.VISIBLE);
+
+                } else {
+                    binding.imageAdddrug.setVisibility(View.GONE);
+
+
+                }
             }
 //            if (status.equals("open")) {
 //                binding.imageCall.setVisibility(View.VISIBLE);
@@ -196,12 +230,12 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
 
     @Override
     public void oncopenSuccess(ApointmentModel.Data data) {
-        if(data.getReservation_type().equals("online")){
+        if (data.getReservation_type().equals("online")) {
             Intent intent = new Intent(PatientDetailsActivity.this, LiveActivity.class);
             intent.putExtra("room", data.getId());
             intent.putExtra("type", data.getReservation_type());
-            startActivityForResult(intent, 1);}
-        else {
+            startActivityForResult(intent, 1);
+        } else {
             intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", data.getPatient_fk().getPhone_code() + data.getPatient_fk().getPhone(), null));
             if (intent != null) {
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

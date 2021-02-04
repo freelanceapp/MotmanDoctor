@@ -64,8 +64,6 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
                     manageNotification(map);
                 }
-            } else {
-                manageNotification(map);
             }
         }
     }
@@ -89,7 +87,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
         String not_type = map.get("notification_type");
 
-        if (not_type != null && not_type.equals("chat")) {
+        if (not_type != null && (not_type.equals("consulting")||not_type.equals("msg"))) {
             try{   String file_link = "";
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
             String current_class = activityManager.getRunningTasks(1).get(0).topActivity.getClassName();

@@ -18,13 +18,22 @@ import com.motman_doctor.R;
 import com.motman_doctor.databinding.AppointmentRowBinding;
 import com.motman_doctor.databinding.LoadMoreRowBinding;
 import com.motman_doctor.models.ApointmentModel;
+import com.motman_doctor.preferences.Preferences;
 import com.motman_doctor.ui.activity_home.fragments.Fragment_Home;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import io.paperdb.Paper;
 
 public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int DATA = 1;
     private final int LOAD = 2;
+    private final String lang;
     private List<ApointmentModel.Data> list;
     private Context context;
     private LayoutInflater inflater;
@@ -37,7 +46,8 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         inflater = LayoutInflater.from(context);
         activity = (AppCompatActivity) context;
         this.fragment = fragment;
-
+        Paper.init(context);
+        lang = Paper.book().read("lang", "ar");
     }
 
 
@@ -60,8 +70,27 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         if (holder instanceof MyHolder) {
             MyHolder myHolder = (MyHolder) holder;
+            myHolder.binding.setLang(lang);
             myHolder.binding.setModel(list.get(position));
-            Log.e("flkfkfk", list.get(position).getReservation_status());
+            String myTime = list.get(position).getDate()+" "+list.get(position).getTime()+" "+ list.get(position).getTime_type();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss aa", Locale.US);
+            Date d = null;
+            Log.e("dlldl",myTime);
+            try {
+                d = df.parse(myTime);
+            } catch (ParseException e) {
+                Log.e("llflfl",e.toString());
+            }
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(d);
+            cal.add(Calendar.MINUTE, Integer.parseInt(Preferences.getInstance().getUserData(context).getData().getDetection_time()));
+            long time = System.currentTimeMillis();
+
+            if(time>cal.getTimeInMillis()){
+                myHolder.binding.image.setEnabled(false);
+                myHolder.binding.image.setClickable(false);
+
+            }
             myHolder.binding.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

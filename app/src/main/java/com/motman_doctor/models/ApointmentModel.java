@@ -97,7 +97,7 @@ public class ApointmentModel implements Serializable{
             public String name;
             public Object email;
             public String phone_code;
-            public int phone;
+            public String phone;
             public String gender;
             public Object address;
             public double latitude;
@@ -154,7 +154,7 @@ public class ApointmentModel implements Serializable{
                 return phone_code;
             }
 
-            public int getPhone() {
+            public String getPhone() {
                 return phone;
             }
 

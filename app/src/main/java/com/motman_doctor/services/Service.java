@@ -368,4 +368,12 @@ public interface Service {
 
 
     );
+    @FormUrlEncoded
+    @POST("api/firebase-tokens")
+    Call<ResponseBody> updateFirebaseToken(@Header("Authorization") String token,
+                                          @Field("user_id") int user_id,
+                                          @Field("phone_token") String phone_token,
+                                          @Field("software_type") String software_type
+
+    );
 }
