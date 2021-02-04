@@ -24,9 +24,11 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import com.google.gson.Gson;
 import com.motman_doctor.R;
 import com.motman_doctor.models.ChatUserModel;
 import com.motman_doctor.models.MessageModel;
+import com.motman_doctor.models.UserModel;
 import com.motman_doctor.preferences.Preferences;
 import com.motman_doctor.tags.Tags;
 import com.motman_doctor.ui.chat_activity.ChatActivity;
@@ -86,30 +88,25 @@ public class FireBaseMessaging extends FirebaseMessagingService {
         String sound_Path = "android.resource://" + getPackageName() + "/" + R.raw.not;
 
         String not_type = map.get("notification_type");
+        Gson gson = new Gson();
 
         if (not_type != null && (not_type.equals("consulting")||not_type.equals("msg"))) {
             try{   String file_link = "";
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
             String current_class = activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
 
-            int msg_id = Integer.parseInt(map.get("id"));
-            int room_id = Integer.parseInt(map.get("chat_room_id"));
+            int room_id = Integer.parseInt(map.get("consulting_id"));
             int from_user_id = Integer.parseInt(map.get("from_user_id"));
             int to_user_id = Integer.parseInt(map.get("to_user_id"));
-            String type = map.get("message_kind");
-            String user_type = map.get("user_type");
-            int order_id = Integer.parseInt(map.get("order_id"));
 
-            Log.e("llfll", room_id + "");
+            String not_data=map.get("not_data");
 
-                long date = Long.parseLong(map.get("date"));
-                String isRead = map.get("is_read");
-
-                String message = map.get("message");
-                String from_user_name = map.get("fromUserName");
+                MessageModel messageModel = gson.fromJson(not_data, MessageModel.class);
 
 
-                MessageModel messageModel = new MessageModel(msg_id, to_user_id + "", from_user_id + "", type, message, file_link, room_id + "", isRead + "");
+
+
+
 
 
                 Log.e("mkjjj", current_class);
@@ -123,7 +120,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                         EventBus.getDefault().post(messageModel);
                     } else {
                         try{
-                            LoadChatImage(messageModel,user_type,order_id, from_user_name, sound_Path, 1);
+                            LoadChatImage(messageModel,messageModel.getFrom().getType(), messageModel.getFrom().getName(), sound_Path, 1);
 
                         }catch (Exception e){
 
@@ -134,7 +131,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                 } else {
 
                     EventBus.getDefault().post(messageModel);
-                    LoadChatImage(messageModel,user_type,order_id, from_user_name, sound_Path, 1);
+                    LoadChatImage(messageModel,messageModel.getFrom().getType(), messageModel.getFrom().getName(), sound_Path, 1);
 
 
                 }
@@ -198,7 +195,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
 
 
-    private void LoadChatImage(MessageModel messageModel,String user_type,int order_id, String fromusername, String sound_path, int type) {
+    private void LoadChatImage(MessageModel messageModel,String user_type, String fromusername, String sound_path, int type) {
 
 
         Target target = new Target() {
@@ -207,10 +204,10 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
 
                 if (type == 1) {
-                    sendChatNotification_VersionNew(messageModel,user_type,order_id, fromusername, sound_path, bitmap);
+                    sendChatNotification_VersionNew(messageModel,user_type, fromusername, sound_path, bitmap);
 
                 } else {
-                    sendChatNotification_VersionOld(messageModel,user_type,order_id, fromusername, sound_path, bitmap);
+                    sendChatNotification_VersionOld(messageModel,user_type, fromusername, sound_path, bitmap);
 
                 }
             }
@@ -224,10 +221,10 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_nav_notification);
 
                 if (type == 1) {
-                    sendChatNotification_VersionNew(messageModel,user_type,order_id, fromusername, sound_path, bitmap);
+                    sendChatNotification_VersionNew(messageModel,user_type, fromusername, sound_path, bitmap);
 
                 } else {
-                    sendChatNotification_VersionOld(messageModel,user_type,order_id, fromusername, sound_path, bitmap);
+                    sendChatNotification_VersionOld(messageModel,user_type, fromusername, sound_path, bitmap);
 
                 }
 
@@ -251,48 +248,55 @@ public class FireBaseMessaging extends FirebaseMessagingService {
         String sound_Path = "android.resource://" + getPackageName() + "/" + R.raw.not;
 
         String not_type = map.get("notification_type");
+        Gson gson = new Gson();
 
-        if (not_type != null && not_type.equals("chat")) {
-            String file_link = "";
+        if (not_type != null && (not_type.equals("consulting")||not_type.equals("msg"))) {
+            try{   String file_link = "";
+                ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+                String current_class = activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
 
-            ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-            String current_class = activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+                int room_id = Integer.parseInt(map.get("consulting_id"));
+                int from_user_id = Integer.parseInt(map.get("from_user_id"));
+                int to_user_id = Integer.parseInt(map.get("to_user_id"));
 
+                String not_data=map.get("not_data");
 
-            int msg_id = Integer.parseInt(map.get("id"));
-            int room_id = Integer.parseInt(map.get("chat_room_id"));
-            int from_user_id = Integer.parseInt(map.get("from_user_id"));
-            int to_user_id = Integer.parseInt(map.get("to_user_id"));
-            String type = map.get("message_kind");
-            String user_type = map.get("user_type");
-            int order_id = Integer.parseInt(map.get("order_id"));
-
-            long date = Long.parseLong(map.get("date"));
-            String isRead = map.get("is_read");
-
-            String message = map.get("message");
-
-            String from_user_name = map.get("fromUserName");
+                MessageModel messageModel = gson.fromJson(not_data, MessageModel.class);
 
 
-            MessageModel messageModel = new MessageModel(msg_id, to_user_id + "", from_user_id + "", type, message, file_link, room_id + "", isRead + "");
 
-            if (current_class.equals("com.refCustomerFamily.activities_fragments.chat_activity.ChatActivity")) {
 
-                String chat_user_id = getChatUser_id();
-                if (chat_user_id.equals(from_user_id + "")) {
-                    EventBus.getDefault().post(messageModel);
+
+
+
+                Log.e("mkjjj", current_class);
+
+
+                if (current_class.equals("com.refCustomerFamily.activities_fragments.chat_activity.ChatActivity")) {
+
+                    String chat_user_id = getChatUser_id();
+
+                    if (chat_user_id.equals(from_user_id + "")) {
+                        EventBus.getDefault().post(messageModel);
+                    } else {
+                        try{
+                            LoadChatImage(messageModel,messageModel.getFrom().getType(), messageModel.getFrom().getName(), sound_Path, 1);
+
+                        }catch (Exception e){
+
+                        }
+                    }
+
+
                 } else {
-                    LoadChatImage(messageModel,user_type,order_id, from_user_name, sound_Path, 0);
+
+                    EventBus.getDefault().post(messageModel);
+                    LoadChatImage(messageModel,messageModel.getFrom().getType(), messageModel.getFrom().getName(), sound_Path, 1);
+
+
                 }
 
-
-            } else {
-
-
-                EventBus.getDefault().post(messageModel);
-                LoadChatImage(messageModel,user_type,order_id, from_user_name, sound_Path, 0);
-
+            }catch (Exception e){
 
             }
 
@@ -357,7 +361,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void sendChatNotification_VersionNew(MessageModel messageModel,String user_type,int order_id, String fromusername, String sound_path, Bitmap bitmap) {
+    private void sendChatNotification_VersionNew(MessageModel messageModel,String user_type, String fromusername, String sound_path, Bitmap bitmap) {
 
 
         String CHANNEL_ID = "my_channel_02";
@@ -404,7 +408,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
     }
 
-    private void sendChatNotification_VersionOld(MessageModel messageModel,String usertype,int order_id, String fromusername, String sound_path, Bitmap bitmap) {
+    private void sendChatNotification_VersionOld(MessageModel messageModel,String usertype, String fromusername, String sound_path, Bitmap bitmap) {
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSound(Uri.parse(sound_path), AudioManager.STREAM_NOTIFICATION);
