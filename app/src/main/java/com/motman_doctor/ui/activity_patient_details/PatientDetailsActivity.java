@@ -148,32 +148,31 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
             binding.imageCall.setVisibility(View.GONE);
             binding.imageAdddrug.setVisibility(View.GONE);
         } else {
-            String myTime = data.getDate()+" "+data.getTime()+" "+ data.getTime_type();
+            String myTime = data.getDate() + " " + data.getTime() + " " + data.getTime_type();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss aa", Locale.US);
             Date d = null;
-            Log.e("dlldl",myTime);
+            Log.e("dlldl", myTime);
             try {
                 d = df.parse(myTime);
             } catch (ParseException e) {
-                Log.e("llflfl",e.toString());
+                Log.e("llflfl", e.toString());
             }
             Calendar cal = Calendar.getInstance();
             cal.setTime(d);
             cal.add(Calendar.MINUTE, Integer.parseInt(userModel.getData().getDetection_time()));
             long time = System.currentTimeMillis();
 
-            if(time>cal.getTimeInMillis()){
+            if (time > cal.getTimeInMillis()) {
                 if (data.getReservation_type().equals("normal")) {
                     binding.imageAdddrug.setVisibility(View.VISIBLE);
 
-                }else {
+                } else {
                     binding.imageAdddrug.setVisibility(View.GONE);
 
                 }
-                    binding.imageCall.setVisibility(View.GONE);
+                binding.imageCall.setVisibility(View.GONE);
 
-            }
-            else {
+            } else {
                 binding.imageCall.setVisibility(View.VISIBLE);
 
                 if (data.getReservation_type().equals("normal")) {
