@@ -119,7 +119,7 @@ public class EditprofileActivity extends AppCompatActivity implements Editprofil
         model.setPhone(userModel.getData().getPhone());
         model.setPhone_code(userModel.getData().getPhone_code());
         model.setEmail(userModel.getData().getEmail());
-
+        model.setJob_title(userModel.getData().getTitle_job_degree());
         if (userModel.getData().getLogo() != null) {
             Picasso.get().load(Tags.IMAGE_URL + userModel.getData().getLogo()).resize(720, 480).onlyScaleDown().into(binding.image);
             binding.icon.setVisibility(View.GONE);
@@ -265,9 +265,6 @@ public class EditprofileActivity extends AppCompatActivity implements Editprofil
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         return Uri.parse(MediaStore.Images.Media.insertImage(this.getContentResolver(), bitmap, "", ""));
     }
-
-
-
 
 
     @Override

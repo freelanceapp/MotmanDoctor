@@ -56,6 +56,7 @@ public class UserModel implements Serializable {
         private String token;
         private String detection_time;
         private String fireBaseToken;
+        private String title_job_degree;
         private LastReservationFk last_reservation_fk;
 
         public int getId() {
@@ -224,6 +225,10 @@ public class UserModel implements Serializable {
 
         public LastReservationFk getLast_reservation_fk() {
             return last_reservation_fk;
+        }
+
+        public String getTitle_job_degree() {
+            return title_job_degree;
         }
     }
 
