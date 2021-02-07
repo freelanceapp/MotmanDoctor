@@ -161,18 +161,21 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
             cal.setTime(d);
             cal.add(Calendar.MINUTE, Integer.parseInt(userModel.getData().getDetection_time()));
             long time = System.currentTimeMillis();
-
-            if (time > cal.getTimeInMillis()) {
-                if (data.getReservation_type().equals("normal")) {
-                    binding.imageAdddrug.setVisibility(View.VISIBLE);
-
-                } else {
-                    binding.imageAdddrug.setVisibility(View.GONE);
-
-                }
-                binding.imageCall.setVisibility(View.GONE);
-
-            } else {
+            Calendar cal1 = Calendar.getInstance();
+            cal1.setTimeInMillis(time);
+//            if (time > cal.getTimeInMillis()) {
+//
+//                if (data.getReservation_type().equals("normal")) {
+//                    binding.imageAdddrug.setVisibility(View.VISIBLE);
+//
+//                } else {
+//                    binding.imageAdddrug.setVisibility(View.GONE);
+//
+//                }
+//                binding.imageCall.setVisibility(View.GONE);
+//
+//            }
+//            else {
                 binding.imageCall.setVisibility(View.VISIBLE);
 
                 if (data.getReservation_type().equals("normal")) {
@@ -183,7 +186,7 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
 
 
                 }
-            }
+//            }
 //            if (status.equals("open")) {
 //                binding.imageCall.setVisibility(View.VISIBLE);
 //

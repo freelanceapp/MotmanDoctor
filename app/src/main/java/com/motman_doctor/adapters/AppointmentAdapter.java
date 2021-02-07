@@ -86,11 +86,11 @@ public class AppointmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             cal.add(Calendar.MINUTE, Integer.parseInt(Preferences.getInstance().getUserData(context).getData().getDetection_time()));
             long time = System.currentTimeMillis();
 
-            if(time>cal.getTimeInMillis()){
-                myHolder.binding.image.setEnabled(false);
-                myHolder.binding.image.setClickable(false);
-
-            }
+//            if(time>cal.getTimeInMillis()){
+//                myHolder.binding.image.setEnabled(false);
+//                myHolder.binding.image.setClickable(false);
+//
+//            }
             myHolder.binding.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
