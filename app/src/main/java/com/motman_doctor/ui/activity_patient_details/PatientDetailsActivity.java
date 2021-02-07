@@ -146,6 +146,7 @@ public class PatientDetailsActivity extends AppCompatActivity implements Activit
         binding.imageBack.setOnClickListener(view -> finish());
         if (data == null) {
             binding.imageCall.setVisibility(View.GONE);
+            binding.imageAdddrug.setVisibility(View.GONE);
         } else {
             String myTime = data.getDate()+" "+data.getTime()+" "+ data.getTime_type();
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss aa", Locale.US);
