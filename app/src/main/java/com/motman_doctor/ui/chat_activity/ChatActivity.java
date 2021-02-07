@@ -70,7 +70,7 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView 
     private Uri url = null;
     private ChatUserModel chatUserModel;
     private int current_page = 1;
-    private boolean isLoading=false;
+    private boolean isLoading = false;
     private ProgressDialog dialog2;
 
     protected void attachBaseContext(Context newBase) {
@@ -126,11 +126,11 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                Log.e("sksks",dy+"");
+                Log.e("sksks", dy + "");
                 if (dy < 0) {
                     int lastItemPos = manager.findLastCompletelyVisibleItemPosition();
                     int total_items = chat_adapter.getItemCount();
-                    Log.e("kdkdkdk",lastItemPos+" "+total_items);
+                    Log.e("kdkdkdk", lastItemPos + " " + total_items);
                     if (!isLoading) {
                         isLoading = true;
                         messagedatalist.add(0, null);
@@ -172,8 +172,8 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void listenToNewMessage(MessageModel messageModel) {
-        messagedatalist.add(messageModel);
-        scrollToLastPosition();
+
+        presenter.getChatMessages(chatUserModel);
     }
 
     private void scrollToLastPosition() {
@@ -351,12 +351,13 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView 
         isLoading = false;
         messagedatalist.remove(0);
         chat_adapter.notifyItemRemoved(0);
-        if(body.getCurrent_page()==current_page){
-        current_page = body.getCurrent_page();
+        if (body.getCurrent_page() == current_page) {
+            current_page = body.getCurrent_page();
 
-        messagedatalist.addAll(0, body.getData());
-        chat_adapter.notifyItemRangeInserted(0, body.getData().size());
-    }}
+            messagedatalist.addAll(0, body.getData());
+            chat_adapter.notifyItemRangeInserted(0, body.getData().size());
+        }
+    }
 
     @Override
     public void onremove() {
@@ -372,7 +373,7 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView 
     public void onLoad() {
         dialog2 = Common.createProgressDialog(this, getString(R.string.wait));
         dialog2.setCancelable(false);
-     //   dialog2.show();
+        //   dialog2.show();
     }
 
     @Override
@@ -389,7 +390,7 @@ public class ChatActivity extends AppCompatActivity implements ChatActivityView 
 
     @Override
     public void onfinishloadmore() {
-      //  binding.progBarLoadMore.setVisibility(View.VISIBLE);
+        //  binding.progBarLoadMore.setVisibility(View.VISIBLE);
     }
 
     @Override

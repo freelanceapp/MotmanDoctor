@@ -31,6 +31,7 @@ import com.motman_doctor.models.MessageModel;
 import com.motman_doctor.models.UserModel;
 import com.motman_doctor.preferences.Preferences;
 import com.motman_doctor.tags.Tags;
+import com.motman_doctor.ui.activity_home.HomeActivity;
 import com.motman_doctor.ui.chat_activity.ChatActivity;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -90,39 +91,32 @@ public class FireBaseMessaging extends FirebaseMessagingService {
         String not_type = map.get("notification_type");
         Gson gson = new Gson();
 
-        if (not_type != null && (not_type.equals("consulting")||not_type.equals("msg"))) {
-            try{   String file_link = "";
-            ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-            String current_class = activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
+        if (not_type != null && (not_type.equals("consulting") || not_type.equals("msg"))) {
+            try {
+                String file_link = "";
+                ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+                String current_class = activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
 
-            int room_id = Integer.parseInt(map.get("consulting_id"));
-            int from_user_id = Integer.parseInt(map.get("from_user_id"));
-            int to_user_id = Integer.parseInt(map.get("to_user_id"));
-
-            String not_data=map.get("not_data");
-
-                MessageModel messageModel = gson.fromJson(not_data, MessageModel.class);
-
+                int room_id = Integer.parseInt(map.get("consulting_id"));
+                int from_user_id = Integer.parseInt(map.get("from_user_id"));
+                int to_user_id = Integer.parseInt(map.get("to_user_id"));
+                String message = map.get("message");
+                String body = map.get("title");
 
 
+                MessageModel messageModel = new MessageModel(room_id + "");
 
-
-
-
-                Log.e("mkjjj", current_class);
-
-
-                if (current_class.equals("com.refCustomerFamily.activities_fragments.chat_activity.ChatActivity")) {
+                if (current_class.equals("com.motman_doctor.ui.chat_activity.ChatActivity")) {
 
                     String chat_user_id = getChatUser_id();
 
                     if (chat_user_id.equals(from_user_id + "")) {
                         EventBus.getDefault().post(messageModel);
                     } else {
-                        try{
-                            LoadChatImage(messageModel,messageModel.getFrom().getType(), messageModel.getFrom().getName(), sound_Path, 1);
+                        try {
+                            LoadChatImage(messageModel, message, body, sound_Path, 1);
 
-                        }catch (Exception e){
+                        } catch (Exception e) {
 
                         }
                     }
@@ -131,20 +125,20 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                 } else {
 
                     EventBus.getDefault().post(messageModel);
-                    LoadChatImage(messageModel,messageModel.getFrom().getType(), messageModel.getFrom().getName(), sound_Path, 1);
+                    LoadChatImage(messageModel, message, body, sound_Path, 1);
 
 
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
 
         }
-        else if (not_type.equals("general_notification")) {
+        else if (not_type.equals("reservation")) {
 
             String title = map.get("title");
-            String body = map.get("body");
+            String body = map.get("message");
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
             String CHANNEL_ID = "my_channel_02";
@@ -168,11 +162,15 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             builder.setLargeIcon(bitmap);
 
 
+            Intent intent = new Intent(this, HomeActivity.class);
+
+            TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+            taskStackBuilder.addNextIntent(intent);
 //            TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
 //
-//            PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-//
-//            builder.setContentIntent(pendingIntent);
+            PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            builder.setContentIntent(pendingIntent);
 
             builder.setContentTitle(title);
             builder.setContentText(body);
@@ -190,12 +188,64 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
 
         }
+        else if (not_type.equals("call")) {
+
+            String title = map.get("title");
+            String body = map.get("message");
+
+            final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+            String CHANNEL_ID = "my_channel_02";
+            CharSequence CHANNEL_NAME = "my_channel_name";
+            int IMPORTANCE = NotificationManager.IMPORTANCE_HIGH;
+
+            final NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, IMPORTANCE);
+
+            channel.setShowBadge(true);
+            channel.setSound(Uri.parse(sound_Path), new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
+                    .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION)
+                    .build()
+            );
+            builder.setChannelId(CHANNEL_ID);
+            builder.setSound(Uri.parse(sound_Path), AudioManager.STREAM_NOTIFICATION);
+            builder.setSmallIcon(R.mipmap.ic_launcher);
+
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+            builder.setLargeIcon(bitmap);
+
+
+            Intent intent = new Intent(this, HomeActivity.class);
+
+            TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+            taskStackBuilder.addNextIntent(intent);
+//            TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+//
+            PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            builder.setContentIntent(pendingIntent);
+
+            builder.setContentTitle(title);
+            builder.setContentText(body);
+            builder.setStyle(new NotificationCompat.BigTextStyle().bigText(body));
+
+
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            if (manager != null) {
+
+                manager.createNotificationChannel(channel);
+                manager.notify(Tags.not_tag, Tags.not_id, builder.build());
+
+
+            }
+
+
+        }
+
     }
 
 
-
-
-    private void LoadChatImage(MessageModel messageModel,String user_type, String fromusername, String sound_path, int type) {
+    private void LoadChatImage(MessageModel messageModel, String user_type, String fromusername, String sound_path, int type) {
 
 
         Target target = new Target() {
@@ -204,10 +254,10 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
 
                 if (type == 1) {
-                    sendChatNotification_VersionNew(messageModel,user_type, fromusername, sound_path, bitmap);
+                    sendChatNotification_VersionNew(messageModel, user_type, fromusername, sound_path, bitmap);
 
                 } else {
-                    sendChatNotification_VersionOld(messageModel,user_type, fromusername, sound_path, bitmap);
+                    sendChatNotification_VersionOld(messageModel, user_type, fromusername, sound_path, bitmap);
 
                 }
             }
@@ -221,10 +271,10 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_nav_notification);
 
                 if (type == 1) {
-                    sendChatNotification_VersionNew(messageModel,user_type, fromusername, sound_path, bitmap);
+                    sendChatNotification_VersionNew(messageModel, user_type, fromusername, sound_path, bitmap);
 
                 } else {
-                    sendChatNotification_VersionOld(messageModel,user_type, fromusername, sound_path, bitmap);
+                    sendChatNotification_VersionOld(messageModel, user_type, fromusername, sound_path, bitmap);
 
                 }
 
@@ -250,8 +300,9 @@ public class FireBaseMessaging extends FirebaseMessagingService {
         String not_type = map.get("notification_type");
         Gson gson = new Gson();
 
-        if (not_type != null && (not_type.equals("consulting")||not_type.equals("msg"))) {
-            try{   String file_link = "";
+        if (not_type != null && (not_type.equals("consulting") || not_type.equals("msg"))) {
+            try {
+                String file_link = "";
                 ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
                 String current_class = activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
 
@@ -259,67 +310,63 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                 int from_user_id = Integer.parseInt(map.get("from_user_id"));
                 int to_user_id = Integer.parseInt(map.get("to_user_id"));
 
-                String not_data=map.get("not_data");
-
-                MessageModel messageModel = gson.fromJson(not_data, MessageModel.class);
-
+                String message = map.get("message");
+                String body = map.get("title");
 
 
+                MessageModel messageModel = new MessageModel(room_id + "");
 
 
-
-
-                Log.e("mkjjj", current_class);
-
-
-                if (current_class.equals("com.refCustomerFamily.activities_fragments.chat_activity.ChatActivity")) {
+                if (current_class.equals("com.motman_doctor.ui.chat_activity.ChatActivity")) {
 
                     String chat_user_id = getChatUser_id();
 
                     if (chat_user_id.equals(from_user_id + "")) {
                         EventBus.getDefault().post(messageModel);
                     } else {
-                        try{
-                            LoadChatImage(messageModel,messageModel.getFrom().getType(), messageModel.getFrom().getName(), sound_Path, 1);
+                        try {
+                            LoadChatImage(messageModel, message, body, sound_Path, 1);
 
-                        }catch (Exception e){
+                        } catch (Exception e) {
 
                         }
                     }
 
 
-                } else {
+                }
+                else {
 
                     EventBus.getDefault().post(messageModel);
-                    LoadChatImage(messageModel,messageModel.getFrom().getType(), messageModel.getFrom().getName(), sound_Path, 1);
+                    LoadChatImage(messageModel, message, body, sound_Path, 1);
 
 
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
 
         }
-        else if (not_type.equals("general_notification")) {
-
+        else if (not_type.equals("reservation")) {
+            ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+            String current_class = activityManager.getRunningTasks(1).get(0).topActivity.getClassName();
             String title = map.get("title");
-            String body = map.get("body");
+            String body = map.get("message");
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
             String CHANNEL_ID = "my_channel_02";
             CharSequence CHANNEL_NAME = "my_channel_name";
             int IMPORTANCE = NotificationManager.IMPORTANCE_HIGH;
 
-//            final NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, IMPORTANCE);
-//
-//            channel.setShowBadge(true);
-//            channel.setSound(Uri.parse(sound_Path), new AudioAttributes.Builder()
-//                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-//                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
-//                    .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION)
-//                    .build()
-//            );
+            final NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, IMPORTANCE);
+
+            channel.setShowBadge(true);
+            channel.setSound(Uri.parse(sound_Path), new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
+                    .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION)
+                    .build()
+            );
 
             builder.setContentTitle(title);
             builder.setContentText(body);
@@ -332,13 +379,13 @@ public class FireBaseMessaging extends FirebaseMessagingService {
             builder.setLargeIcon(bitmap);
 
 
-            //    TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+            Intent intent = new Intent(this, HomeActivity.class);
 
-            //  PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+            taskStackBuilder.addNextIntent(intent);
+            PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            //builder.setContentIntent(pendingIntent);
-
-
+            builder.setContentIntent(pendingIntent);
             builder.setContentTitle(title);
             builder.setContentText(body);
             builder.setStyle(new NotificationCompat.BigTextStyle().bigText(body));
@@ -350,18 +397,78 @@ public class FireBaseMessaging extends FirebaseMessagingService {
                 // manager.createNotificationChannel(channel);
                 manager.notify(Tags.not_tag, Tags.not_id, builder.build());
 
+            }
+//            if (current_class.equals("com.motman_doctor.ui.activity_home.HomeActivity")) {
+//
+//
+//                    EventBus.getDefault().post(messageModel);
+//
+//
+//            }
+
+
+
+        }
+        else if (not_type.equals("call")) {
+
+            String title = map.get("title");
+            String body = map.get("message");
+
+            final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+            String CHANNEL_ID = "my_channel_02";
+            CharSequence CHANNEL_NAME = "my_channel_name";
+            int IMPORTANCE = NotificationManager.IMPORTANCE_HIGH;
+
+            final NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, IMPORTANCE);
+
+            channel.setShowBadge(true);
+            channel.setSound(Uri.parse(sound_Path), new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
+                    .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION)
+                    .build()
+            );
+
+            builder.setContentTitle(title);
+            builder.setContentText(body);
+            builder.setStyle(new NotificationCompat.BigTextStyle().bigText(body));
+            builder.setChannelId(CHANNEL_ID);
+            builder.setSound(Uri.parse(sound_Path), AudioManager.STREAM_NOTIFICATION);
+            builder.setSmallIcon(R.mipmap.ic_launcher);
+
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+            builder.setLargeIcon(bitmap);
+
+
+            Intent intent = new Intent(this, HomeActivity.class);
+
+            TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(this);
+            taskStackBuilder.addNextIntent(intent);
+            PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            builder.setContentIntent(pendingIntent);
+            builder.setContentTitle(title);
+            builder.setContentText(body);
+            builder.setStyle(new NotificationCompat.BigTextStyle().bigText(body));
+
+
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            if (manager != null) {
+
+                // manager.createNotificationChannel(channel);
+                manager.notify(Tags.not_tag, Tags.not_id, builder.build());
 
             }
 
 
         }
 
+
     }
 
 
-
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void sendChatNotification_VersionNew(MessageModel messageModel,String user_type, String fromusername, String sound_path, Bitmap bitmap) {
+    private void sendChatNotification_VersionNew(MessageModel messageModel, String user_type, String fromusername, String sound_path, Bitmap bitmap) {
 
 
         String CHANNEL_ID = "my_channel_02";
@@ -408,7 +515,7 @@ public class FireBaseMessaging extends FirebaseMessagingService {
 
     }
 
-    private void sendChatNotification_VersionOld(MessageModel messageModel,String usertype, String fromusername, String sound_path, Bitmap bitmap) {
+    private void sendChatNotification_VersionOld(MessageModel messageModel, String usertype, String fromusername, String sound_path, Bitmap bitmap) {
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSound(Uri.parse(sound_path), AudioManager.STREAM_NOTIFICATION);

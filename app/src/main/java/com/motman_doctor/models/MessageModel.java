@@ -7,6 +7,10 @@ public class MessageModel implements Serializable {
     private List<MessageModel> data;
     private int current_page;
 
+    public MessageModel(String room_id) {
+        this.room_id=room_id;
+    }
+
 
     public List<MessageModel> getData() {
         return data;
@@ -29,17 +33,7 @@ public class MessageModel implements Serializable {
     private long date;
     private User from_user_fk;
 
-    public MessageModel(int id, String to_user_id, String from_user_id, String message_kind, String message, String image, String room_id, String is_read) {
-        this.id = id;
-        this.to_user_id = to_user_id;
-        this.from_user_id = from_user_id;
-        this.type = message_kind;
-        this.message = message;
-        this.image = image;
-        this.room_id = room_id;
-        this.is_read = is_read;
 
-    }
 
     public int getId() {
         return id;
